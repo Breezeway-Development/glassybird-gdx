@@ -7,6 +7,11 @@ import com.breezewaydevelopment.glassybird.GBGame;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+		config.title = "Glassy Bird";
+		config.useGL30 = true;
+		config.width = 272;
+		config.height = 408;
+		
 		new LwjglApplication(new GBGame(), config);
 	}
 }

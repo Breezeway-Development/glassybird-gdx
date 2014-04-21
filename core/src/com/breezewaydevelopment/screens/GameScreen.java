@@ -13,7 +13,7 @@ public class GameScreen implements Screen {
 	public GameScreen() {
 		System.out.println("GameScreen attached");
 		world = new GameWorld();
-		renderer = new GameRenderer();
+		renderer = new GameRenderer(world);
 	}
 
 	@Override
