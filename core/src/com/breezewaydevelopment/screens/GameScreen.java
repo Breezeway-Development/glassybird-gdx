@@ -1,17 +1,25 @@
 package com.breezewaydevelopment.screens;
 
-import com.badlogic.gdx.Gdx;
+import com.breezewaydevelopment.gameworld.GameRenderer;
+import com.breezewaydevelopment.gameworld.GameWorld;
+
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL30; //opengl es 3.0
 
 public class GameScreen implements Screen {
+	
+	private GameWorld world;
+	private GameRenderer renderer;
+	
+	public GameScreen() {
+		System.out.println("GameScreen attached");
+		world = new GameWorld();
+		renderer = new GameRenderer();
+	}
 
 	@Override
 	public void render(float delta) {
-		// Draws the RGB color 10, 15, 230, at 100% opacity
-        Gdx.gl.glClearColor(230/255.0f, 15/255.0f, 10/255.0f, 1f);
-        Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
-        System.out.println(1 / delta);
+		world.update(delta);
+		renderer.render();
 	}
 
 	@Override
@@ -40,8 +48,6 @@ public class GameScreen implements Screen {
     }
 
     @Override
-    public void dispose() {
-        // Leave blank
-    }
+    public void dispose() {}
 
 }

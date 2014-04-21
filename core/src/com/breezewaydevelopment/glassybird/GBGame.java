@@ -8,7 +8,7 @@ public class GBGame extends Game {
 
 	@Override
 	public void create() {
-		System.out.println("HI THERE");
+		System.out.println("GBGame - create");
 		setScreen(new GameScreen());
 	}
 }
