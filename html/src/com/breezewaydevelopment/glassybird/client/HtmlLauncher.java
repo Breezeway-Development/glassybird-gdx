@@ -3,7 +3,7 @@ package com.breezewaydevelopment.glassybird.client;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
-import com.breezewaydevelopment.glassybird.glassybird;
+import com.breezewaydevelopment.glassybird.GBGame;
 
 public class HtmlLauncher extends GwtApplication {
 
@@ -14,6 +14,6 @@ public class HtmlLauncher extends GwtApplication {
 
         @Override
         public ApplicationListener getApplicationListener () {
-                return new glassybird();
+                return new GBGame();
         }
 }

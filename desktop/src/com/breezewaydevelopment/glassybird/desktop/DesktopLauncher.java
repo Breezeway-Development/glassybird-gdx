@@ -2,11 +2,11 @@ package com.breezewaydevelopment.glassybird.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.breezewaydevelopment.glassybird.glassybird;
+import com.breezewaydevelopment.glassybird.GBGame;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		new LwjglApplication(new glassybird(), config);
+		new LwjglApplication(new GBGame(), config);
 	}
 }
