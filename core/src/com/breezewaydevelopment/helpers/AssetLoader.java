@@ -14,7 +14,7 @@ public class AssetLoader {
     public static Animation birdAnimation;
     public static TextureRegion bird, birdDown, birdUp;
 
-    public static TextureRegion skullUp, skullDown, bar;
+    public static TextureRegion skullUp, skullDown, bar; //pipes have skulls at the end of them
 
     public static void load() {
 
@@ -36,14 +36,13 @@ public class AssetLoader {
         birdUp = new TextureRegion(texture, 170, 0, 17, 12);
         birdUp.flip(false, true);
 
-        TextureRegion[] birds = { birdDown, bird, birdUp };
-        birdAnimation = new Animation(0.06f, birds);
+        
+        birdAnimation = new Animation(0.06f, new TextureRegion[]  { birdDown, bird, birdUp }); //.06 second anim
         birdAnimation.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
 
         skullUp = new TextureRegion(texture, 192, 0, 24, 14);
-        // Create by flipping existing skullUp
         skullDown = new TextureRegion(skullUp);
-        skullDown.flip(false, true);
+        skullDown.flip(false, true); // Flip y from skullUp
 
         bar = new TextureRegion(texture, 136, 16, 22, 3);
         bar.flip(false, true);
