@@ -5,8 +5,8 @@ import com.breezewaydevelopment.gameobjects.Grass;
 import com.breezewaydevelopment.gameobjects.Pipe;
 import com.breezewaydevelopment.gameobjects.ScrollHandler;
 import com.breezewaydevelopment.helpers.AssetLoader;
+
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -99,41 +99,12 @@ public class GameRenderer {
         batcher.draw(bg, 0, midpointY + 23, 136, 43);
         
         drawGrass();
-        
         drawPipes();
-
         batcher.enableBlending();
-        
         drawSkulls();
-        
-        float birdX = bird.getX(), birdY = bird.getY(), birdW = bird.getWidth(), birdH = bird.getHeight();
-        batcher.draw(bird.shouldFlap() ? birdAnimation.getKeyFrame(runtime) : birdMid, // Only flap if not falling
-        		birdX, birdY, birdW / 2.0f, birdH / 2.0f, birdW, birdH,
-        		1, 1, bird.getRotation());
+        drawBird(runtime);
         
         batcher.end();
-        
-        shapeRenderer.begin(ShapeType.Filled);
-        shapeRenderer.setColor(Color.RED);
-        shapeRenderer.circle(bird.getBoundingCircle().x, bird.getBoundingCircle().y, bird.getBoundingCircle().radius);
-        
-        for (Pipe p : pipes) {
-        	shapeRenderer.rect(p.getBarUp().x, p.getBarUp().y,
-                    p.getBarUp().width, p.getBarUp().height);
-        	
-        	shapeRenderer.rect(p.getBarDown().x, p.getBarDown().y,
-                    p.getBarDown().width, p.getBarDown().height);
-        	
-        	shapeRenderer.rect(p.getSkullUp().x, p.getSkullUp().y,
-                    p.getSkullUp().width, p.getSkullUp().height);
-        	
-        	shapeRenderer.rect(p.getSkullDown().x, p.getSkullDown().y,
-                    p.getSkullDown().width, p.getSkullDown().height);
-        }
-        
-        
-        
-        shapeRenderer.end();
 	}
 	
 	private void drawGrass() {
@@ -154,5 +125,12 @@ public class GameRenderer {
 	        batcher.draw(skullDown, p.getX() - 1, p.getY() + p.getHeight() + 45, 24, 14);
 		}
 	}
+	
+	private void drawBird(float runtime) {
+		float birdX = bird.getX(), birdY = bird.getY(), birdW = bird.getWidth(), birdH = bird.getHeight();
+        batcher.draw(bird.shouldFlap() ? birdAnimation.getKeyFrame(runtime) : birdMid, // Only flap if not falling
+        		birdX, birdY, birdW / 2.0f, birdH / 2.0f, birdW, birdH,
+        		1, 1, bird.getRotation());
+        }
 
 }
