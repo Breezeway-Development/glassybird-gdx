@@ -104,6 +104,12 @@ public class GameRenderer {
         drawSkulls();
         drawBird(runtime);
         
+        String score = Integer.toString(world.getScore());
+		// Draw shadow first
+		AssetLoader.shadow.draw(batcher, score, (136 / 2) - (3 * score.length()), 12);
+		// Draw text
+		AssetLoader.font.draw(batcher, score, (136 / 2) - (3 * score.length() - 1), 11);
+        
         batcher.end();
 	}
 	

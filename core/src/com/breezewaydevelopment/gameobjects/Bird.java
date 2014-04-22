@@ -2,6 +2,7 @@ package com.breezewaydevelopment.gameobjects;
 
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
+import com.breezewaydevelopment.helpers.AssetLoader;
 
 public class Bird {
 
@@ -14,6 +15,8 @@ public class Bird {
 	private float rotation;
 	private int width;
 	private int height;
+	
+	private boolean isAlive;
 
 	public Bird(float x, float y, int width, int height) {
 		this.width = width;
@@ -24,6 +27,8 @@ public class Bird {
 		acceleration = new Vector2(0, 460);
 		
 		boundingCircle = new Circle();
+		
+		isAlive = true;
 	}
 
 	public void update(float delta) {
@@ -41,9 +46,7 @@ public class Bird {
             if (rotation < -20) {
                 rotation = -20;
             }
-        }
-        // Rotate clockwise (falling down)
-        if (velocity.y > 110) {
+        } else if (velocity.y > 110 || !isAlive) { // Rotate clockwise (falling down)
             rotation += 480 * delta;
             if (rotation > 90) {
                 rotation = 90;
@@ -52,12 +55,27 @@ public class Bird {
         }
 	}
 	
+	public void die() {
+		isAlive = false;
+		AssetLoader.dead.play();
+	}
+	
+	public void stop(boolean decel) {
+		velocity.y = 0;
+		if (decel) {
+			acceleration.y = 0;
+		}
+	}
+	
 	public boolean shouldFlap() {
-		return velocity.y < 70;
+		return isAlive && velocity.y < 70;
 	}
 
 	public void onClick() {
-		velocity.y = -150; //140 in tutorial
+		if (isAlive) {
+			AssetLoader.flap.play();
+			velocity.y = -150; //140 in tutorial
+		}
 	}
 
 	public float getX() {
@@ -82,6 +100,10 @@ public class Bird {
 	
 	public Circle getBoundingCircle() {
 		return boundingCircle;
+	}
+	
+	public boolean isAlive() {
+		return isAlive;
 	}
 
 }

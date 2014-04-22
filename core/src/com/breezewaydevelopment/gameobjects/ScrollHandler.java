@@ -1,14 +1,21 @@
 package com.breezewaydevelopment.gameobjects;
 
+import com.breezewaydevelopment.gameworld.GameWorld;
+import com.breezewaydevelopment.helpers.AssetLoader;
+
 public class ScrollHandler {
 
+	private GameWorld world;
+	
 	private Grass frontGrass, backGrass;
 	private Pipe[] pipes = new Pipe[3];
 
 	public static final int SCROLL_SPEED = -59; // How fast we need to scroll
 	public static final int PIPE_GAP = 49; // Gap between the pipes
 
-	public ScrollHandler(float yPos) { // Where to begin our grass and pipe objects
+	public ScrollHandler(GameWorld world, float yPos) { // Where to begin our grass and pipe objects
+		this.world = world;
+		
 		frontGrass = new Grass(0, yPos, 143, 11, SCROLL_SPEED);
 		backGrass = new Grass(frontGrass.getTailX(), yPos, 143, 11, SCROLL_SPEED);
 		
@@ -54,6 +61,11 @@ public class ScrollHandler {
 	
 	public boolean collides(Bird bird) {
 		for (Pipe p : pipes) {
+			if (!p.isScored() && p.getX() + (p.getWidth() / 2) < bird.getX() + bird.getWidth()) {
+	            world.addScore(1);
+	            p.setScored(true);
+	            AssetLoader.coin.play();
+	        }
 			if (p.collides(bird)) {
 				return true;
 			}

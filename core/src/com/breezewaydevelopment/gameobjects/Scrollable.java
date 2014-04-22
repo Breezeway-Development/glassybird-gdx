@@ -61,5 +61,4 @@ public class Scrollable {
     public int getHeight() {
         return height;
     }
-
 }
