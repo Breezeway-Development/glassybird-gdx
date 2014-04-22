@@ -1,6 +1,12 @@
 package com.breezewaydevelopment.gameworld;
 
+import com.breezewaydevelopment.gameobjects.Bird;
+import com.breezewaydevelopment.gameobjects.Grass;
+import com.breezewaydevelopment.gameobjects.Pipe;
+import com.breezewaydevelopment.gameobjects.ScrollHandler;
+import com.breezewaydevelopment.helpers.AssetLoader;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -8,16 +14,20 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.breezewaydevelopment.gameobjects.Bird;
-import com.breezewaydevelopment.helpers.AssetLoader;
 
 public class GameRenderer {
 
 	private GameWorld world;
 	private OrthographicCamera cam;
 	
+	private int midpointY;
+	private int gameHeight;
+	
 	// Game Objects
 	private Bird bird;
+	private ScrollHandler scroller;
+	private Grass frontGrass, backGrass;
+	private Pipe[] pipes;
 
 	// Game Assets
 	private TextureRegion bg, grass;
@@ -25,12 +35,8 @@ public class GameRenderer {
 	private TextureRegion birdMid, birdDown, birdUp;
 	private TextureRegion skullUp, skullDown, bar;
 
-
 	private ShapeRenderer shapeRenderer;
 	private SpriteBatch batcher;
-
-	private int midpointY;
-	private int gameHeight;
 
 	public GameRenderer(GameWorld world, int gameHeigh, int midpointY) {
 		this.world = world;
@@ -52,6 +58,10 @@ public class GameRenderer {
 	
 	private void initGameObjects() {
         bird = world.getBird();
+        scroller = world.getScroller();
+        pipes = scroller.getPipes();
+        frontGrass = scroller.getFrontGrass();
+        backGrass = scroller.getBackGrass();
     }
 
     private void initAssets() {
@@ -77,11 +87,7 @@ public class GameRenderer {
         // Draw Background color
         shapeRenderer.setColor(55 / 255.0f, 80 / 255.0f, 100 / 255.0f, 1);
         shapeRenderer.rect(0, 0, 136, midpointY + 66);
-
-        // Draw Grass
-        shapeRenderer.setColor(111 / 255.0f, 186 / 255.0f, 45 / 255.0f, 1);
-        shapeRenderer.rect(0, midpointY + 66, 136, 11);
-
+        
         // Draw Dirt
         shapeRenderer.setColor(147 / 255.0f, 80 / 255.0f, 27 / 255.0f, 1);
         shapeRenderer.rect(0, midpointY + 77, 136, 52);
@@ -91,17 +97,62 @@ public class GameRenderer {
         batcher.begin();
         batcher.disableBlending();
         batcher.draw(bg, 0, midpointY + 23, 136, 43);
+        
+        drawGrass();
+        
+        drawPipes();
 
         batcher.enableBlending();
         
+        drawSkulls();
+        
         float birdX = bird.getX(), birdY = bird.getY(), birdW = bird.getWidth(), birdH = bird.getHeight();
-        if (!bird.shouldFlap()) {
-            batcher.draw(birdMid, birdX, birdY, birdW / 2.0f, birdH / 2.0f, birdW, birdH, 1, 1, bird.getRotation());
-        } else {
-            batcher.draw(birdAnimation.getKeyFrame(runtime), birdX, birdY, birdW / 2.0f, birdH / 2.0f, birdW, birdH, 1, 1, bird.getRotation());
-        }
-
+        batcher.draw(bird.shouldFlap() ? birdAnimation.getKeyFrame(runtime) : birdMid, // Only flap if not falling
+        		birdX, birdY, birdW / 2.0f, birdH / 2.0f, birdW, birdH,
+        		1, 1, bird.getRotation());
+        
         batcher.end();
+        
+        shapeRenderer.begin(ShapeType.Filled);
+        shapeRenderer.setColor(Color.RED);
+        shapeRenderer.circle(bird.getBoundingCircle().x, bird.getBoundingCircle().y, bird.getBoundingCircle().radius);
+        
+        for (Pipe p : pipes) {
+        	shapeRenderer.rect(p.getBarUp().x, p.getBarUp().y,
+                    p.getBarUp().width, p.getBarUp().height);
+        	
+        	shapeRenderer.rect(p.getBarDown().x, p.getBarDown().y,
+                    p.getBarDown().width, p.getBarDown().height);
+        	
+        	shapeRenderer.rect(p.getSkullUp().x, p.getSkullUp().y,
+                    p.getSkullUp().width, p.getSkullUp().height);
+        	
+        	shapeRenderer.rect(p.getSkullDown().x, p.getSkullDown().y,
+                    p.getSkullDown().width, p.getSkullDown().height);
+        }
+        
+        
+        
+        shapeRenderer.end();
+	}
+	
+	private void drawGrass() {
+		batcher.draw(grass, frontGrass.getX(), frontGrass.getY(), frontGrass.getWidth(), frontGrass.getHeight());
+		batcher.draw(grass, backGrass.getX(), backGrass.getY(), backGrass.getWidth(), backGrass.getHeight());
+	}
+	
+	private void drawPipes() {
+		for (Pipe p : pipes) {
+			batcher.draw(bar, p.getX(), p.getY(), p.getWidth(), p.getHeight());
+	        batcher.draw(bar, p.getX(), p.getY() + p.getHeight() + 45, p.getWidth(), midpointY + 66 - (p.getHeight() + 45));
+		}
+	}
+	
+	private void drawSkulls() {
+		for (Pipe p : pipes) {
+			batcher.draw(skullUp, p.getX() - 1, p.getY() + p.getHeight() - 14, 24, 14);
+	        batcher.draw(skullDown, p.getX() - 1, p.getY() + p.getHeight() + 45, 24, 14);
+		}
 	}
 
 }

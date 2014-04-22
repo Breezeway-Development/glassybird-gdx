@@ -12,9 +12,9 @@ public class AssetLoader {
     public static TextureRegion bg, grass;
 
     public static Animation birdAnimation;
-    public static TextureRegion bird, birdDown, birdUp;
+    public static TextureRegion bird, birdDown, birdUp; // Wing position
 
-    public static TextureRegion skullUp, skullDown, bar; //pipes have skulls at the end of them
+    public static TextureRegion skullUp, skullDown, bar; // Pipes (bars) have skulls at the end of them
 
     public static void load() {
 
@@ -22,7 +22,7 @@ public class AssetLoader {
         texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest); // Minification and magnification
 
         bg = new TextureRegion(texture, 0, 0, 136, 43); // x, y, width, height
-        bg.flip(false, true); // flip x, y. libGDX assumes a y-up coord system
+        bg.flip(false, true); // libGDX assumes a y-up coord system (usage flip(boolean x, boolean y))
 
         grass = new TextureRegion(texture, 0, 43, 143, 11);
         grass.flip(false, true);
@@ -36,9 +36,8 @@ public class AssetLoader {
         birdUp = new TextureRegion(texture, 170, 0, 17, 12);
         birdUp.flip(false, true);
 
-        
-        birdAnimation = new Animation(0.10f, new TextureRegion[]  { birdDown, bird, birdUp }); //.06 second anim
-        birdAnimation.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
+        birdAnimation = new Animation(0.06f, new TextureRegion[]  { birdDown, bird, birdUp }); //.06 sec flapping anim
+        birdAnimation.setPlayMode(Animation.PlayMode.LOOP_PINGPONG); // Back and forth
 
         skullUp = new TextureRegion(texture, 192, 0, 24, 14);
         skullDown = new TextureRegion(skullUp);

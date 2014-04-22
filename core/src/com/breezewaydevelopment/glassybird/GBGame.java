@@ -8,9 +8,7 @@ import com.badlogic.gdx.Game;
 public class GBGame extends Game {
 
 	@Override
-	public void create() {
-		System.out.println("GBGame - create");
-		
+	public void create() {		
 		AssetLoader.load();
 		setScreen(new GameScreen());
 	}
