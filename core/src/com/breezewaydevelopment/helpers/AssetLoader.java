@@ -1,6 +1,7 @@
 package com.breezewaydevelopment.helpers;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -9,17 +10,22 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class AssetLoader {
 
     public static Texture texture;
+    public static Sound dead; 
+    
     public static TextureRegion bg, grass;
 
     public static Animation birdAnimation;
     public static TextureRegion bird, birdDown, birdUp; // Wing position
 
     public static TextureRegion skullUp, skullDown, bar; // Pipes (bars) have skulls at the end of them
+    
 
     public static void load() {
 
         texture = new Texture(Gdx.files.internal("data/texture.png")); // Texture is like a spritesheet
         texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest); // Minification and magnification
+        
+        dead = Gdx.audio.newSound(Gdx.files.internal("data/dead.wav"));
 
         bg = new TextureRegion(texture, 0, 0, 136, 43); // x, y, width, height
         bg.flip(false, true); // libGDX assumes a y-up coord system (usage flip(boolean x, boolean y))

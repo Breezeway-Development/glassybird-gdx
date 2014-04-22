@@ -2,6 +2,8 @@ package com.breezewaydevelopment.gameobjects;
 
 import java.util.Random;
 
+import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 
 public class Pipe extends Scrollable {
@@ -55,6 +57,17 @@ public class Pipe extends Scrollable {
 		super.reset(newX);
 		// Change the height to a random number
 		height = r.nextInt(90) + 15;
+	}
+
+	public boolean collides(Bird bird) {
+		if (position.x < bird.getX() + bird.getWidth()) {
+			Circle c = bird.getBoundingCircle();
+			return (Intersector.overlaps(c, barUp)
+					|| Intersector.overlaps(c, barDown)
+					|| Intersector.overlaps(c, skullUp)
+					|| Intersector.overlaps(c, skullDown));
+		}
+		return false;
 	}
 
 	public Rectangle getSkullUp() {
