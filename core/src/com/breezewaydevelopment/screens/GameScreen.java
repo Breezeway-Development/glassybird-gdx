@@ -15,7 +15,6 @@ public class GameScreen implements Screen {
 	private float runtime = 0;
 
 	public GameScreen() {
-		System.out.println("GameScreen attached");
 		float screenWidth = Gdx.graphics.getWidth();
 		float screenHeight = Gdx.graphics.getHeight();
 		float gameWidth = 136;
@@ -37,27 +36,21 @@ public class GameScreen implements Screen {
 	}
 
 	@Override
-	public void resize(int width, int height) {
-	}
+	public void resize(int width, int height) {}
 
 	@Override
-	public void show() {
-	}
+	public void show() {}
 
 	@Override
-	public void hide() {
-	}
+	public void hide() {}
 
 	@Override
-	public void pause() {
-	}
+	public void pause() {}
 
 	@Override
-	public void resume() {
-	}
+	public void resume() {}
 
 	@Override
-	public void dispose() {
-	}
+	public void dispose() {}
 
 }

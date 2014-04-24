@@ -11,15 +11,14 @@ public class Pipe extends Scrollable {
 	public static final int VERTICAL_GAP = 45;
 	public static final int SKULL_WIDTH = 24;
 	public static final int SKULL_HEIGHT = 11;
-	
+
 	private boolean isScored = false;
 	private float groundY;
 	private Random r;
 
 	private Rectangle skullUp, skullDown, barUp, barDown;
 
-	public Pipe(float x, float y, int width, int height, float scrollSpeed,
-			float groundY) {
+	public Pipe(float x, float y, int width, int height, float scrollSpeed, float groundY) {
 		super(x, y, width, height, scrollSpeed);
 
 		r = new Random();
@@ -63,10 +62,7 @@ public class Pipe extends Scrollable {
 	public boolean collides(Bird bird) {
 		if (position.x < bird.getX() + bird.getWidth()) {
 			Circle c = bird.getBoundingCircle();
-			return (Intersector.overlaps(c, barUp)
-					|| Intersector.overlaps(c, barDown)
-					|| Intersector.overlaps(c, skullUp)
-					|| Intersector.overlaps(c, skullDown));
+			return (Intersector.overlaps(c, barUp) || Intersector.overlaps(c, barDown) || Intersector.overlaps(c, skullUp) || Intersector.overlaps(c, skullDown));
 		}
 		return false;
 	}
@@ -86,11 +82,11 @@ public class Pipe extends Scrollable {
 	public Rectangle getBarDown() {
 		return barDown;
 	}
-	
-	public void setScored (boolean t) {
+
+	public void setScored(boolean t) {
 		isScored = true;
 	}
-	
+
 	public boolean isScored() {
 		return isScored;
 	}

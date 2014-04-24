@@ -4,14 +4,13 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.breezewaydevelopment.gameobjects.Bird;
 import com.breezewaydevelopment.gameobjects.ScrollHandler;
-import com.breezewaydevelopment.helpers.AssetLoader;
 
 public class GameWorld {
 
 	private Bird bird;
 	private ScrollHandler scroller;
 	private Rectangle ground;
-	
+
 	private int score = 0;
 
 	public GameWorld(int midpointY) {
@@ -23,13 +22,13 @@ public class GameWorld {
 	public void update(float delta) {
 		bird.update(delta);
 		scroller.update(delta);
-		
+
 		if (scroller.collides(bird) && bird.isAlive()) { // Bird hits pipe
 			stop(false);
 		} else if (Intersector.overlaps(bird.getBoundingCircle(), ground)) {
-            stop(true);
-        }
-		
+			stop(true);
+		}
+
 	}
 
 	public Bird getBird() {
@@ -39,21 +38,21 @@ public class GameWorld {
 	public ScrollHandler getScroller() {
 		return scroller;
 	}
-	
+
 	public int getScore() {
 		return score;
 	}
-	
+
 	public void addScore(int increment) {
 		score += increment;
 	}
-	
+
 	private void stop(boolean decel) {
 		scroller.stop();
-        if (bird.isAlive()) {
-        	bird.die();
-        }
-        bird.stop(decel);
+		if (bird.isAlive()) {
+			bird.die();
+		}
+		bird.stop(decel);
 	}
 
 }

@@ -19,10 +19,10 @@ public class GameRenderer {
 
 	private GameWorld world;
 	private OrthographicCamera cam;
-	
+
 	private int midpointY;
 	private int gameHeight;
-	
+
 	// Game Objects
 	private Bird bird;
 	private ScrollHandler scroller;
@@ -51,92 +51,92 @@ public class GameRenderer {
 
 		shapeRenderer = new ShapeRenderer();
 		shapeRenderer.setProjectionMatrix(cam.combined);
-		
+
 		initGameObjects();
 		initAssets();
 	}
-	
-	private void initGameObjects() {
-        bird = world.getBird();
-        scroller = world.getScroller();
-        pipes = scroller.getPipes();
-        frontGrass = scroller.getFrontGrass();
-        backGrass = scroller.getBackGrass();
-    }
 
-    private void initAssets() {
-        bg = AssetLoader.bg;
-        grass = AssetLoader.grass;
-        birdAnimation = AssetLoader.birdAnimation;
-        birdMid = AssetLoader.bird;
-        birdDown = AssetLoader.birdDown;
-        birdUp = AssetLoader.birdUp;
-        skullUp = AssetLoader.skullUp;
-        skullDown = AssetLoader.skullDown;
-        bar = AssetLoader.bar;
-    }
+	private void initGameObjects() {
+		bird = world.getBird();
+		scroller = world.getScroller();
+		pipes = scroller.getPipes();
+		frontGrass = scroller.getFrontGrass();
+		backGrass = scroller.getBackGrass();
+	}
+
+	private void initAssets() {
+		bg = AssetLoader.bg;
+		grass = AssetLoader.grass;
+		birdAnimation = AssetLoader.birdAnimation;
+		birdMid = AssetLoader.bird;
+		birdDown = AssetLoader.birdDown;
+		birdUp = AssetLoader.birdUp;
+		skullUp = AssetLoader.skullUp;
+		skullDown = AssetLoader.skullDown;
+		bar = AssetLoader.bar;
+	}
 
 	public void render(float runtime) {
 
 		// Black bg prevents flickering
 		Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        shapeRenderer.begin(ShapeType.Filled);
+		shapeRenderer.begin(ShapeType.Filled);
 
-        // Draw Background color
-        shapeRenderer.setColor(55 / 255.0f, 80 / 255.0f, 100 / 255.0f, 1);
-        shapeRenderer.rect(0, 0, 136, midpointY + 66);
-        
-        // Draw Dirt
-        shapeRenderer.setColor(147 / 255.0f, 80 / 255.0f, 27 / 255.0f, 1);
-        shapeRenderer.rect(0, midpointY + 77, 136, 52);
+		// Draw Background color
+		shapeRenderer.setColor(55 / 255.0f, 80 / 255.0f, 100 / 255.0f, 1);
+		shapeRenderer.rect(0, 0, 136, midpointY + 66);
 
-        shapeRenderer.end();
+		// Draw Dirt
+		shapeRenderer.setColor(147 / 255.0f, 80 / 255.0f, 27 / 255.0f, 1);
+		shapeRenderer.rect(0, midpointY + 77, 136, 52);
 
-        batcher.begin();
-        batcher.disableBlending();
-        batcher.draw(bg, 0, midpointY + 23, 136, 43);
-        
-        drawGrass();
-        drawPipes();
-        batcher.enableBlending();
-        drawSkulls();
-        drawBird(runtime);
-        
-        String score = Integer.toString(world.getScore());
+		shapeRenderer.end();
+
+		batcher.begin();
+		batcher.disableBlending();
+		batcher.draw(bg, 0, midpointY + 23, 136, 43);
+
+		drawGrass();
+		drawPipes();
+		batcher.enableBlending();
+		drawSkulls();
+		drawBird(runtime);
+
+		String score = Integer.toString(world.getScore());
 		// Draw shadow first
 		AssetLoader.shadow.draw(batcher, score, (136 / 2) - (3 * score.length()), 12);
 		// Draw text
 		AssetLoader.font.draw(batcher, score, (136 / 2) - (3 * score.length() - 1), 11);
-        
-        batcher.end();
+
+		batcher.end();
 	}
-	
+
 	private void drawGrass() {
 		batcher.draw(grass, frontGrass.getX(), frontGrass.getY(), frontGrass.getWidth(), frontGrass.getHeight());
 		batcher.draw(grass, backGrass.getX(), backGrass.getY(), backGrass.getWidth(), backGrass.getHeight());
 	}
-	
+
 	private void drawPipes() {
 		for (Pipe p : pipes) {
 			batcher.draw(bar, p.getX(), p.getY(), p.getWidth(), p.getHeight());
-	        batcher.draw(bar, p.getX(), p.getY() + p.getHeight() + 45, p.getWidth(), midpointY + 66 - (p.getHeight() + 45));
+			batcher.draw(bar, p.getX(), p.getY() + p.getHeight() + 45, p.getWidth(), midpointY + 66 - (p.getHeight() + 45));
 		}
 	}
-	
+
 	private void drawSkulls() {
 		for (Pipe p : pipes) {
 			batcher.draw(skullUp, p.getX() - 1, p.getY() + p.getHeight() - 14, 24, 14);
-	        batcher.draw(skullDown, p.getX() - 1, p.getY() + p.getHeight() + 45, 24, 14);
+			batcher.draw(skullDown, p.getX() - 1, p.getY() + p.getHeight() + 45, 24, 14);
 		}
 	}
-	
+
 	private void drawBird(float runtime) {
 		float birdX = bird.getX(), birdY = bird.getY(), birdW = bird.getWidth(), birdH = bird.getHeight();
-        batcher.draw(bird.shouldFlap() ? birdAnimation.getKeyFrame(runtime) : birdMid, // Only flap if not falling
-        		birdX, birdY, birdW / 2.0f, birdH / 2.0f, birdW, birdH,
-        		1, 1, bird.getRotation());
-        }
+		batcher.draw(bird.shouldFlap() ? birdAnimation.getKeyFrame(runtime)
+				: birdMid, // Only flap if not falling
+				birdX, birdY, birdW / 2.0f, birdH / 2.0f, birdW, birdH, 1, 1, bird.getRotation());
+	}
 
 }
