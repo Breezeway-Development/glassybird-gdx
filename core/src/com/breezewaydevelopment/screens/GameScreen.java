@@ -2,17 +2,17 @@ package com.breezewaydevelopment.screens;
 
 import com.breezewaydevelopment.gameworld.GameRenderer;
 import com.breezewaydevelopment.gameworld.GameWorld;
-import com.breezewaydevelopment.helpers.InputHelper;
+import com.breezewaydevelopment.helpers.InputHandler;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 
 public class GameScreen implements Screen {
 
+	private float runtime = 0;
+
 	private GameWorld world;
 	private GameRenderer renderer;
-
-	private float runtime = 0;
 
 	public GameScreen() {
 		float screenWidth = Gdx.graphics.getWidth();
@@ -25,7 +25,7 @@ public class GameScreen implements Screen {
 		world = new GameWorld(midpointY);
 		renderer = new GameRenderer(world, (int) gameHeight, midpointY);
 
-		Gdx.input.setInputProcessor(new InputHelper(world.getBird()));
+		Gdx.input.setInputProcessor(new InputHandler(world));
 	}
 
 	@Override

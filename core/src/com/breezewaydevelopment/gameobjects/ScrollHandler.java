@@ -5,17 +5,15 @@ import com.breezewaydevelopment.helpers.AssetLoader;
 
 public class ScrollHandler {
 
-	private GameWorld world;
-
-	private Grass frontGrass, backGrass;
-	private Pipe[] pipes = new Pipe[3];
-
 	public static final int SCROLL_SPEED = -59; // How fast we need to scroll
 	public static final int PIPE_GAP = 49; // Gap between the pipes
 
+	private GameWorld world;
+	private Grass frontGrass, backGrass;
+	private Pipe[] pipes = new Pipe[3];
+
 	public ScrollHandler(GameWorld world, float yPos) { // Where to begin our grass and pipe objects
 		this.world = world;
-
 		frontGrass = new Grass(0, yPos, 143, 11, SCROLL_SPEED);
 		backGrass = new Grass(frontGrass.getTailX(), yPos, 143, 11, SCROLL_SPEED);
 
@@ -84,5 +82,15 @@ public class ScrollHandler {
 
 	public Pipe[] getPipes() {
 		return pipes;
+	}
+
+	public void onRestart() {
+		frontGrass.onRestart(0, SCROLL_SPEED);
+		backGrass.onRestart(frontGrass.getTailX(), SCROLL_SPEED);
+		
+		for (int i = 0; i < pipes.length; i++) {
+			// Same thing as pipes setup in our constructor
+			pipes[i].onRestart(i == 0 ? 210 : pipes[i - 1].getTailX() + PIPE_GAP, SCROLL_SPEED);
+		}
 	}
 }
