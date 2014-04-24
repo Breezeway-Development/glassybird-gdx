@@ -2,7 +2,7 @@ package com.breezewaydevelopment.glassybird;
 
 import com.breezewaydevelopment.helpers.AssetLoader;
 import com.breezewaydevelopment.screens.GameScreen;
-
+import com.breezewaydevelopment.screens.SplashScreen;
 import com.badlogic.gdx.Game;
 
 public class GBGame extends Game {
