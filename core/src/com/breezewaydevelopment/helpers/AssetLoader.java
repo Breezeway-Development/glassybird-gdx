@@ -11,23 +11,29 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class AssetLoader {
 
-	public static Texture texture; // Our spritesheet
-
-	public static TextureRegion bg, grass;
-	public static TextureRegion skullUp, skullDown, bar; // Pipes have skulls at the end of them
-	public static TextureRegion bird, birdDown, birdUp; // Wing position
-
+	public static Texture texture, splashTexture; // Our spritesheet
+	public static TextureRegion splash, logo, bg, grass, skullUp, skullDown,
+			bar, bird, birdDown, birdUp, playButtonUp, playButtonDown;
 	public static Animation birdAnimation;
-
 	public static Sound dead, flap, coin;
-
 	public static BitmapFont font, shadow;
-	
 	public static Preferences prefs;
 
 	public static void load() {
+		splashTexture = new Texture(Gdx.files.internal("data/splash.png"));
+		splashTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+
+		splash = new TextureRegion(splashTexture, 0, 0, 512, 114);
+
 		texture = new Texture(Gdx.files.internal("data/texture.png"));
 		texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest); // Minification and magnification
+
+		playButtonUp = new TextureRegion(texture, 0, 83, 29, 16);
+		playButtonDown = new TextureRegion(texture, 29, 83, 29, 16);
+		playButtonUp.flip(false, true);
+		playButtonDown.flip(false, true);
+
+		logo = new TextureRegion(texture, 0, 55, 135, 24);
 
 		bg = new TextureRegion(texture, 0, 0, 136, 43); // x, y, width, height
 		bg.flip(false, true); // libGDX assumes a y-up coord system (usage flip(boolean x, boolean y))
@@ -57,7 +63,7 @@ public class AssetLoader {
 		font.setScale(.25f, -.25f);
 		shadow = new BitmapFont(Gdx.files.internal("data/shadow.fnt"));
 		shadow.setScale(.25f, -.25f);
-		
+
 		prefs = Gdx.app.getPreferences("glassybird");
 		if (!prefs.contains("highschore")) {
 			setHighScore(0);
@@ -66,6 +72,7 @@ public class AssetLoader {
 
 	public static void dispose() {
 		texture.dispose();
+		splashTexture.dispose();
 
 		dead.dispose();
 		flap.dispose();
@@ -74,12 +81,12 @@ public class AssetLoader {
 		font.dispose();
 		shadow.dispose();
 	}
-	
+
 	public static void setHighScore(int score) {
 		prefs.putInteger("highscore", score);
 		prefs.flush();
 	}
-	
+
 	public static int getHighScore() {
 		return prefs.getInteger("highscore");
 	}
