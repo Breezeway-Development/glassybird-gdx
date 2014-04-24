@@ -1,25 +1,45 @@
 package com.breezewaydevelopment.helpers;
 
-import com.badlogic.gdx.InputProcessor;
 import com.breezewaydevelopment.gameobjects.Bird;
+import com.breezewaydevelopment.gameworld.GameWorld;
 
-public class InputHelper implements InputProcessor {
+import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Input.Keys;
 
+public class InputHandler implements InputProcessor {
+
+	private GameWorld world;
 	private Bird bird;
 
-	public InputHelper(Bird bird) {
-		this.bird = bird;
+	public InputHandler(GameWorld world) {
+		this.world = world;
+		this.bird = world.getBird();
+	}
+
+	private void handleTouch() {
+		if (world.isReady()) {
+			world.start();
+		}
+
+		bird.onClick();
+
+		if (world.isGameOver() || world.isHighScore()) {
+			world.restart();
+		}
 	}
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		bird.onClick();
-		return false;
+		handleTouch();
+		return true;
 	}
 
 	@Override
 	public boolean keyDown(int keycode) {
-		return false;
+		if (keycode == Keys.DPAD_CENTER || keycode == Keys.SPACE) {
+			handleTouch();
+		}
+		return true;
 	}
 
 	@Override

@@ -28,7 +28,6 @@ public class Pipe extends Scrollable {
 		barUp = new Rectangle();
 		barDown = new Rectangle();
 		this.groundY = groundY;
-
 	}
 
 	@Override
