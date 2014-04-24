@@ -36,10 +36,18 @@ public class Bird {
 		if (velocity.y > 200) { // Don't fall too fast
 			velocity.y = 200;
 		}
+		
+		// CEILING CHECK 
+        if (position.y < -13) {
+            position.y = -13;
+            velocity.y = 0;
+        }
+        
 		position.add(velocity.cpy().scl(delta));
 
 		boundingCircle.set(position.x + 9, position.y + 6, 6.5f);
 
+        
 		// Rotate counterclockwise (we're going up)
 		if (velocity.y < 0) {
 			rotation -= 600 * delta;
@@ -105,5 +113,15 @@ public class Bird {
 	public boolean isAlive() {
 		return isAlive;
 	}
+	
+	public void onRestart(int y) {
+        rotation = 0;
+        position.y = y;
+        velocity.x = 0;
+        velocity.y = 0;
+        acceleration.x = 0;
+        acceleration.y = 460;
+        isAlive = true;
+    }
 
 }

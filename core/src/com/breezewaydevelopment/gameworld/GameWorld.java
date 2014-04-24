@@ -12,14 +12,23 @@ public class GameWorld {
 	private Rectangle ground;
 
 	private int score = 0;
+	
+	private GameState currentState;
+
+	public enum GameState {
+
+	    READY, RUNNING, GAMEOVER
+
+	}
 
 	public GameWorld(int midpointY) {
+		currentState = GameState.READY;
 		bird = new Bird(33, midpointY - 5, 17, 12);
 		scroller = new ScrollHandler(this, midpointY + 66);
 		ground = new Rectangle(0, midpointY + 66, 136, 11);
 	}
 
-	public void update(float delta) {
+	public void updateRunning(float delta) {
 		bird.update(delta);
 		scroller.update(delta);
 
@@ -27,10 +36,30 @@ public class GameWorld {
 			stop(false);
 		} else if (Intersector.overlaps(bird.getBoundingCircle(), ground)) {
 			stop(true);
+			currentState = GameState.GAMEOVER;
 		}
 
 	}
 
+	public void update(float delta) {
+
+        switch (currentState) {
+        case READY:
+            updateReady(delta);
+            break;
+
+        case RUNNING:
+        default:
+            updateRunning(delta);
+            break;
+        }
+
+    }
+
+    private void updateReady(float delta) {
+        // Do nothing for now
+    }
+    
 	public Bird getBird() {
 		return bird;
 	}
