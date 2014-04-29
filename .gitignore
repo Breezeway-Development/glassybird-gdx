@@ -56,8 +56,8 @@ nb-configuration.xml
 
 ## Gradle
 
-.gradle
-build/
+#.gradle
+#build/
 
 ## OSX
 .DS_Store
