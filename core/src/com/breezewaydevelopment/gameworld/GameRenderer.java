@@ -26,7 +26,7 @@ public class GameRenderer {
 	// Game Objects
 	private Bird bird;
 	private ScrollHandler scroller;
-	private Grass frontGrass, backGrass;
+	private Grass frontGrass, secondGrass, thirdGrass, fourthGrass;
 	private Pipe[] pipes;
 
 	// Game Assets
@@ -44,7 +44,7 @@ public class GameRenderer {
 		this.midpointY = midpointY;
 
 		cam = new OrthographicCamera();
-		cam.setToOrtho(true, 136, 204);
+		cam.setToOrtho(true, 320, 180);
 
 		batcher = new SpriteBatch();
 		batcher.setProjectionMatrix(cam.combined);
@@ -61,7 +61,9 @@ public class GameRenderer {
 		scroller = world.getScroller();
 		pipes = scroller.getPipes();
 		frontGrass = scroller.getFrontGrass();
-		backGrass = scroller.getBackGrass();
+		secondGrass = scroller.getSecondGrass();
+		thirdGrass = scroller.getThirdGrass();
+		fourthGrass = scroller.getFourthGrass();
 	}
 
 	private void initAssets() {
@@ -86,17 +88,17 @@ public class GameRenderer {
 
 		// Draw Background color
 		shapeRenderer.setColor(55 / 255.0f, 80 / 255.0f, 100 / 255.0f, 1);
-		shapeRenderer.rect(0, 0, 136, midpointY + 66);
+		shapeRenderer.rect(0, 0, 320, 180);
 
 		// Draw Dirt
 		shapeRenderer.setColor(147 / 255.0f, 80 / 255.0f, 27 / 255.0f, 1);
-		shapeRenderer.rect(0, midpointY + 77, 136, 52);
+		shapeRenderer.rect(0, midpointY + 77, 320, 52);
 
 		shapeRenderer.end();
 
 		batcher.begin();
 		batcher.disableBlending();
-		batcher.draw(bg, 0, midpointY + 23, 136, 43);
+		batcher.draw(bg, 0, midpointY + 23, 320, 43);
 
 		drawGrass();
 		drawPipes();
@@ -106,10 +108,10 @@ public class GameRenderer {
 
 		if (world.isReady()) {
          // Draw shadow first
-         AssetLoader.shadow.draw(batcher, "Touch me", (136 / 2) - (42), 76);
+         AssetLoader.shadow.draw(batcher, "Tap me", (136 / 2) - (42), 60);
          // Draw text
          AssetLoader.font
-                 .draw(batcher, "Touch me", (136 / 2) - (42 - 1), 75);
+                 .draw(batcher, "Tap me", (136 / 2) - (42 - 1), 59);
      } else {
 
          if (world.isGameOver() || world.isHighScore()) {
@@ -161,7 +163,9 @@ public class GameRenderer {
 
 	private void drawGrass() {
 		batcher.draw(grass, frontGrass.getX(), frontGrass.getY(), frontGrass.getWidth(), frontGrass.getHeight());
-		batcher.draw(grass, backGrass.getX(), backGrass.getY(), backGrass.getWidth(), backGrass.getHeight());
+		batcher.draw(grass, secondGrass.getX(), secondGrass.getY(), secondGrass.getWidth(), secondGrass.getHeight());
+		batcher.draw(grass, thirdGrass.getX(), thirdGrass.getY(), thirdGrass.getWidth(), thirdGrass.getHeight());
+		batcher.draw(grass, fourthGrass.getX(), fourthGrass.getY(), fourthGrass.getWidth(), fourthGrass.getHeight());
 	}
 
 	private void drawPipes() {

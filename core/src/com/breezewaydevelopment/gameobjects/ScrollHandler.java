@@ -9,24 +9,28 @@ public class ScrollHandler {
 	public static final int PIPE_GAP = 49; // Gap between the pipes
 
 	private GameWorld world;
-	private Grass frontGrass, backGrass;
-	private Pipe[] pipes = new Pipe[3];
+	private Grass frontGrass, secondGrass, thirdGrass, fourthGrass;
+	private Pipe[] pipes = new Pipe[5];
 
 	public ScrollHandler(GameWorld world, float yPos) { // Where to begin our grass and pipe objects
 		this.world = world;
 		frontGrass = new Grass(0, yPos, 143, 11, SCROLL_SPEED);
-		backGrass = new Grass(frontGrass.getTailX(), yPos, 143, 11, SCROLL_SPEED);
+		secondGrass = new Grass(frontGrass.getTailX(), yPos, 143, 11, SCROLL_SPEED);
+		thirdGrass = new Grass(secondGrass.getTailX(), yPos, 143, 11, SCROLL_SPEED);
+		fourthGrass = new Grass(thirdGrass.getTailX(), yPos, 143, 11, SCROLL_SPEED);
 
 		for (int i = 0; i < pipes.length; i++) {
 			// Here we define each pipe. If i = 0 start at x=210, otherwise start behind the previous pipe
-			pipes[i] = new Pipe(i == 0 ? 210 : pipes[i - 1].getTailX() + PIPE_GAP, 0, 22, 60 + (i * 10), SCROLL_SPEED, yPos);
+			pipes[i] = new Pipe(i == 0 ? 330 : pipes[i - 1].getTailX() + PIPE_GAP, 0, 22, 60 + (i * 10), SCROLL_SPEED, yPos);
 		}
 	}
 
 	public void update(float delta) {
 		// Update our objects
 		frontGrass.update(delta);
-		backGrass.update(delta);
+		secondGrass.update(delta);
+		thirdGrass.update(delta);
+		fourthGrass.update(delta);
 
 		// Update and reset pipes
 		int i = 0;
@@ -41,16 +45,22 @@ public class ScrollHandler {
 
 		// Reset grass
 		if (frontGrass.isScrolledLeft()) {
-			frontGrass.reset(backGrass.getTailX());
-		} else if (backGrass.isScrolledLeft()) {
-			backGrass.reset(frontGrass.getTailX());
+			frontGrass.reset(fourthGrass.getTailX());
+		} else if (secondGrass.isScrolledLeft()) {
+			secondGrass.reset(frontGrass.getTailX());
+		} else if (thirdGrass.isScrolledLeft()) {
+			thirdGrass.reset(secondGrass.getTailX());
+		} else if (fourthGrass.isScrolledLeft()) {
+			fourthGrass.reset(thirdGrass.getTailX());
 		}
 
 	}
 
 	public void stop() {
 		frontGrass.stop();
-		backGrass.stop();
+		secondGrass.stop();
+		thirdGrass.stop();
+		fourthGrass.stop();
 
 		for (Pipe p : pipes) {
 			p.stop();
@@ -76,21 +86,31 @@ public class ScrollHandler {
 		return frontGrass;
 	}
 
-	public Grass getBackGrass() {
-		return backGrass;
+	public Grass getSecondGrass() {
+		return secondGrass;
 	}
 
+	public Grass getThirdGrass() {
+		return thirdGrass;
+	}
+	
+	public Grass getFourthGrass() {
+		return fourthGrass;
+	}
+	
 	public Pipe[] getPipes() {
 		return pipes;
 	}
 
 	public void onRestart() {
 		frontGrass.onRestart(0, SCROLL_SPEED);
-		backGrass.onRestart(frontGrass.getTailX(), SCROLL_SPEED);
+		secondGrass.onRestart(frontGrass.getTailX(), SCROLL_SPEED);
+		thirdGrass.onRestart(secondGrass.getTailX(), SCROLL_SPEED);
+		fourthGrass.onRestart(thirdGrass.getTailX(), SCROLL_SPEED);
 		
 		for (int i = 0; i < pipes.length; i++) {
 			// Same thing as pipes setup in our constructor
-			pipes[i].onRestart(i == 0 ? 210 : pipes[i - 1].getTailX() + PIPE_GAP, SCROLL_SPEED);
+			pipes[i].onRestart(i == 0 ? 330 : pipes[i - 1].getTailX() + PIPE_GAP, SCROLL_SPEED);
 		}
 	}
 }
