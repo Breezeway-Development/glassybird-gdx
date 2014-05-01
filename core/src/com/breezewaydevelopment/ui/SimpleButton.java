@@ -31,7 +31,7 @@ public class SimpleButton {
 	}
 
 	public void draw(SpriteBatch batcher) {
-			batcher.draw(isPressed ? buttonDown : buttonUp, x, y, width, height);
+		batcher.draw(isPressed ? buttonDown : buttonUp, x, y, width, height);
 	}
 
 	public boolean isTouchDown(int screenX, int screenY) {

@@ -87,7 +87,7 @@ public class ScrollHandler {
 	public void onRestart() {
 		frontGrass.onRestart(0, SCROLL_SPEED);
 		backGrass.onRestart(frontGrass.getTailX(), SCROLL_SPEED);
-		
+
 		for (int i = 0; i < pipes.length; i++) {
 			// Same thing as pipes setup in our constructor
 			pipes[i].onRestart(i == 0 ? 210 : pipes[i - 1].getTailX() + PIPE_GAP, SCROLL_SPEED);

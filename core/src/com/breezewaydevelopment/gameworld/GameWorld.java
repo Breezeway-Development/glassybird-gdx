@@ -55,13 +55,13 @@ public class GameWorld {
 		} else if (Intersector.overlaps(bird.getBoundingCircle(), ground)) {
 			stop(true);
 			state = GameState.GAMEOVER;
-			
+
 			if (score > AssetLoader.getHighScore()) {
 				AssetLoader.setHighScore(score);
 			}
 		}
 	}
-	
+
 	private void stop(boolean decel) {
 		scroller.stop();
 		if (bird.isAlive()) {
@@ -93,7 +93,7 @@ public class GameWorld {
 	public boolean isGameOver() {
 		return state == GameState.GAMEOVER;
 	}
-	
+
 	public boolean isHighScore() {
 		return state == GameState.HIGHSCORE;
 	}
