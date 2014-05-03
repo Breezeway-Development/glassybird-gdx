@@ -1,9 +1,5 @@
 package com.breezewaydevelopment.screens;
 
-import com.breezewaydevelopment.tweenaccessors.SpriteAccessor;
-import com.breezewaydevelopment.helpers.AssetLoader;
-import com.breezewaydevelopment.glassybird.GBGame;
-
 import aurelienribon.tweenengine.BaseTween;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenCallback;
@@ -15,6 +11,9 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.breezewaydevelopment.tweenaccessors.SpriteAccessor;
+import com.breezewaydevelopment.helpers.AssetLoader;
+import com.breezewaydevelopment.glassybird.GBGame;
 
 public class SplashScreen implements Screen {
 
@@ -54,7 +53,10 @@ public class SplashScreen implements Screen {
 			}
 		};
 
-		Tween.to(sprite, SpriteAccessor.ALPHA, .8f).target(1).ease(TweenEquations.easeInOutQuad).repeatYoyo(1, .4f).setCallback(cb).setCallbackTriggers(TweenCallback.COMPLETE).start(manager);
+		Tween.to(sprite, SpriteAccessor.ALPHA, .8f).target(1)
+			.ease(TweenEquations.easeInOutQuad).repeatYoyo(1, .4f)
+			.setCallback(cb).setCallbackTriggers(TweenCallback.COMPLETE)
+			.start(manager);
 	}
 
 	@Override

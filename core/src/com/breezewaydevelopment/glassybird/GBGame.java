@@ -11,7 +11,7 @@ public class GBGame extends Game {
 	@Override
 	public void create() {
 		AssetLoader.load();
-		setScreen(new SplashScreen(new GBGame()));
+		setScreen(new SplashScreen(this));
 	}
 
 	@Override

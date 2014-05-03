@@ -33,7 +33,6 @@ public class Pipe extends Scrollable {
 	@Override
 	public void update(float delta) {
 		super.update(delta);
-
 		// The set() method allows you to set the top left corner's x, y
 		// coordinates,
 		// along with the width and height of the rectangle
