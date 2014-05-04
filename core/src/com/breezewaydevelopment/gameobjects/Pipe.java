@@ -20,9 +20,7 @@ public class Pipe extends Scrollable {
 
 	public Pipe(float x, float y, int width, int height, float scrollSpeed, float groundY) {
 		super(x, y, width, height, scrollSpeed);
-
 		r = new Random();
-
 		skullUp = new Rectangle();
 		skullDown = new Rectangle();
 		barUp = new Rectangle();
@@ -33,11 +31,8 @@ public class Pipe extends Scrollable {
 	@Override
 	public void update(float delta) {
 		super.update(delta);
-
-		// The set() method allows you to set the top left corner's x, y
-		// coordinates,
-		// along with the width and height of the rectangle
-
+		
+		// x, y of top left corner, width, height of rectangle
 		barUp.set(position.x, position.y, width, height);
 		barDown.set(position.x, position.y + height + VERTICAL_GAP, width, groundY - (position.y + height + VERTICAL_GAP));
 

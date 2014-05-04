@@ -12,15 +12,17 @@ public class Bird {
 
 	private Circle boundingCircle;
 
-	private float rotation;
 	private int width;
 	private int height;
+	private float rotation;
+	private float originalY;
 
 	private boolean isAlive;
 
 	public Bird(float x, float y, int width, int height) {
 		this.width = width;
 		this.height = height;
+		originalY = y;
 
 		position = new Vector2(x, y);
 		velocity = new Vector2(0, 0);
@@ -58,6 +60,10 @@ public class Bird {
 			}
 
 		}
+	}
+	
+	public void updateReady(float runtime) {
+		position.y = 2 * (float) Math.sin(7 * runtime) + originalY;
 	}
 
 	public void die() {

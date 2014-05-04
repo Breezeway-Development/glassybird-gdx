@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Rectangle;
 
 public class SimpleButton {
 
-	private float x, y, width, height;
+	public float x, y, width, height;
 
 	private TextureRegion buttonUp;
 	private TextureRegion buttonDown;

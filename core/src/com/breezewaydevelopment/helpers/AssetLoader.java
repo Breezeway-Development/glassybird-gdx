@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class AssetLoader {
 
-	public static Texture texture, splashTexture; // Our spritesheet
+	public static Texture texture, splashTexture;
 	public static TextureRegion splash, logo, bg, grass, skullUp, skullDown,
 			bar, bird, birdDown, birdUp, playButtonUp, playButtonDown;
 	public static Animation birdAnimation;
@@ -34,6 +34,7 @@ public class AssetLoader {
 		playButtonDown.flip(false, true);
 
 		logo = new TextureRegion(texture, 0, 55, 135, 24);
+		logo.flip(false, true);
 
 		bg = new TextureRegion(texture, 0, 0, 136, 43); // x, y, width, height
 		bg.flip(false, true); // libGDX assumes a y-up coord system (usage flip(boolean x, boolean y))

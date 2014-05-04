@@ -1,6 +1,7 @@
 package com.breezewaydevelopment.screens;
 
 import com.breezewaydevelopment.tweenaccessors.SpriteAccessor;
+
 import com.breezewaydevelopment.helpers.AssetLoader;
 import com.breezewaydevelopment.glassybird.GBGame;
 
@@ -29,7 +30,7 @@ public class SplashScreen implements Screen {
 
 	@Override
 	public void show() {
-		sprite = new Sprite(AssetLoader.logo);
+		sprite = new Sprite(AssetLoader.splash);
 		sprite.setColor(1, 1, 1, 0);
 
 		float width = Gdx.graphics.getWidth();
@@ -39,21 +40,20 @@ public class SplashScreen implements Screen {
 
 		sprite.setSize(sprite.getWidth() * scale, sprite.getHeight() * scale);
 		sprite.setPosition((width / 2) - (sprite.getWidth() / 2), (height / 2) - (sprite.getHeight() / 2));
-		setupTween();
 		batcher = new SpriteBatch();
+
+		setupTween();
 	}
 
 	private void setupTween() {
-		Tween.registerAccessor(Sprite.class, new SpriteAccessor());
 		manager = new TweenManager();
-
+		Tween.registerAccessor(Sprite.class, new SpriteAccessor());
 		TweenCallback cb = new TweenCallback() {
 			@Override
 			public void onEvent(int type, BaseTween<?> source) {
 				game.setScreen(new GameScreen());
 			}
 		};
-
 		Tween.to(sprite, SpriteAccessor.ALPHA, .8f).target(1).ease(TweenEquations.easeInOutQuad).repeatYoyo(1, .4f).setCallback(cb).setCallbackTriggers(TweenCallback.COMPLETE).start(manager);
 	}
 
