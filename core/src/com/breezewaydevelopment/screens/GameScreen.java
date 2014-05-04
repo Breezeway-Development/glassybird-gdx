@@ -1,37 +1,37 @@
 package com.breezewaydevelopment.screens;
 
-import com.breezewaydevelopment.gameworld.GameRenderer;
-import com.breezewaydevelopment.gameworld.GameWorld;
-import com.breezewaydevelopment.helpers.InputHandler;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.breezewaydevelopment.helpers.InputHandler;
+import com.breezewaydevelopment.gameworld.GameRenderer;
+import com.breezewaydevelopment.gameworld.GameWorld;
 
 public class GameScreen implements Screen {
 
-	private float runtime = 0;
-
 	private GameWorld world;
 	private GameRenderer renderer;
+	private float runTime;
 
+	// This is the constructor, not the class declaration
 	public GameScreen() {
+
 		float screenWidth = Gdx.graphics.getWidth();
 		float screenHeight = Gdx.graphics.getHeight();
 		float gameWidth = 136;
 		float gameHeight = screenHeight / (screenWidth / gameWidth);
+		int midPointY = (int) (gameHeight / 2);
 
-		int midpointY = (int) (gameHeight / 2);
-		
-		world = new GameWorld(midpointY);
+		world = new GameWorld(midPointY);
 		Gdx.input.setInputProcessor(new InputHandler(world, screenWidth / gameWidth, screenHeight / gameHeight));
-		renderer = new GameRenderer(world, (int) gameHeight, midpointY);
+		renderer = new GameRenderer(world, (int) gameHeight, midPointY);
+		world.setRenderer(renderer);
 	}
 
 	@Override
 	public void render(float delta) {
-		runtime += delta;
+		runTime += delta;
 		world.update(delta);
-		renderer.render(delta, runtime);
+		renderer.render(delta, runTime);
 	}
 
 	@Override

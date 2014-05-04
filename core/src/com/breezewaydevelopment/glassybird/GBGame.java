@@ -1,12 +1,10 @@
 package com.breezewaydevelopment.glassybird;
 
+import com.badlogic.gdx.Game;
 import com.breezewaydevelopment.helpers.AssetLoader;
 import com.breezewaydevelopment.screens.SplashScreen;
-import com.badlogic.gdx.Game;
 
 public class GBGame extends Game {
-
-	//TODO: document lots of arbitrary math
 
 	@Override
 	public void create() {
@@ -19,4 +17,5 @@ public class GBGame extends Game {
 		super.dispose();
 		AssetLoader.dispose();
 	}
+
 }

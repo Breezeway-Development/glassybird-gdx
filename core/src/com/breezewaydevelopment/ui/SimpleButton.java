@@ -3,10 +3,11 @@ package com.breezewaydevelopment.ui;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.breezewaydevelopment.helpers.AssetLoader;
 
 public class SimpleButton {
 
-	public float x, y, width, height;
+	private float x, y, width, height;
 
 	private TextureRegion buttonUp;
 	private TextureRegion buttonDown;
@@ -24,6 +25,7 @@ public class SimpleButton {
 		this.buttonDown = buttonDown;
 
 		bounds = new Rectangle(x, y, width, height);
+
 	}
 
 	public boolean isClicked(int screenX, int screenY) {
@@ -31,21 +33,29 @@ public class SimpleButton {
 	}
 
 	public void draw(SpriteBatch batcher) {
-		batcher.draw(isPressed ? buttonDown : buttonUp, x, y, width, height);
+		if (isPressed) {
+			batcher.draw(buttonDown, x, y, width, height);
+		} else {
+			batcher.draw(buttonUp, x, y, width, height);
+		}
 	}
 
 	public boolean isTouchDown(int screenX, int screenY) {
+
 		if (bounds.contains(screenX, screenY)) {
 			isPressed = true;
 			return true;
 		}
+
 		return false;
 	}
 
 	public boolean isTouchUp(int screenX, int screenY) {
+
 		// It only counts as a touchUp if the button is in a pressed state.
 		if (bounds.contains(screenX, screenY) && isPressed) {
 			isPressed = false;
+			AssetLoader.flap.play();
 			return true;
 		}
 
