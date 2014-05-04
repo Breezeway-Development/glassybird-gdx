@@ -22,13 +22,11 @@ public class Pipe extends Scrollable {
 	// constructor
 	public Pipe(float x, float y, int width, int height, float scrollSpeed, float groundY) {
 		super(x, y, width, height, scrollSpeed);
-		// Initialize a Random object for Random number generation
 		r = new Random();
 		skullUp = new Rectangle();
 		skullDown = new Rectangle();
 		barUp = new Rectangle();
 		barDown = new Rectangle();
-
 		this.groundY = groundY;
 	}
 
@@ -37,10 +35,7 @@ public class Pipe extends Scrollable {
 		// Call the update method in the superclass (Scrollable)
 		super.update(delta);
 
-		// The set() method allows you to set the top left corner's x, y
-		// coordinates,
-		// along with the width and height of the rectangle
-
+		// x, y of top left corner, width, height of rectangle
 		barUp.set(position.x, position.y, width, height);
 		barDown.set(position.x, position.y + height + VERTICAL_GAP, width, groundY - (position.y + height + VERTICAL_GAP));
 
@@ -51,21 +46,14 @@ public class Pipe extends Scrollable {
 		// This shift is equivalent to: (SKULL_WIDTH - width) / 2
 		skullUp.set(position.x - (SKULL_WIDTH - width) / 2, position.y + height - SKULL_HEIGHT, SKULL_WIDTH, SKULL_HEIGHT);
 		skullDown.set(position.x - (SKULL_WIDTH - width) / 2, barDown.y, SKULL_WIDTH, SKULL_HEIGHT);
-
 	}
 
 	@Override
 	public void reset(float newX) {
-		// Call the reset method in the superclass (Scrollable)
 		super.reset(newX);
 		// Change the height to a random number
 		height = r.nextInt(90) + 15;
 		isScored = false;
-	}
-
-	public void onRestart(float x, float scrollSpeed) {
-		velocity.x = scrollSpeed;
-		reset(x);
 	}
 
 	public Rectangle getSkullUp() {

@@ -8,22 +8,21 @@ import com.breezewaydevelopment.gameworld.GameWorld;
 
 public class GameScreen implements Screen {
 
+	private float runTime = 0;
+	
 	private GameWorld world;
 	private GameRenderer renderer;
-	private float runTime;
 
-	// This is the constructor, not the class declaration
 	public GameScreen() {
-
 		float screenWidth = Gdx.graphics.getWidth();
 		float screenHeight = Gdx.graphics.getHeight();
 		float gameWidth = 136;
 		float gameHeight = screenHeight / (screenWidth / gameWidth);
-		int midPointY = (int) (gameHeight / 2);
+		int midpointY = (int) (gameHeight / 2);
 
-		world = new GameWorld(midPointY);
+		world = new GameWorld(midpointY);
 		Gdx.input.setInputProcessor(new InputHandler(world, screenWidth / gameWidth, screenHeight / gameHeight));
-		renderer = new GameRenderer(world, (int) gameHeight, midPointY);
+		renderer = new GameRenderer(world, (int) gameHeight, midpointY);
 		world.setRenderer(renderer);
 	}
 

@@ -6,17 +6,15 @@ import com.breezewaydevelopment.helpers.AssetLoader;
 
 public class Bird {
 
+	private int width;
+	private int height;
+	private float originalY;
+	private float rotation;
+	private boolean isAlive;
+
 	private Vector2 position;
 	private Vector2 velocity;
 	private Vector2 acceleration;
-
-	private float rotation;
-	private int width;
-	private float height;
-
-	private float originalY;
-
-	private boolean isAlive;
 
 	private Circle boundingCircle;
 
@@ -51,22 +49,17 @@ public class Bird {
 		// Set the circle's radius to be 6.5f;
 		boundingCircle.set(position.x + 9, position.y + 6, 6.5f);
 
-		// Rotate counterclockwise
 		if (velocity.y < 0) {
-			rotation -= 600 * delta;
+			rotation -= 600 * delta; // Rotate counterclockwise
 
 			if (rotation < -20) {
 				rotation = -20;
 			}
-		}
-
-		// Rotate clockwise
-		if (isFalling() || !isAlive) {
-			rotation += 480 * delta;
+		} else if (!isAlive || velocity.y > 110) {
+			rotation += 480 * delta; // Rotate clockwise
 			if (rotation > 90) {
 				rotation = 90;
 			}
-
 		}
 
 	}
@@ -75,12 +68,8 @@ public class Bird {
 		position.y = 2 * (float) Math.sin(7 * runTime) + originalY;
 	}
 
-	public boolean isFalling() {
-		return velocity.y > 110;
-	}
-
-	public boolean shouldntFlap() {
-		return velocity.y > 70 || !isAlive;
+	public boolean shouldFlap() {
+		return isAlive && velocity.y <= 70;
 	}
 
 	public void onClick() {
@@ -90,13 +79,12 @@ public class Bird {
 		}
 	}
 
-	public void die() {
-		isAlive = false;
+	public void stop(boolean freeze) {
 		velocity.y = 0;
-	}
-
-	public void decelerate() {
-		acceleration.y = 0;
+		isAlive = false;
+		if (freeze) { // Hit the ground
+			acceleration.y = 0;
+		}
 	}
 
 	public void onRestart(int y) {

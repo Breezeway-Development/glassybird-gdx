@@ -8,38 +8,37 @@ import com.breezewaydevelopment.gameobjects.ScrollHandler;
 
 public class GameWorld {
 
-	private Bird bird;
-	private ScrollHandler scroller;
-	private Rectangle ground;
 	private int score = 0;
 	private float runTime = 0;
-	private int midPointY;
-	private GameRenderer renderer;
+	private int midpointY;
 
+	private Rectangle ground;
+
+	private Bird bird;
+	private ScrollHandler scroller;
+	private GameRenderer renderer;
 	private GameState currentState;
 
 	public enum GameState {
 		MENU, READY, RUNNING, GAMEOVER, HIGHSCORE
 	}
 
-	public GameWorld(int midPointY) {
+	public GameWorld(int midpointY) {
+		this.midpointY = midpointY;
+		bird = new Bird(33, midpointY - 5, 17, 12);
+		scroller = new ScrollHandler(this, midpointY + 66); // The grass should start 66 pixels below the midpointY
+		ground = new Rectangle(0, midpointY + 66, 137, 11);
+
 		currentState = GameState.MENU;
-		this.midPointY = midPointY;
-		bird = new Bird(33, midPointY - 5, 17, 12);
-		// The grass should start 66 pixels below the midPointY
-		scroller = new ScrollHandler(this, midPointY + 66);
-		ground = new Rectangle(0, midPointY + 66, 137, 11);
 	}
 
 	public void update(float delta) {
 		runTime += delta;
-
 		switch (currentState) {
-			case READY:
 			case MENU:
+			case READY:
 				updateReady(delta);
 				break;
-
 			case RUNNING:
 				updateRunning(delta);
 				break;
@@ -54,7 +53,7 @@ public class GameWorld {
 		scroller.updateReady(delta);
 	}
 
-	public void updateRunning(float delta) {
+	private void updateRunning(float delta) {
 		if (delta > .15f) {
 			delta = .15f;
 		}
@@ -62,28 +61,25 @@ public class GameWorld {
 		bird.update(delta);
 		scroller.update(delta);
 
-		if (scroller.collides(bird) && bird.isAlive()) {
-			scroller.stop();
-			bird.die();
-			AssetLoader.dead.play();
-			renderer.prepareTransition(255, 255, 255, .3f);
-
+		if (bird.isAlive() && scroller.collides(bird)) { // Bird hits pipe
 			AssetLoader.fall.play();
+			stop(false);
+		} else if (Intersector.overlaps(bird.getBoundingCircle(), ground)) { // Bird hits ground
+			stop(true);
+
 		}
+	}
 
-		if (Intersector.overlaps(bird.getBoundingCircle(), ground)) {
+	private void stop(boolean ground) {
+		scroller.stop();
+		if (bird.isAlive()) {
+			AssetLoader.dead.play();
+			renderer.initTransition(255, 255, 255, .3f);
+		}
+		bird.stop(ground); // Let it fall if it hits a pipe
 
-			if (bird.isAlive()) {
-				AssetLoader.dead.play();
-				renderer.prepareTransition(255, 255, 255, .3f);
-
-				bird.die();
-			}
-
-			scroller.stop();
-			bird.decelerate();
+		if (ground) {
 			currentState = GameState.GAMEOVER;
-
 			if (score > AssetLoader.getHighScore()) {
 				AssetLoader.setHighScore(score);
 				currentState = GameState.HIGHSCORE;
@@ -97,7 +93,7 @@ public class GameWorld {
 	}
 
 	public int getMidPointY() {
-		return midPointY;
+		return midpointY;
 	}
 
 	public ScrollHandler getScroller() {
@@ -118,12 +114,12 @@ public class GameWorld {
 
 	public void ready() {
 		currentState = GameState.READY;
-		renderer.prepareTransition(0, 0, 0, 1f);
+		renderer.initTransition(0, 0, 0, 1f);
 	}
 
 	public void restart() {
 		score = 0;
-		bird.onRestart(midPointY - 5);
+		bird.onRestart(midpointY - 5);
 		scroller.onRestart();
 		ready();
 	}

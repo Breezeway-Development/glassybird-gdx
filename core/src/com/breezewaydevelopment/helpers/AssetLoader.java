@@ -11,24 +11,24 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class AssetLoader {
 
-	public static Texture texture, logoTexture;
-	public static TextureRegion logo, zbLogo, bg, grass, bird, birdDown, birdUp,
+	public static Texture texture, splashTexture;
+	public static TextureRegion splash, logo, bg, grass, bird, birdDown, birdUp,
 			skullUp, skullDown, bar, playButtonUp, playButtonDown, ready,
 			gameOver, highScore, scoreboard, star, noStar, retry;
 	public static Animation birdAnimation;
 	public static Sound dead, flap, coin, fall;
-	public static BitmapFont font, shadow, whiteFont;
+	public static BitmapFont greenFont, shadow, whiteFont;
 	private static Preferences prefs;
 
 	public static void load() {
 
-		logoTexture = new Texture(Gdx.files.internal("data/logo.png"));
-		logoTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-
-		logo = new TextureRegion(logoTexture, 0, 0, 512, 114);
+		splashTexture = new Texture(Gdx.files.internal("data/logo.png"));
+		splashTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
 		texture = new Texture(Gdx.files.internal("data/texture.png"));
 		texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+		
+		splash = new TextureRegion(splashTexture, 0, 0, 512, 114);
 
 		playButtonUp = new TextureRegion(texture, 0, 83, 29, 16);
 		playButtonDown = new TextureRegion(texture, 29, 83, 29, 16);
@@ -37,52 +37,39 @@ public class AssetLoader {
 
 		ready = new TextureRegion(texture, 59, 83, 34, 7);
 		ready.flip(false, true);
-
 		retry = new TextureRegion(texture, 59, 110, 33, 7);
 		retry.flip(false, true);
-
 		gameOver = new TextureRegion(texture, 59, 92, 46, 7);
 		gameOver.flip(false, true);
-
 		scoreboard = new TextureRegion(texture, 111, 83, 97, 37);
 		scoreboard.flip(false, true);
-
 		star = new TextureRegion(texture, 152, 70, 10, 10);
-		noStar = new TextureRegion(texture, 165, 70, 10, 10);
-
 		star.flip(false, true);
+		noStar = new TextureRegion(texture, 165, 70, 10, 10);
 		noStar.flip(false, true);
-
 		highScore = new TextureRegion(texture, 59, 101, 48, 7);
 		highScore.flip(false, true);
 
-		zbLogo = new TextureRegion(texture, 0, 55, 135, 24);
-		zbLogo.flip(false, true);
+		logo = new TextureRegion(texture, 0, 55, 135, 24);
+		logo.flip(false, true);
 
 		bg = new TextureRegion(texture, 0, 0, 136, 43);
 		bg.flip(false, true);
-
 		grass = new TextureRegion(texture, 0, 43, 143, 11);
 		grass.flip(false, true);
 
-		birdDown = new TextureRegion(texture, 136, 0, 17, 12);
-		birdDown.flip(false, true);
-
 		bird = new TextureRegion(texture, 153, 0, 17, 12);
 		bird.flip(false, true);
-
 		birdUp = new TextureRegion(texture, 170, 0, 17, 12);
 		birdUp.flip(false, true);
-
-		TextureRegion[] birds = { birdDown, bird, birdUp };
-		birdAnimation = new Animation(0.06f, birds);
-		birdAnimation.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
+		birdDown = new TextureRegion(texture, 136, 0, 17, 12);
+		birdDown.flip(false, true);
+		birdAnimation = new Animation(0.06f, new TextureRegion[] { birdDown, bird, birdUp }); //.06 sec flapping anim
+		birdAnimation.setPlayMode(Animation.PlayMode.LOOP_PINGPONG); // Back and forth
 
 		skullUp = new TextureRegion(texture, 192, 0, 24, 14);
-		// Create by flipping existing skullUp
 		skullDown = new TextureRegion(skullUp);
-		skullDown.flip(false, true);
-
+		skullDown.flip(false, true); // Flip y from skullUp
 		bar = new TextureRegion(texture, 136, 16, 22, 3);
 		bar.flip(false, true);
 
@@ -91,42 +78,39 @@ public class AssetLoader {
 		coin = Gdx.audio.newSound(Gdx.files.internal("data/coin.wav"));
 		fall = Gdx.audio.newSound(Gdx.files.internal("data/fall.wav"));
 
-		font = new BitmapFont(Gdx.files.internal("data/text.fnt"));
-		font.setScale(.25f, -.25f);
-
+		greenFont = new BitmapFont(Gdx.files.internal("data/greentext.fnt"));
+		greenFont.setScale(.25f, -.25f);
 		whiteFont = new BitmapFont(Gdx.files.internal("data/whitetext.fnt"));
 		whiteFont.setScale(.1f, -.1f);
-
 		shadow = new BitmapFont(Gdx.files.internal("data/shadow.fnt"));
 		shadow.setScale(.25f, -.25f);
 
-		// Create (or retrieve existing) preferences file
-		prefs = Gdx.app.getPreferences("ZombieBird");
-
-		if (!prefs.contains("highScore")) {
-			prefs.putInteger("highScore", 0);
+		prefs = Gdx.app.getPreferences("glassybird");
+		if (!prefs.contains("highscore")) {
+			setHighScore(0);
 		}
 	}
 
 	public static void setHighScore(int val) {
-		prefs.putInteger("highScore", val);
+		prefs.putInteger("highscore", val);
 		prefs.flush();
 	}
 
 	public static int getHighScore() {
-		return prefs.getInteger("highScore");
+		return prefs.getInteger("highscore");
 	}
 
 	public static void dispose() {
-		// We must dispose of the texture when we are finished.
 		texture.dispose();
+		splashTexture.dispose();
 
-		// Dispose sounds
 		dead.dispose();
 		flap.dispose();
 		coin.dispose();
+		fall.dispose();
 
-		font.dispose();
+		greenFont.dispose();
+		whiteFont.dispose();
 		shadow.dispose();
 	}
 

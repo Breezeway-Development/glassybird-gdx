@@ -8,13 +8,12 @@ import com.breezewaydevelopment.helpers.AssetLoader;
 public class SimpleButton {
 
 	private float x, y, width, height;
+	private boolean isPressed = false;
 
 	private TextureRegion buttonUp;
 	private TextureRegion buttonDown;
 
 	private Rectangle bounds;
-
-	private boolean isPressed = false;
 
 	public SimpleButton(float x, float y, float width, float height, TextureRegion buttonUp, TextureRegion buttonDown) {
 		this.x = x;
@@ -25,7 +24,6 @@ public class SimpleButton {
 		this.buttonDown = buttonDown;
 
 		bounds = new Rectangle(x, y, width, height);
-
 	}
 
 	public boolean isClicked(int screenX, int screenY) {
@@ -33,32 +31,23 @@ public class SimpleButton {
 	}
 
 	public void draw(SpriteBatch batcher) {
-		if (isPressed) {
-			batcher.draw(buttonDown, x, y, width, height);
-		} else {
-			batcher.draw(buttonUp, x, y, width, height);
-		}
+		batcher.draw(isPressed ? buttonDown : buttonUp, x, y, width, height);
 	}
 
 	public boolean isTouchDown(int screenX, int screenY) {
-
 		if (bounds.contains(screenX, screenY)) {
 			isPressed = true;
 			return true;
 		}
-
 		return false;
 	}
 
 	public boolean isTouchUp(int screenX, int screenY) {
-
-		// It only counts as a touchUp if the button is in a pressed state.
-		if (bounds.contains(screenX, screenY) && isPressed) {
+		if (isPressed && bounds.contains(screenX, screenY)) {
 			isPressed = false;
 			AssetLoader.flap.play();
 			return true;
 		}
-
 		// Whenever a finger is released, we will cancel any presses.
 		isPressed = false;
 		return false;

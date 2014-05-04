@@ -24,13 +24,13 @@ public class InputHandler implements InputProcessor {
 		this.myWorld = myWorld;
 		myBird = myWorld.getBird();
 
-		int midPointY = myWorld.getMidPointY();
+		int midpointY = myWorld.getMidPointY();
 
 		this.scaleFactorX = scaleFactorX;
 		this.scaleFactorY = scaleFactorY;
 
 		menuButtons = new ArrayList<SimpleButton>();
-		playButton = new SimpleButton(136 / 2 - (AssetLoader.playButtonUp.getRegionWidth() / 2), midPointY + 50, 29, 16, AssetLoader.playButtonUp, AssetLoader.playButtonDown);
+		playButton = new SimpleButton(136 / 2 - (AssetLoader.playButtonUp.getRegionWidth() / 2), midpointY + 50, 29, 16, AssetLoader.playButtonUp, AssetLoader.playButtonDown);
 		menuButtons.add(playButton);
 	}
 
