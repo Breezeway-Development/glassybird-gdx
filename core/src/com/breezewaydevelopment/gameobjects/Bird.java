@@ -2,7 +2,8 @@ package com.breezewaydevelopment.gameobjects;
 
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
-import com.breezewaydevelopment.helpers.AssetLoader;
+import com.breezewaydevelopment.helpers.Assets;
+import com.breezewaydevelopment.helpers.Constants;
 
 public class Bird {
 
@@ -18,11 +19,10 @@ public class Bird {
 
 	private Circle boundingCircle;
 
-	public Bird(float x, float y, int width, int height) {
-		this.width = width;
-		this.height = height;
-		this.originalY = y;
-		position = new Vector2(x, y);
+	public Bird() {
+		this.width = Constants.Bird.WIDTH;
+		this.height = Constants.Bird.HEIGHT;
+		position = new Vector2(Constants.Bird.START_X, Constants.Bird.START_Y);
 		velocity = new Vector2(0, 0);
 		acceleration = new Vector2(0, 460);
 		boundingCircle = new Circle();
@@ -74,7 +74,7 @@ public class Bird {
 
 	public void onClick() {
 		if (isAlive) {
-			AssetLoader.flap.play();
+			Assets.flap.play();
 			velocity.y = -140;
 		}
 	}
@@ -87,9 +87,9 @@ public class Bird {
 		}
 	}
 
-	public void onRestart(int y) {
+	public void onRestart() {
 		rotation = 0;
-		position.y = y;
+		position.y = Constants.Bird.START_Y;
 		velocity.x = 0;
 		velocity.y = 0;
 		acceleration.x = 0;

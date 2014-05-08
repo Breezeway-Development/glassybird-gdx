@@ -1,59 +1,61 @@
 package com.breezewaydevelopment.gameobjects;
 
-import java.util.Random;
-
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
+import com.breezewaydevelopment.helpers.Constants;
+import com.breezewaydevelopment.helpers.Util;
 
 public class Pipe extends Scrollable {
 
-	private Random r;
-
 	private Rectangle skullUp, skullDown, barUp, barDown;
-
-	public static final int VERTICAL_GAP = 45;
-	public static final int SKULL_WIDTH = 24;
-	public static final int SKULL_HEIGHT = 11;
-	private float groundY;
-
+	
 	private boolean isScored = false;
 
 	// When Pipe's constructor is invoked, invoke the super (Scrollable)
 	// constructor
-	public Pipe(float x, float y, int width, int height, float scrollSpeed, float groundY) {
-		super(x, y, width, height, scrollSpeed);
-		r = new Random();
+	public Pipe(float x) {
+		super(x, 0, Constants.Scrollables.PIPE_WIDTH, Util.genPipeHeight());
 		skullUp = new Rectangle();
 		skullDown = new Rectangle();
 		barUp = new Rectangle();
 		barDown = new Rectangle();
-		this.groundY = groundY;
 	}
 
 	@Override
 	public void update(float delta) {
-		// Call the update method in the superclass (Scrollable)
 		super.update(delta);
 
 		// x, y of top left corner, width, height of rectangle
-		barUp.set(position.x, position.y, width, height);
-		barDown.set(position.x, position.y + height + VERTICAL_GAP, width, groundY - (position.y + height + VERTICAL_GAP));
-
-		// Our skull width is 24. The bar is only 22 pixels wide. So the skull
-		// must be shifted by 1 pixel to the left (so that the skull is centered
-		// with respect to its bar).
-
-		// This shift is equivalent to: (SKULL_WIDTH - width) / 2
-		skullUp.set(position.x - (SKULL_WIDTH - width) / 2, position.y + height - SKULL_HEIGHT, SKULL_WIDTH, SKULL_HEIGHT);
-		skullDown.set(position.x - (SKULL_WIDTH - width) / 2, barDown.y, SKULL_WIDTH, SKULL_HEIGHT);
+		
+		barUp.setX(position.x);
+		barDown.setX(position.x);
+		
+		skullUp.setX(position.x - 1);
+		skullDown.setX(position.x - 1);
+		
+//		barUp.set(position.x, position.y, width, height);
+//		barDown.set(position.x, position.y + height + VERTICAL_GAP, width, groundY - (position.y + height + VERTICAL_GAP));
+//
+//		// Our skull width is 24. The bar is only 22 pixels wide. So the skull
+//		// must be shifted by 1 pixel to the left (so that the skull is centered
+//		// with respect to its bar).
+//
+//		// This shift is equivalent to: (SKULL_WIDTH - width) / 2
+//		skullUp.set(position.x - (SKULL_WIDTH - width) / 2, position.y + height - SKULL_HEIGHT, SKULL_WIDTH, SKULL_HEIGHT);
+//		skullDown.set(position.x - (SKULL_WIDTH - width) / 2, barDown.y, SKULL_WIDTH, SKULL_HEIGHT);
 	}
 
 	@Override
 	public void reset(float newX) {
 		super.reset(newX);
 		// Change the height to a random number
-		height = r.nextInt(90) + 15;
+		height = Util.genPipeHeight();
 		isScored = false;
+	}
+	
+	@Override
+	public float getTailX() {
+		return super.getTailX() + Constants.Scrollables.PIPE_GAP_X;
 	}
 
 	public Rectangle getSkullUp() {

@@ -15,7 +15,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.breezewaydevelopment.helpers.AssetLoader;
+import com.breezewaydevelopment.helpers.Assets;
+import com.breezewaydevelopment.helpers.Constants;
+import com.breezewaydevelopment.helpers.Util;
 import com.breezewaydevelopment.helpers.InputHandler;
 import com.breezewaydevelopment.tweenaccessors.Value;
 import com.breezewaydevelopment.tweenaccessors.ValueAccessor;
@@ -27,7 +29,7 @@ import com.breezewaydevelopment.gameobjects.ScrollHandler;
 
 public class GameRenderer {
 
-	private int midpointY;
+	private float midpointY;
 
 	private GameWorld myWorld;
 
@@ -43,7 +45,7 @@ public class GameRenderer {
 
 	// Game Assets
 	private TextureRegion bg, grass, birdMid, skullUp, skullDown, bar, ready,
-			logo, gameOver, highScore, scoreboard, star, noStar, retry;
+			gameOver, highScore, scoreboard, star, noStar, retry;
 	private Animation birdAnimation;
 
 	// Tween stuff
@@ -54,14 +56,14 @@ public class GameRenderer {
 	private List<SimpleButton> menuButtons;
 	private Color transitionColor;
 
-	public GameRenderer(GameWorld world, int gameHeight, int midpointY) {
+	public GameRenderer(GameWorld world) {
 		myWorld = world;
 
-		this.midpointY = midpointY;
+		midpointY = Constants.MIDPOINT_Y;
 		this.menuButtons = ((InputHandler) Gdx.input.getInputProcessor()).getMenuButtons();
 
 		cam = new OrthographicCamera();
-		cam.setToOrtho(true, 136, gameHeight);
+		cam.setToOrtho(true, 136, Constants.GAME_HEIGHT); //TODO: Y-UP coord system
 
 		batcher = new SpriteBatch();
 		batcher.setProjectionMatrix(cam.combined);
@@ -84,21 +86,20 @@ public class GameRenderer {
 	}
 
 	private void initAssets() {
-		bg = AssetLoader.bg;
-		grass = AssetLoader.grass;
-		birdAnimation = AssetLoader.birdAnimation;
-		birdMid = AssetLoader.bird;
-		skullUp = AssetLoader.skullUp;
-		skullDown = AssetLoader.skullDown;
-		bar = AssetLoader.bar;
-		ready = AssetLoader.ready;
-		logo = AssetLoader.logo;
-		gameOver = AssetLoader.gameOver;
-		highScore = AssetLoader.highScore;
-		scoreboard = AssetLoader.scoreboard;
-		retry = AssetLoader.retry;
-		star = AssetLoader.star;
-		noStar = AssetLoader.noStar;
+		bg = Assets.bg;
+		grass = Assets.grass;
+		birdAnimation = Assets.birdAnimation;
+		birdMid = Assets.bird;
+		skullUp = Assets.skullUp;
+		skullDown = Assets.skullDown;
+		bar = Assets.bar;
+		ready = Assets.ready;
+		gameOver = Assets.gameOver;
+		highScore = Assets.highScore;
+		scoreboard = Assets.scoreboard;
+		retry = Assets.retry;
+		star = Assets.star;
+		noStar = Assets.noStar;
 	}
 
 	private void drawGrass() {
@@ -131,7 +132,7 @@ public class GameRenderer {
 	}
 
 	private void drawMenuUI() {
-		batcher.draw(logo, 136 / 2 - 56, midpointY - 50, logo.getRegionWidth() / 1.2f, logo.getRegionHeight() / 1.2f);
+		//batcher.draw(logo, 136 / 2 - 56, midpointY - 50, logo.getRegionWidth() / 1.2f, logo.getRegionHeight() / 1.2f);
 		for (SimpleButton button : menuButtons) {
 			button.draw(batcher);
 		}
@@ -169,10 +170,10 @@ public class GameRenderer {
 
 		int length = ("" + myWorld.getScore()).length();
 
-		AssetLoader.whiteFont.draw(batcher, "" + myWorld.getScore(), 104 - (2 * length), midpointY - 20);
+		Assets.whiteFont.draw(batcher, "" + myWorld.getScore(), 104 - (2 * length), midpointY - 20);
 
-		int length2 = ("" + AssetLoader.getHighScore()).length();
-		AssetLoader.whiteFont.draw(batcher, "" + AssetLoader.getHighScore(), 104 - (2.5f * length2), midpointY - 3);
+		int length2 = ("" + Util.getHighScore()).length();
+		Assets.whiteFont.draw(batcher, "" + Util.getHighScore(), 104 - (2.5f * length2), midpointY - 3);
 
 	}
 
@@ -190,8 +191,8 @@ public class GameRenderer {
 
 	private void drawScore() {
 		int length = ("" + myWorld.getScore()).length();
-		AssetLoader.shadow.draw(batcher, "" + myWorld.getScore(), 68 - (3 * length), midpointY - 82);
-		AssetLoader.greenFont.draw(batcher, "" + myWorld.getScore(), 68 - (3 * length), midpointY - 83);
+		Assets.shadow.draw(batcher, "" + myWorld.getScore(), 68 - (3 * length), midpointY - 82);
+		Assets.greenFont.draw(batcher, "" + myWorld.getScore(), 68 - (3 * length), midpointY - 83);
 	}
 
 	private void drawHighScore() {
@@ -274,7 +275,6 @@ public class GameRenderer {
 			shapeRenderer.rect(0, 0, 136, 300);
 			shapeRenderer.end();
 			Gdx.gl.glDisable(GL20.GL_BLEND);
-
 		}
 	}
 

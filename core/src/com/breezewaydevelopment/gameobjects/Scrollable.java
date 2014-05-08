@@ -1,6 +1,7 @@
 package com.breezewaydevelopment.gameobjects;
 
 import com.badlogic.gdx.math.Vector2;
+import com.breezewaydevelopment.helpers.Constants;
 
 public class Scrollable {
 
@@ -13,9 +14,9 @@ public class Scrollable {
 	
 	protected boolean isScrolledLeft;
 
-	public Scrollable(float x, float y, int width, int height, float scrollSpeed) {
+	public Scrollable(float x, float y, int width, int height) {
 		position = new Vector2(x, y);
-		velocity = new Vector2(scrollSpeed, 0);
+		velocity = new Vector2(Constants.Scrollables.SCROLL_SPEED, 0);
 		this.width = width;
 		this.height = height;
 		isScrolledLeft = false;
@@ -63,9 +64,9 @@ public class Scrollable {
 		return height;
 	}
 	
-	public void onRestart(float x, float scrollSpeed) {
+	public void onRestart(float x) {
 		reset(x);
-		velocity.x = scrollSpeed;
+		velocity.x = Constants.Scrollables.SCROLL_SPEED;
 	}
 
 }

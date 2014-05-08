@@ -2,7 +2,9 @@ package com.breezewaydevelopment.gameworld;
 
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
-import com.breezewaydevelopment.helpers.AssetLoader;
+import com.breezewaydevelopment.helpers.Assets;
+import com.breezewaydevelopment.helpers.Constants;
+import com.breezewaydevelopment.helpers.Util;
 import com.breezewaydevelopment.gameobjects.Bird;
 import com.breezewaydevelopment.gameobjects.ScrollHandler;
 
@@ -10,7 +12,6 @@ public class GameWorld {
 
 	private int score = 0;
 	private float runTime = 0;
-	private int midpointY;
 
 	private Rectangle ground;
 
@@ -23,11 +24,10 @@ public class GameWorld {
 		MENU, READY, RUNNING, GAMEOVER, HIGHSCORE
 	}
 
-	public GameWorld(int midpointY) {
-		this.midpointY = midpointY;
-		bird = new Bird(33, midpointY - 5, 17, 12);
-		scroller = new ScrollHandler(this, midpointY + 66); // The grass should start 66 pixels below the midpointY
-		ground = new Rectangle(0, midpointY + 66, 137, 11);
+	public GameWorld() {
+		bird = new Bird();
+		scroller = new ScrollHandler(this); // The grass should start 66 pixels below the midpointY
+		ground = new Rectangle(0, Constants.MIDPOINT_Y + 66, 137, 11);
 
 		currentState = GameState.MENU;
 	}
@@ -62,7 +62,7 @@ public class GameWorld {
 		scroller.update(delta);
 
 		if (bird.isAlive() && scroller.collides(bird)) { // Bird hits pipe
-			AssetLoader.fall.play();
+			Assets.fall.play();
 			stop(false);
 		} else if (Intersector.overlaps(bird.getBoundingCircle(), ground)) { // Bird hits ground
 			stop(true);
@@ -73,15 +73,15 @@ public class GameWorld {
 	private void stop(boolean ground) {
 		scroller.stop();
 		if (bird.isAlive()) {
-			AssetLoader.dead.play();
+			Assets.dead.play();
 			renderer.initTransition(255, 255, 255, .3f);
 		}
 		bird.stop(ground); // Let it fall if it hits a pipe
 
 		if (ground) {
 			currentState = GameState.GAMEOVER;
-			if (score > AssetLoader.getHighScore()) {
-				AssetLoader.setHighScore(score);
+			if (score > Util.getHighScore()) {
+				Util.setHighScore(score);
 				currentState = GameState.HIGHSCORE;
 			}
 		}
@@ -90,10 +90,6 @@ public class GameWorld {
 	public Bird getBird() {
 		return bird;
 
-	}
-
-	public int getMidPointY() {
-		return midpointY;
 	}
 
 	public ScrollHandler getScroller() {
@@ -119,7 +115,7 @@ public class GameWorld {
 
 	public void restart() {
 		score = 0;
-		bird.onRestart(midpointY - 5);
+		bird.onRestart();
 		scroller.onRestart();
 		ready();
 	}

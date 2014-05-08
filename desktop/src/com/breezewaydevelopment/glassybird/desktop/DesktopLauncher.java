@@ -9,8 +9,8 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.title = "Glassy Bird";
 		config.useGL30 = false;
-		config.width = 1080 / 3;
-		config.height = 1920 / 3;
+		config.width = 1088 / 4; // 272 (divisible by 136)
+		config.height = 1920 / 4; // 480
 //		config.width = 1280 / 3;
 //		config.height = 720 / 3;
 

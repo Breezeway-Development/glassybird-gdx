@@ -12,7 +12,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.breezewaydevelopment.glassybird.GBGame;
-import com.breezewaydevelopment.helpers.AssetLoader;
+import com.breezewaydevelopment.helpers.Assets;
 import com.breezewaydevelopment.tweenaccessors.SpriteAccessor;
 
 public class SplashScreen implements Screen {
@@ -28,18 +28,17 @@ public class SplashScreen implements Screen {
 
 	@Override
 	public void show() {
-		sprite = new Sprite(AssetLoader.splash);
+		sprite = new Sprite(Assets.splash);
 		sprite.setColor(1, 1, 1, 0);
 
-		float width = Gdx.graphics.getWidth();
-		float height = Gdx.graphics.getHeight();
-		float desiredWidth = width * .7f;
-		float scale = desiredWidth / sprite.getWidth();
-
+		float width = Gdx.graphics.getWidth(); // 270
+		float height = Gdx.graphics.getHeight(); // 480
+		
+		float scale = (width * .7f) / sprite.getWidth(); // Splash doesn't have borders
 		sprite.setSize(sprite.getWidth() * scale, sprite.getHeight() * scale);
+		
 		sprite.setPosition((width / 2) - (sprite.getWidth() / 2), (height / 2) - (sprite.getHeight() / 2));
 		batcher = new SpriteBatch();
-		
 		setupTween();
 	}
 

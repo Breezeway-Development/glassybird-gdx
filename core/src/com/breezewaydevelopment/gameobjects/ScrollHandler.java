@@ -1,25 +1,22 @@
 package com.breezewaydevelopment.gameobjects;
 
-import com.breezewaydevelopment.helpers.AssetLoader;
+import com.breezewaydevelopment.helpers.Assets;
 import com.breezewaydevelopment.gameworld.GameWorld;
 
 public class ScrollHandler {
-
-	public static final int SCROLL_SPEED = -59;
-	public static final int PIPE_GAP = 49;
 
 	private GameWorld gameWorld;
 	private Grass frontGrass, backGrass;
 	private Pipe[] pipes = new Pipe[3];
 
-	public ScrollHandler(GameWorld gameWorld, float yPos) {
+	public ScrollHandler(GameWorld gameWorld) {
 		this.gameWorld = gameWorld;
-		frontGrass = new Grass(0, yPos, 143, 11, SCROLL_SPEED);
-		backGrass = new Grass(frontGrass.getTailX(), yPos, 143, 11, SCROLL_SPEED);
+		frontGrass = new Grass(0);
+		backGrass = new Grass(frontGrass.getTailX());
 
 		for (int i = 0; i < pipes.length; i++) {
 			// Here we define each pipe. If i = 0 start at x=210, otherwise start behind the previous pipe
-			pipes[i] = new Pipe(i == 0 ? 210 : pipes[i - 1].getTailX() + PIPE_GAP, 0, 22, 60 + (i * 10), SCROLL_SPEED, yPos);
+			pipes[i] = new Pipe((i == 0 ? 210 : pipes[i - 1].getTailX()));
 		}
 	}
 
@@ -50,7 +47,7 @@ public class ScrollHandler {
 			p.update(delta);
 			if (p.isScrolledLeft()) {
 				// If a pipe is scrolled left, reset it past the farthest pipe (1 -> 3, 2 -> 1, 3 -> 2)
-				p.reset(pipes[(i == 0 ? pipes.length : i) - 1].getTailX() + PIPE_GAP);
+				p.reset(pipes[(i == 0 ? pipes.length : i) - 1].getTailX());
 			}
 			i++;
 		}
@@ -78,7 +75,7 @@ public class ScrollHandler {
 			if (!p.isScored() && p.getX() + (p.getWidth() / 2) < birdTip) { // If the tip of the bird crosses the middle of the pipe
 				gameWorld.addScore(1);
 				p.setScored(true);
-				AssetLoader.coin.play();
+				Assets.coin.play();
 			}
 			if (p.collides(bird)) {
 				return true;
@@ -100,11 +97,11 @@ public class ScrollHandler {
 	}
 
 	public void onRestart() {
-		frontGrass.onRestart(0, SCROLL_SPEED);
-		backGrass.onRestart(frontGrass.getTailX(), SCROLL_SPEED);
+		frontGrass.onRestart(0);
+		backGrass.onRestart(frontGrass.getTailX());
 		for (int i = 0; i < pipes.length; i++) {
 			// Same thing as pipes setup in our constructor
-			pipes[i].onRestart(i == 0 ? 210 : pipes[i - 1].getTailX() + PIPE_GAP, SCROLL_SPEED);
+			pipes[i].onRestart((i == 0 ? 210 : pipes[i - 1].getTailX()));
 		}
 	}
 

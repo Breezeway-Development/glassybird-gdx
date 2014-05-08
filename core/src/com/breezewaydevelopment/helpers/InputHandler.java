@@ -20,17 +20,18 @@ public class InputHandler implements InputProcessor {
 	private float scaleFactorX;
 	private float scaleFactorY;
 
-	public InputHandler(GameWorld myWorld, float scaleFactorX, float scaleFactorY) {
+	public InputHandler(GameWorld myWorld) {
+		float scaleFactorX = Constants.SCREEN_WIDTH / Constants.GAME_WIDTH;
+		float scaleFactorY = Constants.SCREEN_HEIGHT / Constants.GAME_HEIGHT;
+		
 		this.myWorld = myWorld;
 		myBird = myWorld.getBird();
-
-		int midpointY = myWorld.getMidPointY();
 
 		this.scaleFactorX = scaleFactorX;
 		this.scaleFactorY = scaleFactorY;
 
 		menuButtons = new ArrayList<SimpleButton>();
-		playButton = new SimpleButton(136 / 2 - (AssetLoader.playButtonUp.getRegionWidth() / 2), midpointY + 50, 29, 16, AssetLoader.playButtonUp, AssetLoader.playButtonDown);
+		playButton = new SimpleButton(136 / 2 - (Assets.playButtonUp.getRegionWidth() / 2), Constants.MIDPOINT_Y + 50, 29, 16, Assets.playButtonUp, Assets.playButtonDown);
 		menuButtons.add(playButton);
 	}
 

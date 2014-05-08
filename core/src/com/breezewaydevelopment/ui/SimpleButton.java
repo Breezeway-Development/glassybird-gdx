@@ -3,7 +3,7 @@ package com.breezewaydevelopment.ui;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
-import com.breezewaydevelopment.helpers.AssetLoader;
+import com.breezewaydevelopment.helpers.Assets;
 
 public class SimpleButton {
 
@@ -45,7 +45,7 @@ public class SimpleButton {
 	public boolean isTouchUp(int screenX, int screenY) {
 		if (isPressed && bounds.contains(screenX, screenY)) {
 			isPressed = false;
-			AssetLoader.flap.play();
+			Assets.flap.play();
 			return true;
 		}
 		// Whenever a finger is released, we will cancel any presses.
