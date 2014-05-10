@@ -26,7 +26,7 @@ public class Bird {
 		position = new Vector2(Constants.Bird.START_X, originalY);
 		velocity = new Vector2(0, 0);
 		acceleration = new Vector2(0, -460);
-		boundingCircle = new Circle();
+		boundingCircle = new Circle(position.x, position.y, 6.5f);
 		isAlive = true;
 	}
 
@@ -37,7 +37,7 @@ public class Bird {
 			velocity.y = -200;
 		}
 
-		if (position.y > Constants.GAME_HEIGHT) { // TODO: Fix ceiling check
+		if (position.y > Constants.GAME_HEIGHT) {
 			System.out.println("Ceiling");
 			position.y = Constants.GAME_HEIGHT;
 			velocity.y = 0;
@@ -45,22 +45,19 @@ public class Bird {
 
 		position.add(velocity.cpy().scl(delta));
 
-		// Set the circle's center to be (9, 6) with respect to the bird.
-		// Set the circle's radius to be 6.5f;
-		boundingCircle.set(position.x + 9, position.y + 6, 6.5f);
-		
-		// TODO: Fix rotation
+		boundingCircle.setPosition(position.x + 9, position.y + 6);
 
-		if (velocity.y < 0) {
-			rotation -= 600 * delta; // Rotate counterclockwise
-
-			if (rotation < -20) {
-				rotation = -20;
+		// Clockwise rotation in degrees
+		if (velocity.y >= 0) { // Going up
+			rotation += 600 * delta;
+			if (rotation > 20) {
+				rotation = 20;
 			}
-		} else if (!isAlive || velocity.y > 110) {
-			rotation += 480 * delta; // Rotate clockwise
-			if (rotation > 90) {
-				rotation = 90;
+		} else if (!isAlive || velocity.y <= -110) { // Going down
+			// TODO: More responsive clockwise rotation
+			rotation -= 480 * delta;
+			if (rotation < -90) {
+				rotation = -90;
 			}
 		}
 
@@ -68,10 +65,11 @@ public class Bird {
 
 	public void updateReady(float runTime) {
 		position.y = 2 * (float) Math.sin(7 * runTime) + originalY;
+		position.x = Constants.MIDPOINT_X - width;
 	}
 
 	public boolean shouldFlap() {
-		return isAlive && velocity.y <= 70;
+		return isAlive && velocity.y >= -70;
 	}
 
 	public void onClick() {

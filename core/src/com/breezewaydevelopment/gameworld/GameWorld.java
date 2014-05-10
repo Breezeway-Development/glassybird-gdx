@@ -21,6 +21,7 @@ public class GameWorld {
 	private GameState currentState;
 
 	public enum GameState {
+		// TODO: Better state handling
 		MENU, READY, RUNNING, GAMEOVER, HIGHSCORE
 	}
 

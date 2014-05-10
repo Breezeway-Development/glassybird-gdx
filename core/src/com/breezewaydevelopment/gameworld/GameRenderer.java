@@ -122,15 +122,22 @@ public class GameRenderer {
 		}
 	}
 
-//	private void drawBirdCentered(float runtime) {
-////		batcher.draw(birdAnimation.getKeyFrame(runTime), 59, bird.getY() - 15, bird.getWidth() / 2.0f, bird.getHeight() / 2.0f, bird.getWidth(), bird.getHeight(), 1, 1, bird.getRotation());
-//		float birdW = bird.getWidth(), birdH = bird.getHeight();
-//		batcher.draw(birdAnimation.getKeyFrame(runtime), 59, bird.getY(), birdW / 2.0f, birdH / 2.0f, birdW, birdH, 1, 1, bird.getRotation());
-//	}
+	//	private void drawBirdCentered(float runtime) {
+	////		batcher.draw(birdAnimation.getKeyFrame(runTime), 59, bird.getY() - 15, bird.getWidth() / 2.0f, bird.getHeight() / 2.0f, bird.getWidth(), bird.getHeight(), 1, 1, bird.getRotation());
+	//		float birdW = bird.getWidth(), birdH = bird.getHeight();
+	//		batcher.draw(birdAnimation.getKeyFrame(runtime), 59, bird.getY(), birdW / 2.0f, birdH / 2.0f, birdW, birdH, 1, 1, bird.getRotation());
+	//	}
+
+	/*
+	 * draw(x, y, originX, originY, width, height, scaleX, scaleY, rotation) The
+	 * rectangle is offset by originX, originY relative to the origin. Scale
+	 * specifies the scaling factor by which the rectangle should be scaled
+	 * around originX, originY. Rotation specifies the angle of counter clockwise
+	 * rotation of the rectangle around originX, originY.
+	 */
 
 	private void drawBird(float runtime) {
 		float birdW = bird.getWidth(), birdH = bird.getHeight();
-		// TODO: More sensical bird rendering
 		batcher.draw(bird.shouldFlap() ? birdAnimation.getKeyFrame(runtime)
 				: birdMid, bird.getX(), bird.getY(), birdW / 2.0f, birdH / 2.0f, birdW, birdH, 1, 1, bird.getRotation());
 	}
@@ -144,59 +151,61 @@ public class GameRenderer {
 	}
 
 	private void drawScoreboard() {
-		batcher.draw(scoreboard, 22, midpointY - 30, 97, 37);
+		// TODO: Constants for UI positioning
+		// TODO: Fix scoreboard
+		batcher.draw(scoreboard, 22, midpointY, 97, 37);
 
-		batcher.draw(noStar, 25, midpointY - 15, 10, 10);
-		batcher.draw(noStar, 37, midpointY - 15, 10, 10);
-		batcher.draw(noStar, 49, midpointY - 15, 10, 10);
-		batcher.draw(noStar, 61, midpointY - 15, 10, 10);
-		batcher.draw(noStar, 73, midpointY - 15, 10, 10);
+		batcher.draw(noStar, 25, midpointY + 15, 10, 10);
+		batcher.draw(noStar, 37, midpointY + 15, 10, 10);
+		batcher.draw(noStar, 49, midpointY + 15, 10, 10);
+		batcher.draw(noStar, 61, midpointY + 15, 10, 10);
+		batcher.draw(noStar, 73, midpointY + 15, 10, 10);
 
 		if (world.getScore() > 2) {
-			batcher.draw(star, 73, midpointY - 15, 10, 10);
+			batcher.draw(star, 73, midpointY + 15, 10, 10);
 		}
 
 		if (world.getScore() > 17) {
-			batcher.draw(star, 61, midpointY - 15, 10, 10);
+			batcher.draw(star, 61, midpointY + 15, 10, 10);
 		}
 
 		if (world.getScore() > 50) {
-			batcher.draw(star, 49, midpointY - 15, 10, 10);
+			batcher.draw(star, 49, midpointY + 15, 10, 10);
 		}
 
 		if (world.getScore() > 80) {
-			batcher.draw(star, 37, midpointY - 15, 10, 10);
+			batcher.draw(star, 37, midpointY + 15, 10, 10);
 		}
 
 		if (world.getScore() > 120) {
-			batcher.draw(star, 25, midpointY - 15, 10, 10);
+			batcher.draw(star, 25, midpointY + 15, 10, 10);
 		}
 
 		int length = ("" + world.getScore()).length();
 
-		Assets.whiteFont.draw(batcher, "" + world.getScore(), 104 - (2 * length), midpointY - 20);
+		Assets.whiteFont.draw(batcher, "" + world.getScore(), 104 - (2 * length), midpointY + 20);
 
 		int length2 = ("" + Util.getHighScore()).length();
-		Assets.whiteFont.draw(batcher, "" + Util.getHighScore(), 104 - (2.5f * length2), midpointY - 3);
+		Assets.whiteFont.draw(batcher, "" + Util.getHighScore(), 104 - (2.5f * length2), midpointY + 3);
 
 	}
 
 	private void drawRetry() {
-		batcher.draw(retry, 36, midpointY + 10, 66, 14);
+		batcher.draw(retry, 36, midpointY - 50, 66, 14);
 	}
 
 	private void drawReady() {
-		batcher.draw(ready, 36, midpointY - 50, 68, 14);
+		batcher.draw(ready, 36, midpointY + 50, 68, 14);
 	}
 
 	private void drawGameOver() {
-		batcher.draw(gameOver, 24, midpointY - 50, 92, 14);
+		batcher.draw(gameOver, 24, midpointY + 50, 92, 14);
 	}
 
 	private void drawScore() {
 		int length = ("" + world.getScore()).length();
-		Assets.shadow.draw(batcher, "" + world.getScore(), 68 - (3 * length), midpointY - 82);
-		Assets.greenFont.draw(batcher, "" + world.getScore(), 68 - (3 * length), midpointY - 83);
+		Assets.shadow.draw(batcher, "" + world.getScore(), 68 - (3 * length), midpointY + 82);
+		Assets.greenFont.draw(batcher, "" + world.getScore(), 68 - (3 * length), midpointY + 83);
 	}
 
 	private void drawHighScore() {
@@ -214,14 +223,13 @@ public class GameRenderer {
 		shapeRenderer.setColor(55 / 255.0f, 80 / 255.0f, 100 / 255.0f, 1);
 		shapeRenderer.rect(0, 0, Constants.GAME_WIDTH, Constants.GAME_HEIGHT);
 
-//		// Draw Grass
-//		shapeRenderer.setColor(111 / 255.0f, 186 / 255.0f, 45 / 255.0f, 1);
-//		shapeRenderer.rect(0, midpointY + 66, 136, 11);
+		//		// Draw Grass
+		//		shapeRenderer.setColor(111 / 255.0f, 186 / 255.0f, 45 / 255.0f, 1);
+		//		shapeRenderer.rect(0, midpointY + 66, 136, 11);
 
 		// Draw Dirt
-		// TODO: Make these constant
 		shapeRenderer.setColor(147 / 255.0f, 80 / 255.0f, 27 / 255.0f, 1);
-		shapeRenderer.rect(0, 0, 136, Scrollables.Y_POSITION);
+		shapeRenderer.rect(0, 0, Constants.GAME_WIDTH, Scrollables.Y_POSITION);
 
 		shapeRenderer.end();
 

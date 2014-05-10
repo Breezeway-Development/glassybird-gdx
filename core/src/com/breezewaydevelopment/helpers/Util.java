@@ -41,6 +41,7 @@ public final class Util {
 	
 	public static int genPipeHeight() {
 		return r.nextInt(90) + 15;
+		// TODO: Fix pipe height and y coordinates
 	}
 	
 }

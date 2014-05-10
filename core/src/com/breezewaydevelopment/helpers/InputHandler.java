@@ -25,7 +25,6 @@ public class InputHandler implements InputProcessor {
 
 		menuButtons = new ArrayList<SimpleButton>();
 		playButton = new SimpleButton((Constants.GAME_WIDTH - Assets.playButtonUp.getRegionWidth()) / 2, Constants.MIDPOINT_Y - 50, Assets.playButtonUp, Assets.playButtonDown);
-		//TODO: Constants for UI positioning
 		menuButtons.add(playButton);
 	}
 
