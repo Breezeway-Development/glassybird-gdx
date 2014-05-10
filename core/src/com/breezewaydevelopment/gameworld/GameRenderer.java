@@ -19,6 +19,7 @@ import com.breezewaydevelopment.helpers.Assets;
 import com.breezewaydevelopment.helpers.Constants;
 import com.breezewaydevelopment.helpers.Util;
 import com.breezewaydevelopment.helpers.InputHandler;
+import com.breezewaydevelopment.helpers.Constants.Scrollables;
 import com.breezewaydevelopment.tweenaccessors.Value;
 import com.breezewaydevelopment.tweenaccessors.ValueAccessor;
 import com.breezewaydevelopment.ui.SimpleButton;
@@ -31,7 +32,7 @@ public class GameRenderer {
 
 	private float midpointY;
 
-	private GameWorld myWorld;
+	private GameWorld world;
 
 	private OrthographicCamera cam;
 	private ShapeRenderer shapeRenderer;
@@ -57,13 +58,13 @@ public class GameRenderer {
 	private Color transitionColor;
 
 	public GameRenderer(GameWorld world) {
-		myWorld = world;
+		this.world = world;
 
 		midpointY = Constants.MIDPOINT_Y;
 		this.menuButtons = ((InputHandler) Gdx.input.getInputProcessor()).getMenuButtons();
 
 		cam = new OrthographicCamera();
-		cam.setToOrtho(true, 136, Constants.GAME_HEIGHT); //TODO: Y-UP coord system
+		cam.setToOrtho(false, Constants.GAME_WIDTH, Constants.GAME_HEIGHT); //TODO: Finish Y-UP coord system
 
 		batcher = new SpriteBatch();
 		batcher.setProjectionMatrix(cam.combined);
@@ -78,8 +79,8 @@ public class GameRenderer {
 	}
 
 	private void initGameObjects() {
-		bird = myWorld.getBird();
-		scroller = myWorld.getScroller();
+		bird = world.getBird();
+		scroller = world.getScroller();
 		pipes = scroller.getPipes();
 		frontGrass = scroller.getFrontGrass();
 		backGrass = scroller.getBackGrass();
@@ -121,12 +122,15 @@ public class GameRenderer {
 		}
 	}
 
-	private void drawBirdCentered(float runTime) {
-		batcher.draw(birdAnimation.getKeyFrame(runTime), 59, bird.getY() - 15, bird.getWidth() / 2.0f, bird.getHeight() / 2.0f, bird.getWidth(), bird.getHeight(), 1, 1, bird.getRotation());
-	}
+//	private void drawBirdCentered(float runtime) {
+////		batcher.draw(birdAnimation.getKeyFrame(runTime), 59, bird.getY() - 15, bird.getWidth() / 2.0f, bird.getHeight() / 2.0f, bird.getWidth(), bird.getHeight(), 1, 1, bird.getRotation());
+//		float birdW = bird.getWidth(), birdH = bird.getHeight();
+//		batcher.draw(birdAnimation.getKeyFrame(runtime), 59, bird.getY(), birdW / 2.0f, birdH / 2.0f, birdW, birdH, 1, 1, bird.getRotation());
+//	}
 
 	private void drawBird(float runtime) {
 		float birdW = bird.getWidth(), birdH = bird.getHeight();
+		// TODO: More sensical bird rendering
 		batcher.draw(bird.shouldFlap() ? birdAnimation.getKeyFrame(runtime)
 				: birdMid, bird.getX(), bird.getY(), birdW / 2.0f, birdH / 2.0f, birdW, birdH, 1, 1, bird.getRotation());
 	}
@@ -148,29 +152,29 @@ public class GameRenderer {
 		batcher.draw(noStar, 61, midpointY - 15, 10, 10);
 		batcher.draw(noStar, 73, midpointY - 15, 10, 10);
 
-		if (myWorld.getScore() > 2) {
+		if (world.getScore() > 2) {
 			batcher.draw(star, 73, midpointY - 15, 10, 10);
 		}
 
-		if (myWorld.getScore() > 17) {
+		if (world.getScore() > 17) {
 			batcher.draw(star, 61, midpointY - 15, 10, 10);
 		}
 
-		if (myWorld.getScore() > 50) {
+		if (world.getScore() > 50) {
 			batcher.draw(star, 49, midpointY - 15, 10, 10);
 		}
 
-		if (myWorld.getScore() > 80) {
+		if (world.getScore() > 80) {
 			batcher.draw(star, 37, midpointY - 15, 10, 10);
 		}
 
-		if (myWorld.getScore() > 120) {
+		if (world.getScore() > 120) {
 			batcher.draw(star, 25, midpointY - 15, 10, 10);
 		}
 
-		int length = ("" + myWorld.getScore()).length();
+		int length = ("" + world.getScore()).length();
 
-		Assets.whiteFont.draw(batcher, "" + myWorld.getScore(), 104 - (2 * length), midpointY - 20);
+		Assets.whiteFont.draw(batcher, "" + world.getScore(), 104 - (2 * length), midpointY - 20);
 
 		int length2 = ("" + Util.getHighScore()).length();
 		Assets.whiteFont.draw(batcher, "" + Util.getHighScore(), 104 - (2.5f * length2), midpointY - 3);
@@ -190,9 +194,9 @@ public class GameRenderer {
 	}
 
 	private void drawScore() {
-		int length = ("" + myWorld.getScore()).length();
-		Assets.shadow.draw(batcher, "" + myWorld.getScore(), 68 - (3 * length), midpointY - 82);
-		Assets.greenFont.draw(batcher, "" + myWorld.getScore(), 68 - (3 * length), midpointY - 83);
+		int length = ("" + world.getScore()).length();
+		Assets.shadow.draw(batcher, "" + world.getScore(), 68 - (3 * length), midpointY - 82);
+		Assets.greenFont.draw(batcher, "" + world.getScore(), 68 - (3 * length), midpointY - 83);
 	}
 
 	private void drawHighScore() {
@@ -208,22 +212,23 @@ public class GameRenderer {
 
 		// Draw Background color
 		shapeRenderer.setColor(55 / 255.0f, 80 / 255.0f, 100 / 255.0f, 1);
-		shapeRenderer.rect(0, 0, 136, midpointY + 66);
+		shapeRenderer.rect(0, 0, Constants.GAME_WIDTH, Constants.GAME_HEIGHT);
 
-		// Draw Grass
-		shapeRenderer.setColor(111 / 255.0f, 186 / 255.0f, 45 / 255.0f, 1);
-		shapeRenderer.rect(0, midpointY + 66, 136, 11);
+//		// Draw Grass
+//		shapeRenderer.setColor(111 / 255.0f, 186 / 255.0f, 45 / 255.0f, 1);
+//		shapeRenderer.rect(0, midpointY + 66, 136, 11);
 
 		// Draw Dirt
+		// TODO: Make these constant
 		shapeRenderer.setColor(147 / 255.0f, 80 / 255.0f, 27 / 255.0f, 1);
-		shapeRenderer.rect(0, midpointY + 77, 136, 52);
+		shapeRenderer.rect(0, 0, 136, Scrollables.Y_POSITION);
 
 		shapeRenderer.end();
 
 		batcher.begin();
 		batcher.disableBlending();
 
-		batcher.draw(bg, 0, midpointY + 23, 136, 43);
+		batcher.draw(bg, 0, Scrollables.Y_POSITION + Scrollables.GRASS_HEIGHT, 136, 43);
 
 		drawPipes();
 		drawGrass();
@@ -231,21 +236,21 @@ public class GameRenderer {
 		batcher.enableBlending();
 		drawSkulls();
 
-		if (myWorld.isRunning()) {
+		if (world.isRunning()) {
 			drawBird(runTime);
 			drawScore();
-		} else if (myWorld.isReady()) {
+		} else if (world.isReady()) {
 			drawBird(runTime);
 			drawReady();
-		} else if (myWorld.isMenu()) {
-			drawBirdCentered(runTime);
+		} else if (world.isMenu()) {
+			drawBird(runTime);
 			drawMenuUI();
-		} else if (myWorld.isGameOver()) {
+		} else if (world.isGameOver()) {
 			drawScoreboard();
 			drawBird(runTime);
 			drawGameOver();
 			drawRetry();
-		} else if (myWorld.isHighScore()) {
+		} else if (world.isHighScore()) {
 			drawScoreboard();
 			drawBird(runTime);
 			drawHighScore();

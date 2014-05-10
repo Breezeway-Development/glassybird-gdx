@@ -26,8 +26,8 @@ public class GameWorld {
 
 	public GameWorld() {
 		bird = new Bird();
-		scroller = new ScrollHandler(this); // The grass should start 66 pixels below the midpointY
-		ground = new Rectangle(0, Constants.MIDPOINT_Y + 66, 137, 11);
+		scroller = new ScrollHandler(this);
+		ground = new Rectangle(0, Constants.Scrollables.Y_POSITION, Constants.GAME_WIDTH + 1, 11); // TODO: Simplify pipe/ground collision
 
 		currentState = GameState.MENU;
 	}
@@ -74,7 +74,7 @@ public class GameWorld {
 		scroller.stop();
 		if (bird.isAlive()) {
 			Assets.dead.play();
-			renderer.initTransition(255, 255, 255, .3f);
+			renderer.initTransition(0, 0, 0, .3f);
 		}
 		bird.stop(ground); // Let it fall if it hits a pipe
 

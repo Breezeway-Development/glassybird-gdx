@@ -1,6 +1,7 @@
 package com.breezewaydevelopment.gameobjects;
 
 import com.breezewaydevelopment.helpers.Assets;
+import com.breezewaydevelopment.helpers.Constants;
 import com.breezewaydevelopment.gameworld.GameWorld;
 
 public class ScrollHandler {

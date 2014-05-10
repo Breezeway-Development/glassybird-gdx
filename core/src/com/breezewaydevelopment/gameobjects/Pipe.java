@@ -11,16 +11,22 @@ public class Pipe extends Scrollable {
 	
 	private boolean isScored = false;
 
-	// When Pipe's constructor is invoked, invoke the super (Scrollable)
-	// constructor
 	public Pipe(float x) {
-		super(x, 0, Constants.Scrollables.PIPE_WIDTH, Util.genPipeHeight());
-		skullUp = new Rectangle();
-		skullDown = new Rectangle();
+		super(x, Constants.Scrollables.Y_POSITION, Constants.Scrollables.PIPE_WIDTH, Util.genPipeHeight());
 		barUp = new Rectangle();
 		barDown = new Rectangle();
+		skullUp = new Rectangle();
+		skullDown = new Rectangle();
+		setRectangles();		
 	}
 
+	private void setRectangles() { // TODO: Fix pipe rectangles
+		barUp.set(position.x, position.y, width, height);		
+		barDown = new Rectangle(position.x, position.y + height + Constants.Scrollables.PIPE_GAP_Y, width, Constants.Scrollables.Y_POSITION - (position.y + height + Constants.Scrollables.PIPE_GAP_Y));
+		skullUp.set(position.x - 1, position.y + height - Constants.Scrollables.SKULL_HEIGHT,Constants.Scrollables.SKULL_WIDTH, Constants.Scrollables.SKULL_HEIGHT);
+		skullDown.set(position.x - 1, barDown.y, Constants.Scrollables.SKULL_WIDTH, Constants.Scrollables.SKULL_HEIGHT);
+	}
+	
 	@Override
 	public void update(float delta) {
 		super.update(delta);
@@ -51,6 +57,7 @@ public class Pipe extends Scrollable {
 		// Change the height to a random number
 		height = Util.genPipeHeight();
 		isScored = false;
+		setRectangles();
 	}
 	
 	@Override

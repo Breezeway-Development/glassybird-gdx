@@ -15,11 +15,11 @@ public class SimpleButton {
 
 	private Rectangle bounds;
 
-	public SimpleButton(float x, float y, float width, float height, TextureRegion buttonUp, TextureRegion buttonDown) {
+	public SimpleButton(float x, float y, TextureRegion buttonUp, TextureRegion buttonDown) {
 		this.x = x;
 		this.y = y;
-		this.width = width;
-		this.height = height;
+		this.width = buttonUp.getRegionWidth();
+		this.height = buttonUp.getRegionHeight();
 		this.buttonUp = buttonUp;
 		this.buttonDown = buttonDown;
 
@@ -33,6 +33,8 @@ public class SimpleButton {
 	public void draw(SpriteBatch batcher) {
 		batcher.draw(isPressed ? buttonDown : buttonUp, x, y, width, height);
 	}
+	
+	// TODO: Simplify input logic
 
 	public boolean isTouchDown(int screenX, int screenY) {
 		if (bounds.contains(screenX, screenY)) {

@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.breezewaydevelopment.glassybird.GBGame;
 import com.breezewaydevelopment.helpers.Assets;
+import com.breezewaydevelopment.helpers.Constants;
 import com.breezewaydevelopment.tweenaccessors.SpriteAccessor;
 
 public class SplashScreen implements Screen {
@@ -30,14 +31,11 @@ public class SplashScreen implements Screen {
 	public void show() {
 		sprite = new Sprite(Assets.splash);
 		sprite.setColor(1, 1, 1, 0);
-
-		float width = Gdx.graphics.getWidth(); // 270
-		float height = Gdx.graphics.getHeight(); // 480
 		
-		float scale = (width * .7f) / sprite.getWidth(); // Splash doesn't have borders
+		float scale = (Constants.SCREEN_WIDTH * .7f) / sprite.getWidth(); // Splash doesn't have borders
 		sprite.setSize(sprite.getWidth() * scale, sprite.getHeight() * scale);
-		
-		sprite.setPosition((width / 2) - (sprite.getWidth() / 2), (height / 2) - (sprite.getHeight() / 2));
+
+		sprite.setPosition((Constants.SCREEN_WIDTH / 2) - (sprite.getWidth() / 2), (Constants.SCREEN_HEIGHT / 2) - (sprite.getHeight() / 2));
 		batcher = new SpriteBatch();
 		setupTween();
 	}
@@ -57,7 +55,7 @@ public class SplashScreen implements Screen {
 	@Override
 	public void render(float delta) {
 		manager.update(delta);
-		Gdx.gl.glClearColor(1, 1, 1, 1);
+		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batcher.begin();
 		sprite.draw(batcher);

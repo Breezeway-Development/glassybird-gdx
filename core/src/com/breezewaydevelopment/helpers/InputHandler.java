@@ -11,59 +11,53 @@ import com.breezewaydevelopment.ui.SimpleButton;
 
 public class InputHandler implements InputProcessor {
 	private Bird myBird;
-	private GameWorld myWorld;
+	private GameWorld world;
 
 	private List<SimpleButton> menuButtons;
 
 	private SimpleButton playButton;
 
-	private float scaleFactorX;
-	private float scaleFactorY;
+	// Don't forget inputhandler uses a y-down coord system for some reason ((0,0) is at the top left)
 
-	public InputHandler(GameWorld myWorld) {
-		float scaleFactorX = Constants.SCREEN_WIDTH / Constants.GAME_WIDTH;
-		float scaleFactorY = Constants.SCREEN_HEIGHT / Constants.GAME_HEIGHT;
-		
-		this.myWorld = myWorld;
-		myBird = myWorld.getBird();
-
-		this.scaleFactorX = scaleFactorX;
-		this.scaleFactorY = scaleFactorY;
+	public InputHandler(GameWorld world) {
+		this.world = world;
+		myBird = world.getBird();
 
 		menuButtons = new ArrayList<SimpleButton>();
-		playButton = new SimpleButton(136 / 2 - (Assets.playButtonUp.getRegionWidth() / 2), Constants.MIDPOINT_Y + 50, 29, 16, Assets.playButtonUp, Assets.playButtonDown);
+		playButton = new SimpleButton((Constants.GAME_WIDTH - Assets.playButtonUp.getRegionWidth()) / 2, Constants.MIDPOINT_Y - 50, Assets.playButtonUp, Assets.playButtonDown);
+		//TODO: Constants for UI positioning
 		menuButtons.add(playButton);
 	}
 
 	@Override
-	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		screenX = scaleX(screenX);
-		screenY = scaleY(screenY);
+	public boolean touchDown(int x, int y, int pointer, int button) {
+		x = scale(x);
+		y = scale(Constants.SCREEN_HEIGHT - y);
 
-		if (myWorld.isMenu()) {
-			playButton.isTouchDown(screenX, screenY);
-		} else if (myWorld.isReady()) {
-			myWorld.start();
+		if (world.isMenu()) {
+			playButton.isTouchDown(x, y);
+		} else if (world.isReady()) {
+			world.start();
 			myBird.onClick();
-		} else if (myWorld.isRunning()) {
+		} else if (world.isRunning()) {
 			myBird.onClick();
 		}
 
-		if (myWorld.isGameOver() || myWorld.isHighScore()) {
-			myWorld.restart();
+		if (world.isGameOver() || world.isHighScore()) {
+			world.restart();
 		}
 
 		return true;
 	}
 
 	@Override
-	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		screenX = scaleX(screenX);
-		screenY = scaleY(screenY);
+	public boolean touchUp(int x, int y, int pointer, int button) {
+		x = scale(x);
+		y = scale(Constants.SCREEN_HEIGHT - y);
 
-		if (myWorld.isMenu()) {
-			if (playButton.isTouchUp(screenX, screenY)) {
-				myWorld.ready();
+		if (world.isMenu()) {
+			if (playButton.isTouchUp(x, y)) {
+				world.ready();
 				return true;
 			}
 		}
@@ -73,20 +67,18 @@ public class InputHandler implements InputProcessor {
 
 	@Override
 	public boolean keyDown(int keycode) {
-
-		// Can now use Space Bar to play the game
 		if (keycode == Keys.SPACE) {
 
-			if (myWorld.isMenu()) {
-				myWorld.ready();
-			} else if (myWorld.isReady()) {
-				myWorld.start();
+			if (world.isMenu()) {
+				world.ready();
+			} else if (world.isReady()) {
+				world.start();
 			}
 
 			myBird.onClick();
 
-			if (myWorld.isGameOver() || myWorld.isHighScore()) {
-				myWorld.restart();
+			if (world.isGameOver() || world.isHighScore()) {
+				world.restart();
 			}
 
 		}
@@ -119,12 +111,8 @@ public class InputHandler implements InputProcessor {
 		return false;
 	}
 
-	private int scaleX(int screenX) {
-		return (int) (screenX / scaleFactorX);
-	}
-
-	private int scaleY(int screenY) {
-		return (int) (screenY / scaleFactorY);
+	private int scale(float i) {
+		return (int) (i * Constants.SCALE_FACTOR);
 	}
 
 	public List<SimpleButton> getMenuButtons() {

@@ -61,37 +61,37 @@ public final class Assets {
 
 		// UI
 		ready = new TextureRegion(texture, 59, 83, 34, 7);
-		ready.flip(false, true);
+//		ready.flip(false, true);
 		retry = new TextureRegion(texture, 59, 110, 33, 7);
-		retry.flip(false, true);
+//		retry.flip(false, true);
 		gameOver = new TextureRegion(texture, 59, 92, 46, 7);
-		gameOver.flip(false, true);
+//		gameOver.flip(false, true);
 		scoreboard = new TextureRegion(texture, 111, 83, 97, 37);
-		scoreboard.flip(false, true);
+//		scoreboard.flip(false, true);
 		star = new TextureRegion(texture, 152, 70, 10, 10);
-		star.flip(false, true);
+//		star.flip(false, true);
 		noStar = new TextureRegion(texture, 165, 70, 10, 10);
-		noStar.flip(false, true);
+//		noStar.flip(false, true);
 		highScore = new TextureRegion(texture, 59, 101, 48, 7);
-		highScore.flip(false, true);
+//		highScore.flip(false, true);
 		playButtonUp = new TextureRegion(texture, 0, 83, 29, 16);
 		playButtonDown = new TextureRegion(texture, 29, 83, 29, 16);
-		playButtonUp.flip(false, true);
-		playButtonDown.flip(false, true);
+//		playButtonUp.flip(false, true);
+//		playButtonDown.flip(false, true);
 
 		// Game
 		bg = new TextureRegion(texture, 0, 0, 136, 43);
-		bg.flip(false, true);
+//		bg.flip(false, true);
 		grass = new TextureRegion(texture, 0, 43, 143, 11);
-		grass.flip(false, true);
+//		grass.flip(false, true);
 		bird = new TextureRegion(texture, 153, 0, 17, 12);
-		bird.flip(false, true);
+//		bird.flip(false, true);
 		birdUp = new TextureRegion(texture, 170, 0, 17, 12);
-		birdUp.flip(false, true);
+//		birdUp.flip(false, true);
 		birdDown = new TextureRegion(texture, 136, 0, 17, 12);
-		birdDown.flip(false, true);
+//		birdDown.flip(false, true);
 		bar = new TextureRegion(texture, 136, 16, 22, 3);
-		bar.flip(false, true);
+//		bar.flip(false, true);
 		skullUp = new TextureRegion(texture, 192, 0, 24, 14);
 		skullDown = new TextureRegion(skullUp);
 		skullDown.flip(false, true); // Flip y from skullUp

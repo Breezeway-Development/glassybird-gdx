@@ -22,9 +22,10 @@ public class Bird {
 	public Bird() {
 		this.width = Constants.Bird.WIDTH;
 		this.height = Constants.Bird.HEIGHT;
-		position = new Vector2(Constants.Bird.START_X, Constants.Bird.START_Y);
+		originalY = Constants.Bird.START_Y;
+		position = new Vector2(Constants.Bird.START_X, originalY);
 		velocity = new Vector2(0, 0);
-		acceleration = new Vector2(0, 460);
+		acceleration = new Vector2(0, -460);
 		boundingCircle = new Circle();
 		isAlive = true;
 	}
@@ -32,14 +33,13 @@ public class Bird {
 	public void update(float delta) {
 
 		velocity.add(acceleration.cpy().scl(delta));
-
-		if (velocity.y > 200) {
-			velocity.y = 200;
+		if (velocity.y < -200) {
+			velocity.y = -200;
 		}
 
-		// CEILING CHECK
-		if (position.y < -13) {
-			position.y = -13;
+		if (position.y > Constants.GAME_HEIGHT) { // TODO: Fix ceiling check
+			System.out.println("Ceiling");
+			position.y = Constants.GAME_HEIGHT;
 			velocity.y = 0;
 		}
 
@@ -48,6 +48,8 @@ public class Bird {
 		// Set the circle's center to be (9, 6) with respect to the bird.
 		// Set the circle's radius to be 6.5f;
 		boundingCircle.set(position.x + 9, position.y + 6, 6.5f);
+		
+		// TODO: Fix rotation
 
 		if (velocity.y < 0) {
 			rotation -= 600 * delta; // Rotate counterclockwise
@@ -75,7 +77,7 @@ public class Bird {
 	public void onClick() {
 		if (isAlive) {
 			Assets.flap.play();
-			velocity.y = -140;
+			velocity.y = 140;
 		}
 	}
 
@@ -93,7 +95,7 @@ public class Bird {
 		velocity.x = 0;
 		velocity.y = 0;
 		acceleration.x = 0;
-		acceleration.y = 460;
+		acceleration.y = -460;
 		isAlive = true;
 	}
 

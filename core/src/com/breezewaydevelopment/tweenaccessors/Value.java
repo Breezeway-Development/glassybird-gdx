@@ -1,6 +1,8 @@
 package com.breezewaydevelopment.tweenaccessors;
 
 public class Value {
+	
+	//TODO: Just implement MutableFloat
 
 	private float val = 1;
 

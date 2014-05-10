@@ -2,7 +2,7 @@ package com.breezewaydevelopment.glassybird;
 
 import com.badlogic.gdx.Game;
 import com.breezewaydevelopment.helpers.Util;
-import com.breezewaydevelopment.screens.SplashScreen;
+import com.breezewaydevelopment.screens.InitScreen;
 
 public class GBGame extends Game {
 	
@@ -10,8 +10,7 @@ public class GBGame extends Game {
 
 	@Override
 	public void create() {
-		Util.init();
-		setScreen(new SplashScreen(this));
+		setScreen(new InitScreen(this));
 	}
 
 	@Override
