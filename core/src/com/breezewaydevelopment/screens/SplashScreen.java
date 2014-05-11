@@ -32,7 +32,7 @@ public class SplashScreen implements Screen {
 		sprite = new Sprite(Assets.splash);
 		sprite.setColor(1, 1, 1, 0);
 		
-		float scale = (Constants.SCREEN_WIDTH * .7f) / sprite.getWidth(); // Splash doesn't have borders
+		float scale = Constants.SCREEN_WIDTH / sprite.getWidth();
 		sprite.setSize(sprite.getWidth() * scale, sprite.getHeight() * scale);
 
 		sprite.setPosition((Constants.SCREEN_WIDTH / 2) - (sprite.getWidth() / 2), (Constants.SCREEN_HEIGHT / 2) - (sprite.getHeight() / 2));
@@ -49,13 +49,13 @@ public class SplashScreen implements Screen {
 				game.setScreen(new GameScreen());
 			}
 		};
-		Tween.to(sprite, SpriteAccessor.ALPHA, .8f).target(1).ease(TweenEquations.easeInOutQuad).repeatYoyo(1, .4f).setCallback(cb).setCallbackTriggers(TweenCallback.COMPLETE).start(manager);
+		Tween.to(sprite, SpriteAccessor.ALPHA, .9f).target(1).ease(TweenEquations.easeInOutQuad).repeatYoyo(1, .2f).setCallback(cb).setCallbackTriggers(TweenCallback.COMPLETE).start(manager);
 	}
 
 	@Override
 	public void render(float delta) {
 		manager.update(delta);
-		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batcher.begin();
 		sprite.draw(batcher);
