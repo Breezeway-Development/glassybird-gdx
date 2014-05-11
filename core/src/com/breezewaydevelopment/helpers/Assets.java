@@ -15,7 +15,7 @@ import com.badlogic.gdx.utils.Disposable;
 public final class Assets {
 
 	public static Texture texture, splashTexture;
-	public static TextureRegion splash, logo, bg, grass, bird, birdDown, birdUp,
+	public static TextureRegion splash, logo, grass, bird, birdDown, birdUp,
 			skullUp, skullDown, bar, playButtonUp, playButtonDown, ready,
 			gameOver, highScore, scoreboard, star, noStar, retry;
 	public static Animation birdAnimation;
@@ -71,7 +71,6 @@ public final class Assets {
 		playButtonDown = new TextureRegion(texture, 29, 83, 29, 16);
 
 		// Game
-		bg = new TextureRegion(texture, 0, 0, 136, 43);
 		grass = new TextureRegion(texture, 0, 43, 143, 11);
 		bird = new TextureRegion(texture, 153, 0, 17, 12);
 		birdUp = new TextureRegion(texture, 170, 0, 17, 12);

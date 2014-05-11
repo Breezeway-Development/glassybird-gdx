@@ -41,7 +41,7 @@ public class GameRenderer {
 	private Pipe[] pipes;
 
 	// Game Assets
-	private TextureRegion bg, grass, birdMid, skullUp, skullDown, bar, ready,
+	private TextureRegion grass, birdMid, skullUp, skullDown, bar, ready,
 			gameOver, scoreboard, star, noStar, retry;
 	private Animation birdAnimation;
 
@@ -81,7 +81,6 @@ public class GameRenderer {
 	}
 
 	private void initAssets() {
-		bg = Assets.bg;
 		grass = Assets.grass;
 		birdAnimation = Assets.birdAnimation;
 		birdMid = Assets.bird;
@@ -217,7 +216,7 @@ public class GameRenderer {
 		batcher.begin();
 		batcher.disableBlending();
 
-		batcher.draw(bg, 0, Scrollables.Y_POSITION + Scrollables.GRASS_HEIGHT, 136, 43);
+		//batcher.draw(bg, 0, Scrollables.Y_POSITION + Scrollables.GRASS_HEIGHT, 136, 43);
 
 		drawPipes();
 		drawGrass();

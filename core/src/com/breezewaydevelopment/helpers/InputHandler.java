@@ -1,6 +1,7 @@
 package com.breezewaydevelopment.helpers;
 
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Input.Keys;
 import com.breezewaydevelopment.gameobjects.Bird;
 import com.breezewaydevelopment.gameworld.GameWorld;
 import com.breezewaydevelopment.gameworld.GameWorld.GameState;
@@ -46,7 +47,15 @@ public class InputHandler implements InputProcessor {
 
 	@Override
 	public boolean keyDown(int keycode) {
-		return handleTap();
+		switch (keycode) {
+			case Keys.DPAD_CENTER:
+			case Keys.SPACE:
+			case Keys.ENTER:
+			case Keys.UP:
+				return handleTap();
+			default:
+				return false;
+		}
 	}
 
 	@Override
