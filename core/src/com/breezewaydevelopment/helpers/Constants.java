@@ -3,9 +3,10 @@ package com.breezewaydevelopment.helpers;
 import com.badlogic.gdx.Gdx;
 
 public final class Constants {
-	
+
 	/*
-	 * Most of this class is temporary. Once the dust clears we can start adding variables back into classes.
+	 * Most of this class is temporary. Once the dust clears we can start adding
+	 * variables back into classes.
 	 */
 
 	public static float SCREEN_WIDTH, SCREEN_HEIGHT, GAME_WIDTH, GAME_HEIGHT,
@@ -34,7 +35,7 @@ public final class Constants {
 		SCREEN_HEIGHT = Gdx.graphics.getHeight(); // 480
 		GAME_WIDTH = 136;
 		SCALE_FACTOR = GAME_WIDTH / SCREEN_WIDTH; // 2
-		
+
 		GAME_HEIGHT = SCREEN_HEIGHT * SCALE_FACTOR; // 240
 		MIDPOINT_Y = GAME_HEIGHT / 2; // 120
 		MIDPOINT_X = GAME_WIDTH / 2;

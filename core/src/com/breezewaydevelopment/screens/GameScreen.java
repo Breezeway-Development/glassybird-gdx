@@ -9,7 +9,7 @@ import com.breezewaydevelopment.gameworld.GameWorld;
 public class GameScreen implements Screen {
 
 	private float runTime = 0;
-	
+
 	private GameWorld world;
 	private GameRenderer renderer;
 

@@ -8,10 +8,10 @@ public class Scrollable {
 	// Protected is similar to private, but allows inheritance by subclasses
 	protected Vector2 position;
 	protected Vector2 velocity;
-	
+
 	protected int width;
 	protected int height;
-	
+
 	protected boolean isScrolledLeft;
 
 	public Scrollable(float x, float y, int width, int height) {
@@ -63,7 +63,7 @@ public class Scrollable {
 	public int getHeight() {
 		return height;
 	}
-	
+
 	public void onRestart(float x) {
 		reset(x);
 		velocity.x = Constants.Scrollables.SCROLL_SPEED;

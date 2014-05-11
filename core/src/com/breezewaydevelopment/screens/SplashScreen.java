@@ -31,7 +31,7 @@ public class SplashScreen implements Screen {
 	public void show() {
 		sprite = new Sprite(Assets.splash);
 		sprite.setColor(1, 1, 1, 0);
-		
+
 		float scale = Constants.SCREEN_WIDTH / sprite.getWidth();
 		sprite.setSize(sprite.getWidth() * scale, sprite.getHeight() * scale);
 

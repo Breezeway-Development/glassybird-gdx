@@ -21,8 +21,7 @@ public class GameWorld {
 	private GameState currentState;
 
 	public enum GameState {
-		// TODO: Better state handling
-		MENU, READY, RUNNING, GAMEOVER, HIGHSCORE
+		READY, RUNNING, GAMEOVER
 	}
 
 	public GameWorld() {
@@ -30,13 +29,12 @@ public class GameWorld {
 		scroller = new ScrollHandler(this);
 		ground = new Rectangle(0, Constants.Scrollables.Y_POSITION, Constants.GAME_WIDTH + 1, 11); // TODO: Simplify pipe/ground collision
 
-		currentState = GameState.MENU;
+		setState(GameState.READY);
 	}
 
 	public void update(float delta) {
 		runTime += delta;
 		switch (currentState) {
-			case MENU:
 			case READY:
 				updateReady(delta);
 				break;
@@ -80,11 +78,11 @@ public class GameWorld {
 		bird.stop(ground); // Let it fall if it hits a pipe
 
 		if (ground) {
-			currentState = GameState.GAMEOVER;
 			if (score > Util.getHighScore()) {
 				Util.setHighScore(score);
-				currentState = GameState.HIGHSCORE;
 			}
+
+			setState(GameState.GAMEOVER);
 		}
 	}
 
@@ -101,44 +99,26 @@ public class GameWorld {
 		return score;
 	}
 
-	public void addScore(int increment) {
-		score += increment;
-	}
-
-	public void start() {
-		currentState = GameState.RUNNING;
-	}
-
-	public void ready() {
-		currentState = GameState.READY;
-		renderer.initTransition(0, 0, 0, 1f);
+	public void addScore() {
+		score++;
 	}
 
 	public void restart() {
 		score = 0;
 		bird.onRestart();
 		scroller.onRestart();
-		ready();
+		setState(GameState.READY);
 	}
 
-	public boolean isReady() {
-		return currentState == GameState.READY;
+	public GameState getState() {
+		return currentState;
 	}
 
-	public boolean isGameOver() {
-		return currentState == GameState.GAMEOVER;
-	}
-
-	public boolean isHighScore() {
-		return currentState == GameState.HIGHSCORE;
-	}
-
-	public boolean isMenu() {
-		return currentState == GameState.MENU;
-	}
-
-	public boolean isRunning() {
-		return currentState == GameState.RUNNING;
+	public void setState(GameState state) {
+		if (renderer != null && state == GameState.READY) {
+			renderer.initTransition(1, 1, 1, 1f);
+		}
+		currentState = state;
 	}
 
 	public void setRenderer(GameRenderer renderer) {

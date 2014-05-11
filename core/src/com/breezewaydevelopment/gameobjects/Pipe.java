@@ -8,7 +8,7 @@ import com.breezewaydevelopment.helpers.Util;
 public class Pipe extends Scrollable {
 
 	private Rectangle skullUp, skullDown, barUp, barDown;
-	
+
 	private boolean isScored = false;
 
 	public Pipe(float x) {
@@ -17,20 +17,21 @@ public class Pipe extends Scrollable {
 		barDown = new Rectangle();
 		skullUp = new Rectangle();
 		skullDown = new Rectangle();
-		setRectangles();		
+		setRectangles();
 	}
 
-	private void setRectangles() { // TODO: Fix pipe rectangles (or not)
-		barUp.set(position.x, position.y, width, height);		
+	private void setRectangles() { // TODO: Pipe rectangles?
+		// Do these make sense?
+		barUp.set(position.x, position.y, width, height);
 		barDown = new Rectangle(position.x, position.y + height + Constants.Scrollables.PIPE_GAP_Y, width, Constants.Scrollables.Y_POSITION - (position.y + height + Constants.Scrollables.PIPE_GAP_Y));
-		skullUp.set(position.x - 1, position.y + height - Constants.Scrollables.SKULL_HEIGHT,Constants.Scrollables.SKULL_WIDTH, Constants.Scrollables.SKULL_HEIGHT);
+		skullUp.set(position.x - 1, position.y + height - Constants.Scrollables.SKULL_HEIGHT, Constants.Scrollables.SKULL_WIDTH, Constants.Scrollables.SKULL_HEIGHT);
 		skullDown.set(position.x - 1, barDown.y, Constants.Scrollables.SKULL_WIDTH, Constants.Scrollables.SKULL_HEIGHT);
 	}
-	
+
 	@Override
 	public void update(float delta) {
 		super.update(delta);
-		
+
 		barUp.setX(position.x);
 		barDown.setX(position.x);
 		skullUp.setX(position.x - 1);
@@ -45,7 +46,7 @@ public class Pipe extends Scrollable {
 		isScored = false;
 		setRectangles();
 	}
-	
+
 	@Override
 	public float getTailX() {
 		return super.getTailX() + Constants.Scrollables.PIPE_GAP_X;

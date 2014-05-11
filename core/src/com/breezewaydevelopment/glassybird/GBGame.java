@@ -5,8 +5,6 @@ import com.breezewaydevelopment.helpers.Util;
 import com.breezewaydevelopment.screens.InitScreen;
 
 public class GBGame extends Game {
-	
-	//TODO: document lots of arbitrary math
 
 	@Override
 	public void create() {
