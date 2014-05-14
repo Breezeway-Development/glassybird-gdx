@@ -23,7 +23,9 @@ public final class Constants {
 
 		public static int PIPE_GAP_X;
 		public static int PIPE_GAP_Y;
+		public static int PIPE_OFFSET;
 		public static int PIPE_WIDTH;
+		public static int PIPE_HEIGHT;
 		public static int SKULL_WIDTH;
 		public static int SKULL_HEIGHT;
 
@@ -41,16 +43,17 @@ public final class Constants {
 		MIDPOINT_X = GAME_WIDTH / 2;
 
 		Scrollables.SCROLL_SPEED = -59;
-		Scrollables.Y_POSITION = MIDPOINT_Y - 66;
-
-		Scrollables.PIPE_GAP_X = 49;
-		Scrollables.PIPE_GAP_Y = 45;
-		Scrollables.PIPE_WIDTH = 22;
-		Scrollables.SKULL_WIDTH = 24;
-		Scrollables.SKULL_HEIGHT = 11;
+		Scrollables.Y_POSITION = 0;
 
 		Scrollables.GRASS_WIDTH = 143;
 		Scrollables.GRASS_HEIGHT = 11;
+		Scrollables.PIPE_GAP_X = 49;
+		Scrollables.PIPE_GAP_Y = 45;
+		Scrollables.PIPE_WIDTH = 22;
+		Scrollables.PIPE_HEIGHT = (int) GAME_HEIGHT - Scrollables.GRASS_HEIGHT;// + 1;
+		Scrollables.PIPE_OFFSET = 15;
+		Scrollables.SKULL_WIDTH = 24;
+		Scrollables.SKULL_HEIGHT = 11;
 
 		Bird.START_X = GAME_WIDTH * (2 / 7f);
 		Bird.START_Y = MIDPOINT_Y;

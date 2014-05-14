@@ -10,10 +10,7 @@ public class DesktopLauncher {
 		config.title = "Glassy Bird";
 		config.useGL30 = false;
 		config.width = 1088 / 4; // 272 (divisible by 136)
-		config.height = 1920 / 4; // 480
-//		config.width = 1280 / 3;
-//		config.height = 720 / 3;
-
+		config.height = 1656 / 4; // 414 (480-66)
 		new LwjglApplication(new GBGame(), config);
 	}
 }

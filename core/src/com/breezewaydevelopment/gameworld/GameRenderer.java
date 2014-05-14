@@ -16,7 +16,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.breezewaydevelopment.helpers.Assets;
 import com.breezewaydevelopment.helpers.Constants;
 import com.breezewaydevelopment.helpers.Util;
-import com.breezewaydevelopment.helpers.Constants.Scrollables;
 import com.breezewaydevelopment.tweenaccessors.Value;
 import com.breezewaydevelopment.tweenaccessors.ValueAccessor;
 import com.breezewaydevelopment.gameobjects.Bird;
@@ -101,25 +100,14 @@ public class GameRenderer {
 		batcher.draw(grass, backGrass.getX(), backGrass.getY(), backGrass.getWidth(), backGrass.getHeight());
 	}
 
-	private void drawSkulls() {
-		for (Pipe p : pipes) {
-			batcher.draw(skullUp, p.getX() - 1, p.getY() + p.getHeight() - 14, 24, 14);
-			batcher.draw(skullDown, p.getX() - 1, p.getY() + p.getHeight() + 45, 24, 14);
-		}
-	}
-
 	private void drawPipes() {
 		for (Pipe p : pipes) {
 			batcher.draw(bar, p.getX(), p.getY(), p.getWidth(), p.getHeight());
 			batcher.draw(bar, p.getX(), p.getY() + p.getHeight() + 45, p.getWidth(), midpointY + 66 - (p.getHeight() + 45));
+			batcher.draw(skullUp, p.getX() - 1, p.getY() + p.getHeight() - 14, 24, 14);
+			batcher.draw(skullDown, p.getX() - 1, p.getY() + p.getHeight() + 45, 24, 14);
 		}
 	}
-
-	//	private void drawBirdCentered(float runtime) {
-	////		batcher.draw(birdAnimation.getKeyFrame(runTime), 59, bird.getY() - 15, bird.getWidth() / 2.0f, bird.getHeight() / 2.0f, bird.getWidth(), bird.getHeight(), 1, 1, bird.getRotation());
-	//		float birdW = bird.getWidth(), birdH = bird.getHeight();
-	//		batcher.draw(birdAnimation.getKeyFrame(runtime), 59, bird.getY(), birdW / 2.0f, birdH / 2.0f, birdW, birdH, 1, 1, bird.getRotation());
-	//	}
 
 	/*
 	 * draw(x, y, originX, originY, width, height, scaleX, scaleY, rotation) The
@@ -193,36 +181,19 @@ public class GameRenderer {
 	}
 
 	public void render(float delta, float runtime) {
-
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		shapeRenderer.begin(ShapeType.Filled);
-
-		// Draw Background color
 		shapeRenderer.setColor(55 / 255.0f, 80 / 255.0f, 100 / 255.0f, 1);
 		shapeRenderer.rect(0, 0, Constants.GAME_WIDTH, Constants.GAME_HEIGHT);
-
-		//		// Draw Grass
-		//		shapeRenderer.setColor(111 / 255.0f, 186 / 255.0f, 45 / 255.0f, 1);
-		//		shapeRenderer.rect(0, midpointY + 66, 136, 11);
-
-		// Draw Dirt
-		shapeRenderer.setColor(147 / 255.0f, 80 / 255.0f, 27 / 255.0f, 1);
-		shapeRenderer.rect(0, 0, Constants.GAME_WIDTH, Scrollables.Y_POSITION);
-
 		shapeRenderer.end();
 
 		batcher.begin();
 		batcher.disableBlending();
-
-		//batcher.draw(bg, 0, Scrollables.Y_POSITION + Scrollables.GRASS_HEIGHT, 136, 43);
-
-		drawPipes();
 		drawGrass();
-
+		//drawPipes();
 		batcher.enableBlending();
-		drawSkulls();
 
 		switch (world.getState()) {
 			case READY:
@@ -238,36 +209,14 @@ public class GameRenderer {
 				drawScoreboard();
 				drawGameOver();
 				drawRetry();
-				//drawHighScore();
 				break;
 			default:
 				break;
 		}
-
-		//		if (world.isRunning()) {
-		//			drawBird(runTime);
-		//			drawScore();
-		//		} else if (world.isReady()) {
-		//			drawBird(runTime);
-		//			drawReady();
-		//		} else if (world.isMenu()) {
-		//			drawBird(runTime);
-		//			drawMenuUI();
-		//		} else if (world.isGameOver()) {
-		//			drawScoreboard();
-		//			drawBird(runTime);
-		//			drawGameOver();
-		//			drawRetry();
-		//		} else if (world.isHighScore()) {
-		//			drawScoreboard();
-		//			drawBird(runTime);
-		//			drawHighScore();
-		//			drawRetry();
-		//		}
-
 		batcher.end();
-		drawTransition(delta);
 
+		drawTransition(delta);
+		drawPipeRect();
 	}
 
 	public void initTransition(float r, float g, float b, float duration) {
@@ -289,6 +238,19 @@ public class GameRenderer {
 			shapeRenderer.end();
 			Gdx.gl.glDisable(GL20.GL_BLEND);
 		}
+	}
+
+	private void drawPipeRect() {
+		shapeRenderer.begin(ShapeType.Filled);
+		for (Pipe p : pipes) {
+			shapeRenderer.setColor(Color.BLACK);
+			shapeRenderer.rect(p.getSkullBottom().getX(), p.getSkullBottom().getY(), p.getSkullBottom().getWidth(), p.getSkullBottom().getHeight());
+			shapeRenderer.rect(p.getBarBottom().getX(), p.getBarBottom().getY(), p.getBarBottom().getWidth(), p.getBarBottom().getHeight());
+			shapeRenderer.setColor(Color.WHITE);
+			shapeRenderer.rect(p.getBarTop().getX(), p.getBarTop().getY(), p.getBarTop().getWidth(), p.getBarTop().getHeight());
+			shapeRenderer.rect(p.getSkullTop().getX(), p.getSkullTop().getY(), p.getSkullTop().getWidth(), p.getSkullTop().getHeight());
+		}
+		shapeRenderer.end();
 	}
 
 }
