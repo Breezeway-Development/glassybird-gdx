@@ -14,7 +14,7 @@ public final class Constants {
 
 	public static class Bird {
 		public static float START_X, START_Y;
-		public static int WIDTH, HEIGHT;
+		public static int WIDTH, HEIGHT, ACCEL, DECEL, MAX_TRAVEL_DIST;
 	}
 
 	public static class Scrollables {
@@ -29,6 +29,8 @@ public final class Constants {
 		public static int SKULL_HEIGHT;
 
 		public static int GRASS_WIDTH, GRASS_HEIGHT;
+		
+		public static float PIPE_MAX_HOLE_DELTA;
 	}
 
 	public static void calc() {
@@ -56,6 +58,18 @@ public final class Constants {
 		Bird.START_Y = MIDPOINT_Y;
 		Bird.WIDTH = 17;
 		Bird.HEIGHT = 12;
+		Bird.ACCEL = 140;
+		Bird.DECEL = -200;
+		
+		float birdMaxTravel = 140f * (49f / 59f); // Speed * the time from one pipe to another
+		Scrollables.PIPE_MAX_HOLE_DELTA = (float) Math.sqrt(square(birdMaxTravel) - square(49));
+		
+		// Pipes scroll at 59 px/sec with a 49px gap.
+		
+	}
+
+	private static float square(float f) {
+		return f * f;
 	}
 
 	private Constants() {

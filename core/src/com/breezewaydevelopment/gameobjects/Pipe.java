@@ -16,15 +16,21 @@ public class Pipe extends Scrollable {
 
 	public Pipe(float x) {
 		super(x, 0, Constants.Scrollables.PIPE_WIDTH, Constants.Scrollables.PIPE_HEIGHT);
-		holeY = genHole();
 		barBottom = new Rectangle(0, 0, width, height);
 		barTop = new Rectangle(0, 0, width, height);
 		skullBottom = new Rectangle(0, 0, Constants.Scrollables.SKULL_WIDTH, Constants.Scrollables.SKULL_HEIGHT);
 		skullTop = new Rectangle(0, 0, Constants.Scrollables.SKULL_WIDTH, Constants.Scrollables.SKULL_HEIGHT);
-		setRectangles();
+		setup();
 	}
 
-	private void setRectangles() {
+	private void setup() {
+		int prevHoleY = holeY;
+		holeY = genHole();
+		while (holeY - prevHoleY > Constants.Scrollables.PIPE_MAX_HOLE_DELTA) {
+			holeY = genHole();
+			System.out.println("Trying new hole");
+		}
+		
 		barBottom.set(position.x, position.y, width, holeY);
 		skullBottom.set(position.x - 1, holeY - Constants.Scrollables.SKULL_HEIGHT, Constants.Scrollables.SKULL_WIDTH, Constants.Scrollables.SKULL_HEIGHT);
 		
@@ -48,9 +54,8 @@ public class Pipe extends Scrollable {
 	public void reset(float newX) {
 		super.reset(newX);
 		// Change the height to a random number
-		holeY = genHole();
 		isScored = false;
-		setRectangles();
+		setup();
 	}
 
 	@Override

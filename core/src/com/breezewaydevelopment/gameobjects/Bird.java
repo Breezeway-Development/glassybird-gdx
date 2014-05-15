@@ -33,8 +33,8 @@ public class Bird {
 	public void update(float delta) {
 
 		velocity.add(acceleration.cpy().scl(delta));
-		if (velocity.y < -200) {
-			velocity.y = -200;
+		if (velocity.y < Constants.Bird.DECEL) {
+			velocity.y = Constants.Bird.DECEL;
 		}
 
 		if (position.y > Constants.GAME_HEIGHT) {
@@ -75,7 +75,7 @@ public class Bird {
 	public void onClick() {
 		if (isAlive) {
 			Assets.flap.play();
-			velocity.y = 140;
+			velocity.y = Constants.Bird.ACCEL;
 		}
 	}
 
