@@ -13,9 +13,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Rectangle;
 import com.breezewaydevelopment.helpers.Assets;
 import com.breezewaydevelopment.helpers.Constants;
-import com.breezewaydevelopment.helpers.Util;
+import com.breezewaydevelopment.helpers.HighScoreHandler;
 import com.breezewaydevelopment.tweenaccessors.Value;
 import com.breezewaydevelopment.tweenaccessors.ValueAccessor;
 import com.breezewaydevelopment.gameobjects.Bird;
@@ -40,7 +41,7 @@ public class GameRenderer {
 	private Pipe[] pipes;
 
 	// Game Assets
-	private TextureRegion grass, birdMid, skullUp, skullDown, bar, ready,
+	private TextureRegion grass, birdMid, skullBottom, skullTop, bar, ready,
 			gameOver, scoreboard, star, noStar, retry;
 	private Animation birdAnimation;
 
@@ -83,8 +84,8 @@ public class GameRenderer {
 		grass = Assets.grass;
 		birdAnimation = Assets.birdAnimation;
 		birdMid = Assets.bird;
-		skullUp = Assets.skullUp;
-		skullDown = Assets.skullDown;
+		skullBottom = Assets.skullBottom;
+		skullTop = Assets.skullTop;
 		bar = Assets.bar;
 		ready = Assets.ready;
 		gameOver = Assets.gameOver;
@@ -95,18 +96,21 @@ public class GameRenderer {
 	}
 
 	private void drawGrass() {
-		// TODO: Remove dirt and move grass to the bottom
 		batcher.draw(grass, frontGrass.getX(), frontGrass.getY(), frontGrass.getWidth(), frontGrass.getHeight());
 		batcher.draw(grass, backGrass.getX(), backGrass.getY(), backGrass.getWidth(), backGrass.getHeight());
 	}
 
 	private void drawPipes() {
 		for (Pipe p : pipes) {
-			batcher.draw(bar, p.getX(), p.getY(), p.getWidth(), p.getHeight());
-			batcher.draw(bar, p.getX(), p.getY() + p.getHeight() + 45, p.getWidth(), midpointY + 66 - (p.getHeight() + 45));
-			batcher.draw(skullUp, p.getX() - 1, p.getY() + p.getHeight() - 14, 24, 14);
-			batcher.draw(skullDown, p.getX() - 1, p.getY() + p.getHeight() + 45, 24, 14);
+			drawRect(p.getBarBottom(), bar);
+			drawRect(p.getSkullBottom(), skullBottom);
+			drawRect(p.getBarTop(), bar);
+			drawRect(p.getSkullTop(), skullTop);
 		}
+	}
+
+	private void drawRect(Rectangle r, TextureRegion texture) {
+		batcher.draw(texture, r.getX(), r.getY(), r.getWidth(), r.getHeight());
 	}
 
 	/*
@@ -157,8 +161,8 @@ public class GameRenderer {
 
 		Assets.whiteFont.draw(batcher, "" + world.getScore(), 104 - (2 * length), midpointY + 20);
 
-		int length2 = ("" + Util.getHighScore()).length();
-		Assets.whiteFont.draw(batcher, "" + Util.getHighScore(), 104 - (2.5f * length2), midpointY + 3);
+		int length2 = ("" + HighScoreHandler.getHighScore()).length();
+		Assets.whiteFont.draw(batcher, "" + HighScoreHandler.getHighScore(), 104 - (2.5f * length2), midpointY + 3);
 
 	}
 
@@ -190,9 +194,9 @@ public class GameRenderer {
 		shapeRenderer.end();
 
 		batcher.begin();
+		drawPipes();
 		batcher.disableBlending();
 		drawGrass();
-		//drawPipes();
 		batcher.enableBlending();
 
 		switch (world.getState()) {
@@ -216,7 +220,7 @@ public class GameRenderer {
 		batcher.end();
 
 		drawTransition(delta);
-		drawPipeRect();
+		//drawPipeRect();
 	}
 
 	public void initTransition(float r, float g, float b, float duration) {
@@ -240,17 +244,17 @@ public class GameRenderer {
 		}
 	}
 
-	private void drawPipeRect() {
-		shapeRenderer.begin(ShapeType.Filled);
-		for (Pipe p : pipes) {
-			shapeRenderer.setColor(Color.BLACK);
-			shapeRenderer.rect(p.getSkullBottom().getX(), p.getSkullBottom().getY(), p.getSkullBottom().getWidth(), p.getSkullBottom().getHeight());
-			shapeRenderer.rect(p.getBarBottom().getX(), p.getBarBottom().getY(), p.getBarBottom().getWidth(), p.getBarBottom().getHeight());
-			shapeRenderer.setColor(Color.WHITE);
-			shapeRenderer.rect(p.getBarTop().getX(), p.getBarTop().getY(), p.getBarTop().getWidth(), p.getBarTop().getHeight());
-			shapeRenderer.rect(p.getSkullTop().getX(), p.getSkullTop().getY(), p.getSkullTop().getWidth(), p.getSkullTop().getHeight());
-		}
-		shapeRenderer.end();
-	}
+	//	private void drawPipeRect() {
+	//		shapeRenderer.begin(ShapeType.Filled);
+	//		for (Pipe p : pipes) {
+	//			shapeRenderer.setColor(Color.BLACK);
+	//			shapeRenderer.rect(p.getSkullBottom().getX(), p.getSkullBottom().getY(), p.getSkullBottom().getWidth(), p.getSkullBottom().getHeight());
+	//			shapeRenderer.rect(p.getBarBottom().getX(), p.getBarBottom().getY(), p.getBarBottom().getWidth(), p.getBarBottom().getHeight());
+	//			shapeRenderer.setColor(Color.WHITE);
+	//			shapeRenderer.rect(p.getBarTop().getX(), p.getBarTop().getY(), p.getBarTop().getWidth(), p.getBarTop().getHeight());
+	//			shapeRenderer.rect(p.getSkullTop().getX(), p.getSkullTop().getY(), p.getSkullTop().getWidth(), p.getSkullTop().getHeight());
+	//		}
+	//		shapeRenderer.end();
+	//	}
 
 }

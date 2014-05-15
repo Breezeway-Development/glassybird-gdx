@@ -11,29 +11,27 @@ public class Pipe extends Scrollable {
 	private Rectangle skullBottom, skullTop, barBottom, barTop;
 
 	private boolean isScored = false;
-	private int gap;
+	private int holeY;
 	private static Random r;
 
 	public Pipe(float x) {
-		super(x, Constants.Scrollables.Y_POSITION, Constants.Scrollables.PIPE_WIDTH, Constants.Scrollables.PIPE_HEIGHT);
-		gap = getPipeGap();
-		barBottom = new Rectangle();
-		barTop = new Rectangle();
-		skullBottom = new Rectangle();
-		skullTop = new Rectangle();
+		super(x, 0, Constants.Scrollables.PIPE_WIDTH, Constants.Scrollables.PIPE_HEIGHT);
+		holeY = genHole();
+		barBottom = new Rectangle(0, 0, width, height);
+		barTop = new Rectangle(0, 0, width, height);
+		skullBottom = new Rectangle(0, 0, Constants.Scrollables.SKULL_WIDTH, Constants.Scrollables.SKULL_HEIGHT);
+		skullTop = new Rectangle(0, 0, Constants.Scrollables.SKULL_WIDTH, Constants.Scrollables.SKULL_HEIGHT);
 		setRectangles();
 	}
 
 	private void setRectangles() {
-		// TODO: Constants for skull placement
-		// TODO: FIX PIPES
-		barBottom.set(position.x, position.y, width, height);
-		skullBottom.set(position.x - 1, gap - Constants.Scrollables.SKULL_HEIGHT, Constants.Scrollables.SKULL_WIDTH, Constants.Scrollables.SKULL_HEIGHT);
+		barBottom.set(position.x, position.y, width, holeY);
+		skullBottom.set(position.x - 1, holeY - Constants.Scrollables.SKULL_HEIGHT, Constants.Scrollables.SKULL_WIDTH, Constants.Scrollables.SKULL_HEIGHT);
+		
+		barTop.set(position.x, holeY + Constants.Scrollables.PIPE_HOLE, width, Constants.GAME_HEIGHT - holeY - Constants.Scrollables.PIPE_HOLE);
+		skullTop.set(position.x - 1, barTop.getY(), Constants.Scrollables.SKULL_WIDTH, Constants.Scrollables.SKULL_HEIGHT);
 
-		barTop.set(position.x, gap + Constants.Scrollables.PIPE_GAP_Y, width, Constants.GAME_HEIGHT - (gap + Constants.Scrollables.PIPE_GAP_Y + Constants.Scrollables.SKULL_HEIGHT));
-		skullTop.set(position.x - 1, barTop.y, Constants.Scrollables.SKULL_WIDTH, Constants.Scrollables.SKULL_HEIGHT);
-
-		System.out.println("Pipe " + hashCode() + "\tat " + (int)getX() + "," + (int)getY() + "  " + getWidth() + "x" + getHeight() + "\tgap " + gap);
+		System.out.println("Pipe " + hashCode() + "\tat " + (int) getX() + "," + (int) getY() + "  " + getWidth() + "x" + getHeight() + "\tgap " + holeY);
 	}
 
 	@Override
@@ -50,14 +48,14 @@ public class Pipe extends Scrollable {
 	public void reset(float newX) {
 		super.reset(newX);
 		// Change the height to a random number
-		gap = getPipeGap();
+		holeY = genHole();
 		isScored = false;
 		setRectangles();
 	}
 
 	@Override
 	public float getTailX() {
-		return super.getTailX() + Constants.Scrollables.PIPE_GAP_X;
+		return super.getTailX() + Constants.Scrollables.PIPE_GAP;
 	}
 
 	public Rectangle getBarBottom() {
@@ -91,18 +89,18 @@ public class Pipe extends Scrollable {
 		isScored = b;
 	}
 
-	public int getGap() {
-		return gap;
+	public int getHole() {
+		return holeY;
 	}
 
 	/*
 	 * Y coordinate of the pipe gap (from the top of the bottom pipe
 	 */
 
-	public int getPipeGap() {
+	private static int genHole() {
 		if (r == null) {
 			r = new Random();
 		}
-		return Constants.Scrollables.PIPE_OFFSET + r.nextInt((int) Constants.GAME_HEIGHT - Constants.Scrollables.PIPE_OFFSET);
+		return Constants.Scrollables.GRASS_HEIGHT + Constants.Scrollables.PIPE_CLEARANCE + r.nextInt((int) Constants.GAME_HEIGHT - Constants.Scrollables.GRASS_HEIGHT - 2 * Constants.Scrollables.PIPE_CLEARANCE);
 	}
 }

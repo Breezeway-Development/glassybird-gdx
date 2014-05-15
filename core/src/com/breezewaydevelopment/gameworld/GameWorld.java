@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.breezewaydevelopment.helpers.Assets;
 import com.breezewaydevelopment.helpers.Constants;
-import com.breezewaydevelopment.helpers.Util;
+import com.breezewaydevelopment.helpers.HighScoreHandler;
 import com.breezewaydevelopment.gameobjects.Bird;
 import com.breezewaydevelopment.gameobjects.ScrollHandler;
 
@@ -25,9 +25,10 @@ public class GameWorld {
 	}
 
 	public GameWorld() {
+		HighScoreHandler.init();
 		bird = new Bird();
 		scroller = new ScrollHandler(this);
-		ground = new Rectangle(0, Constants.Scrollables.Y_POSITION, Constants.GAME_WIDTH + 1, 11); // TODO: Simplify pipe/ground collision
+		ground = new Rectangle(0, 0, Constants.GAME_WIDTH, Constants.Scrollables.GRASS_HEIGHT);
 
 		setState(GameState.READY);
 	}
@@ -63,7 +64,7 @@ public class GameWorld {
 		if (bird.isAlive() && scroller.collides(bird)) { // Bird hits pipe
 			Assets.fall.play();
 			stop(false);
-		} else if (Intersector.overlaps(bird.getBoundingCircle(), ground)) { // Bird hits ground
+		} else if (bird.getY() - bird.getWidth() < ground.getY() && Intersector.overlaps(bird.getBoundingCircle(), ground)) { // Bird hits ground
 			stop(true);
 
 		}
@@ -78,10 +79,9 @@ public class GameWorld {
 		bird.stop(ground); // Let it fall if it hits a pipe
 
 		if (ground) {
-			if (score > Util.getHighScore()) {
-				Util.setHighScore(score);
+			if (score > HighScoreHandler.getHighScore()) {
+				HighScoreHandler.setHighScore(score);
 			}
-
 			setState(GameState.GAMEOVER);
 		}
 	}

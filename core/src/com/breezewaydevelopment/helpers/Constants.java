@@ -19,11 +19,10 @@ public final class Constants {
 
 	public static class Scrollables {
 		public static int SCROLL_SPEED;
-		public static float Y_POSITION;
 
-		public static int PIPE_GAP_X;
-		public static int PIPE_GAP_Y;
-		public static int PIPE_OFFSET;
+		public static int PIPE_GAP;
+		public static int PIPE_HOLE;
+		public static int PIPE_CLEARANCE;
 		public static int PIPE_WIDTH;
 		public static int PIPE_HEIGHT;
 		public static int SKULL_WIDTH;
@@ -32,7 +31,7 @@ public final class Constants {
 		public static int GRASS_WIDTH, GRASS_HEIGHT;
 	}
 
-	public static void load() {
+	public static void calc() {
 		SCREEN_WIDTH = Gdx.graphics.getWidth(); // 272
 		SCREEN_HEIGHT = Gdx.graphics.getHeight(); // 480
 		GAME_WIDTH = 136;
@@ -43,15 +42,13 @@ public final class Constants {
 		MIDPOINT_X = GAME_WIDTH / 2;
 
 		Scrollables.SCROLL_SPEED = -59;
-		Scrollables.Y_POSITION = 0;
 
-		Scrollables.GRASS_WIDTH = 143;
+		Scrollables.GRASS_WIDTH = (int) GAME_WIDTH;
 		Scrollables.GRASS_HEIGHT = 11;
-		Scrollables.PIPE_GAP_X = 49;
-		Scrollables.PIPE_GAP_Y = 45;
+		Scrollables.PIPE_GAP = 49;
+		Scrollables.PIPE_HOLE = 45;
 		Scrollables.PIPE_WIDTH = 22;
-		Scrollables.PIPE_HEIGHT = (int) GAME_HEIGHT - Scrollables.GRASS_HEIGHT;// + 1;
-		Scrollables.PIPE_OFFSET = 15;
+		Scrollables.PIPE_CLEARANCE = 15; // TODO: Calculate this so you can play on a tall screen
 		Scrollables.SKULL_WIDTH = 24;
 		Scrollables.SKULL_HEIGHT = 11;
 

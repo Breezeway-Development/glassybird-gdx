@@ -29,6 +29,9 @@ public class SplashScreen implements Screen {
 
 	@Override
 	public void show() {
+		Assets.load();
+		Constants.calc();
+		
 		sprite = new Sprite(Assets.splash);
 		sprite.setColor(1, 1, 1, 0);
 

@@ -16,7 +16,7 @@ public final class Assets {
 
 	public static Texture texture, splashTexture;
 	public static TextureRegion splash, logo, grass, bird, birdDown, birdUp,
-			skullUp, skullDown, bar, playButtonUp, playButtonDown, ready,
+			skullBottom, skullTop, bar, playButtonUp, playButtonDown, ready,
 			gameOver, highScore, scoreboard, star, noStar, retry;
 	public static Animation birdAnimation;
 	public static BitmapFont greenFont, shadow, whiteFont;
@@ -76,9 +76,9 @@ public final class Assets {
 		birdUp = new TextureRegion(texture, 170, 0, 17, 12);
 		birdDown = new TextureRegion(texture, 136, 0, 17, 12);
 		bar = new TextureRegion(texture, 136, 16, 22, 3);
-		skullUp = new TextureRegion(texture, 192, 0, 24, 14);
-		skullDown = new TextureRegion(skullUp);
-		skullDown.flip(false, true); // Flip y from skullUp
+		skullBottom = new TextureRegion(texture, 192, 0, 24, 14);
+		skullTop = new TextureRegion(skullBottom);
+		skullTop.flip(false, true); // Flip y from skullUp
 	}
 
 	private static void loadAnim() {
