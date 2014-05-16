@@ -1,53 +1,39 @@
 package com.breezewaydevelopment.gameobjects;
 
+import com.breezewaydevelopment.helpers.Assets;
 import com.breezewaydevelopment.gameworld.GameWorld;
-import com.breezewaydevelopment.helpers.AssetLoader;
 
 public class ScrollHandler {
 
-	public static final int SCROLL_SPEED = -59; // How fast we need to scroll
-	public static final int PIPE_GAP = 49; // Gap between the pipes
-
-	private GameWorld world;
-	private Grass frontGrass, secondGrass, thirdGrass, fourthGrass;
+	private GameWorld gameWorld;
+	private Grass firstGrass, secondGrass, thirdGrass, fourthGrass;
 	private Pipe[] pipes = new Pipe[5];
 
-	public ScrollHandler(GameWorld world, float yPos) { // Where to begin our grass and pipe objects
-		this.world = world;
-		frontGrass = new Grass(0, yPos, 143, 11, SCROLL_SPEED);
-		secondGrass = new Grass(frontGrass.getTailX(), yPos, 143, 11, SCROLL_SPEED);
-		thirdGrass = new Grass(secondGrass.getTailX(), yPos, 143, 11, SCROLL_SPEED);
-		fourthGrass = new Grass(thirdGrass.getTailX(), yPos, 143, 11, SCROLL_SPEED);
+	public ScrollHandler(GameWorld gameWorld) {
+		this.gameWorld = gameWorld;
+		firstGrass = new Grass(0);
+		secondGrass = new Grass(firstGrass.getTailX());
+		thirdGrass = new Grass(secondGrass.getTailX());
+		fourthGrass = new Grass(thirdGrass.getTailX());
 
 		for (int i = 0; i < pipes.length; i++) {
 			// Here we define each pipe. If i = 0 start at x=210, otherwise start behind the previous pipe
-			pipes[i] = new Pipe(i == 0 ? 330 : pipes[i - 1].getTailX() + PIPE_GAP, 0, 22, 60 + (i * 10), SCROLL_SPEED, yPos);
+			pipes[i] = new Pipe((i == 0 ? 210 : pipes[i - 1].getTailX()));
 		}
 	}
 
-	public void update(float delta) {
-		// Update our objects
-		frontGrass.update(delta);
+	public void updateReady(float delta) {
+
+		firstGrass.update(delta);
 		secondGrass.update(delta);
 		thirdGrass.update(delta);
 		fourthGrass.update(delta);
 
-		// Update and reset pipes
-		int i = 0;
-		for (Pipe p : pipes) { // for-each loop
-			p.update(delta);
-			if (p.isScrolledLeft()) {
-				// If a pipe is scrolled left, reset it past the farthest pipe
-				p.reset(pipes[(i == 0 ? pipes.length : i) - 1].getTailX() + PIPE_GAP);
-			}
-			i++;
-		}
-
-		// Reset grass
-		if (frontGrass.isScrolledLeft()) {
-			frontGrass.reset(fourthGrass.getTailX());
+		// Same with grass
+		if (firstGrass.isScrolledLeft()) {
+			firstGrass.reset(fourthGrass.getTailX());
 		} else if (secondGrass.isScrolledLeft()) {
-			secondGrass.reset(frontGrass.getTailX());
+			secondGrass.reset(firstGrass.getTailX());
 		} else if (thirdGrass.isScrolledLeft()) {
 			thirdGrass.reset(secondGrass.getTailX());
 		} else if (fourthGrass.isScrolledLeft()) {
@@ -56,23 +42,53 @@ public class ScrollHandler {
 
 	}
 
+	public void update(float delta) {
+		// Update our objects
+		firstGrass.update(delta);
+		secondGrass.update(delta);
+		thirdGrass.update(delta);
+		fourthGrass.update(delta);
+
+		// Update and reset pipes
+		int i = 0;
+		for (Pipe p : pipes) {
+			p.update(delta);
+			if (p.isScrolledLeft()) {
+				// If a pipe is scrolled left, reset it past the farthest pipe (1 -> 3, 2 -> 1, 3 -> 2)
+				p.reset(pipes[(i == 0 ? pipes.length : i) - 1].getTailX());
+			}
+			i++;
+		}
+
+		// Same with grass
+		if (firstGrass.isScrolledLeft()) {
+			firstGrass.reset(fourthGrass.getTailX());
+		} else if (secondGrass.isScrolledLeft()) {
+			secondGrass.reset(firstGrass.getTailX());
+		} else if (thirdGrass.isScrolledLeft()) {
+			thirdGrass.reset(secondGrass.getTailX());
+		} else if (fourthGrass.isScrolledLeft()) {
+			fourthGrass.reset(thirdGrass.getTailX());
+		}
+	}
+
 	public void stop() {
-		frontGrass.stop();
+		firstGrass.stop();
 		secondGrass.stop();
 		thirdGrass.stop();
 		fourthGrass.stop();
-
 		for (Pipe p : pipes) {
 			p.stop();
 		}
 	}
 
 	public boolean collides(Bird bird) {
+		float birdTip = bird.getX() + bird.getWidth();
 		for (Pipe p : pipes) {
-			if (!p.isScored() && p.getX() + (p.getWidth() / 2) < bird.getX() + bird.getWidth()) {
-				world.addScore(1);
+			if (!p.isScored() && p.getX() + (p.getWidth() / 2) < birdTip) { // If the tip of the bird crosses the middle of the pipe
+				gameWorld.addScore();
 				p.setScored(true);
-				AssetLoader.coin.play();
+				Assets.coin.play();
 			}
 			if (p.collides(bird)) {
 				return true;
@@ -81,9 +97,8 @@ public class ScrollHandler {
 		return false;
 	}
 
-	// The getters for our five instance variables
-	public Grass getFrontGrass() {
-		return frontGrass;
+	public Grass getFirstGrass() {
+		return firstGrass;
 	}
 
 	public Grass getSecondGrass() {
@@ -103,14 +118,15 @@ public class ScrollHandler {
 	}
 
 	public void onRestart() {
-		frontGrass.onRestart(0, SCROLL_SPEED);
-		secondGrass.onRestart(frontGrass.getTailX(), SCROLL_SPEED);
-		thirdGrass.onRestart(secondGrass.getTailX(), SCROLL_SPEED);
-		fourthGrass.onRestart(thirdGrass.getTailX(), SCROLL_SPEED);
-		
+
+		firstGrass.onRestart(0);
+		secondGrass.onRestart(firstGrass.getTailX());
+		thirdGrass.onRestart(secondGrass.getTailX());
+		fourthGrass.onRestart(thirdGrass.getTailX());
 		for (int i = 0; i < pipes.length; i++) {
 			// Same thing as pipes setup in our constructor
-			pipes[i].onRestart(i == 0 ? 330 : pipes[i - 1].getTailX() + PIPE_GAP, SCROLL_SPEED);
+			pipes[i].onRestart((i == 0 ? 210 : pipes[i - 1].getTailX()));
 		}
 	}
+
 }

@@ -1,9 +1,11 @@
 package com.breezewaydevelopment.gameobjects;
 
+import com.breezewaydevelopment.helpers.Constants;
+
 public class Grass extends Scrollable {
 
-	public Grass(float x, float y, int width, int height, float scrollSpeed) {
-		super(x, y, width, height, scrollSpeed);
+	public Grass(float x) {
+		super(x, 0, Constants.Scrollables.GRASS_WIDTH, Constants.Scrollables.GRASS_HEIGHT);
 	}
 
 }

@@ -9,9 +9,11 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.title = "Glassy Bird";
 		config.useGL30 = false;
-		config.width = 640;
-		config.height = 360;
-
+		// TODO: Glassify
+		config.width = 1088 / 4; // 272 (divisible by 136)
+		config.height = 1656 / 4; // 414 (480-66)
+		//		config.width = 1920 / 3; // 640
+		//		config.height = 1080 / 3; // 360
 		new LwjglApplication(new GBGame(), config);
 	}
 }

@@ -1,77 +1,94 @@
 package com.breezewaydevelopment.gameworld;
 
-import com.breezewaydevelopment.gameobjects.Bird;
-import com.breezewaydevelopment.gameobjects.ScrollHandler;
-import com.breezewaydevelopment.helpers.AssetLoader;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
+import com.breezewaydevelopment.helpers.Assets;
+import com.breezewaydevelopment.helpers.Constants;
+import com.breezewaydevelopment.helpers.HighScoreHandler;
+import com.breezewaydevelopment.gameobjects.Bird;
+import com.breezewaydevelopment.gameobjects.ScrollHandler;
 
 public class GameWorld {
 
-	public int midpointY;
 	private int score = 0;
+	private float runTime = 0;
+
+	private Rectangle ground;
 
 	private Bird bird;
 	private ScrollHandler scroller;
-	private Rectangle ground;
-
-	private GameState state;
-
-	public GameWorld(int midpointY) {
-		this.midpointY = midpointY;
-		bird = new Bird(33, midpointY - 5, 17, 12);
-		scroller = new ScrollHandler(this, midpointY + 66);
-		ground = new Rectangle(0, midpointY + 66, 136, 11);
-		state = GameState.READY;
-	}
+	private GameRenderer renderer;
+	private GameState currentState;
 
 	public enum GameState {
-		READY, RUNNING, GAMEOVER, HIGHSCORE
+		READY, RUNNING, GAMEOVER
+	}
+
+	public GameWorld() {
+		HighScoreHandler.init();
+		bird = new Bird();
+		scroller = new ScrollHandler(this);
+		ground = new Rectangle(0, 0, Constants.GAME_WIDTH, Constants.Scrollables.GRASS_HEIGHT);
+
+		setState(GameState.READY);
 	}
 
 	public void update(float delta) {
-		switch (state) {
+		runTime += delta;
+		switch (currentState) {
 			case READY:
-				ready(delta);
+				updateReady(delta);
 				break;
 			case RUNNING:
-				run(delta);
+				updateRunning(delta);
 				break;
 			default:
 				break;
 		}
+
 	}
 
-	private void ready(float delta) {
-		// Nothing to see here
+	private void updateReady(float delta) {
+		bird.updateReady(runTime);
+		scroller.updateReady(delta);
 	}
 
-	private void run(float delta) {
+	private void updateRunning(float delta) {
+		if (delta > .15f) {
+			delta = .15f;
+		}
+
 		bird.update(delta);
 		scroller.update(delta);
 
-		if (scroller.collides(bird) && bird.isAlive()) { // Bird hits pipe
+		if (bird.isAlive() && scroller.collides(bird)) { // Bird hits pipe
+			Assets.fall.play();
 			stop(false);
-		} else if (Intersector.overlaps(bird.getBoundingCircle(), ground)) {
+		} else if (bird.getY() - bird.getWidth() < ground.getY() && Intersector.overlaps(bird.getBoundingCircle(), ground)) { // Bird hits ground
 			stop(true);
-			state = GameState.GAMEOVER;
-			
-			if (score > AssetLoader.getHighScore()) {
-				AssetLoader.setHighScore(score);
-			}
+
 		}
 	}
-	
-	private void stop(boolean decel) {
+
+	private void stop(boolean ground) {
 		scroller.stop();
 		if (bird.isAlive()) {
-			bird.die();
+			Assets.dead.play();
+			renderer.initTransition(0, 0, 0, .3f);
 		}
-		bird.stop(decel);
+		bird.stop(ground); // Let it fall if it hits a pipe
+
+		if (ground) {
+			if (score > HighScoreHandler.getHighScore()) {
+				HighScoreHandler.setHighScore(score);
+			}
+			setState(GameState.GAMEOVER);
+		}
 	}
 
 	public Bird getBird() {
 		return bird;
+
 	}
 
 	public ScrollHandler getScroller() {
@@ -82,31 +99,30 @@ public class GameWorld {
 		return score;
 	}
 
-	public void addScore(int increment) {
-		score += increment;
-	}
-
-	public boolean isReady() {
-		return state == GameState.READY;
-	}
-
-	public boolean isGameOver() {
-		return state == GameState.GAMEOVER;
-	}
-	
-	public boolean isHighScore() {
-		return state == GameState.HIGHSCORE;
-	}
-
-	public void start() {
-		state = GameState.RUNNING;
+	public void addScore() {
+		score++;
 	}
 
 	public void restart() {
 		score = 0;
-		bird.onRestart(midpointY - 5);
+		bird.onRestart();
 		scroller.onRestart();
-		state = GameState.READY;
+		setState(GameState.READY);
+	}
+
+	public GameState getState() {
+		return currentState;
+	}
+
+	public void setState(GameState state) {
+		if (renderer != null && state == GameState.READY) {
+			renderer.initTransition(1, 1, 1, 1f);
+		}
+		currentState = state;
+	}
+
+	public void setRenderer(GameRenderer renderer) {
+		this.renderer = renderer;
 	}
 
 }

@@ -2,91 +2,110 @@ package com.breezewaydevelopment.gameobjects;
 
 import java.util.Random;
 
-import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
+import com.breezewaydevelopment.helpers.Constants;
 
 public class Pipe extends Scrollable {
 
-	public static final int VERTICAL_GAP = 45;
-	public static final int SKULL_WIDTH = 24;
-	public static final int SKULL_HEIGHT = 11;
+	private Rectangle skullBottom, skullTop, barBottom, barTop;
 
 	private boolean isScored = false;
-	private float groundY;
-	private Random r;
+	private int holeY;
+	private static Random r;
 
-	private Rectangle skullUp, skullDown, barUp, barDown;
+	public Pipe(float x) {
+		super(x, 0, Constants.Scrollables.PIPE_WIDTH, Constants.Scrollables.PIPE_HEIGHT);
+		barBottom = new Rectangle(0, 0, width, height);
+		barTop = new Rectangle(0, 0, width, height);
+		skullBottom = new Rectangle(0, 0, Constants.Scrollables.SKULL_WIDTH, Constants.Scrollables.SKULL_HEIGHT);
+		skullTop = new Rectangle(0, 0, Constants.Scrollables.SKULL_WIDTH, Constants.Scrollables.SKULL_HEIGHT);
+		setup();
+	}
 
-	public Pipe(float x, float y, int width, int height, float scrollSpeed, float groundY) {
-		super(x, y, width, height, scrollSpeed);
+	private void setup() {
+		int prevHoleY = holeY;
+		holeY = genHole();
+		while (holeY - prevHoleY > Constants.Scrollables.PIPE_MAX_HOLE_DELTA) {
+			holeY = genHole();
+			System.out.println("Trying new hole");
+		}
 
-		r = new Random();
+		barBottom.set(position.x, position.y, width, holeY);
+		skullBottom.set(position.x - 1, holeY - Constants.Scrollables.SKULL_HEIGHT, Constants.Scrollables.SKULL_WIDTH, Constants.Scrollables.SKULL_HEIGHT);
 
-		skullUp = new Rectangle();
-		skullDown = new Rectangle();
-		barUp = new Rectangle();
-		barDown = new Rectangle();
-		this.groundY = groundY;
+		barTop.set(position.x, holeY + Constants.Scrollables.PIPE_HOLE, width, Constants.GAME_HEIGHT - holeY - Constants.Scrollables.PIPE_HOLE);
+		skullTop.set(position.x - 1, barTop.getY(), Constants.Scrollables.SKULL_WIDTH, Constants.Scrollables.SKULL_HEIGHT);
+
+		System.out.println("Pipe " + hashCode() + "\tat " + (int) getX() + "," + (int) getY() + "  " + getWidth() + "x" + getHeight() + "\tgap " + holeY);
 	}
 
 	@Override
 	public void update(float delta) {
 		super.update(delta);
-		// The set() method allows you to set the top left corner's x, y
-		// coordinates,
-		// along with the width and height of the rectangle
 
-		barUp.set(position.x, position.y, width, height);
-		barDown.set(position.x, position.y + height + VERTICAL_GAP, width, groundY - (position.y + height + VERTICAL_GAP));
-
-		// Our skull width is 24. The bar is only 22 pixels wide. So the skull
-		// must be shifted by 1 pixel to the left (so that the skull is centered
-		// with respect to its bar).
-
-		// This shift is equivalent to: (SKULL_WIDTH - width) / 2
-		skullUp.set(position.x - (SKULL_WIDTH - width) / 2, position.y + height - SKULL_HEIGHT, SKULL_WIDTH, SKULL_HEIGHT);
-		skullDown.set(position.x - (SKULL_WIDTH - width) / 2, barDown.y, SKULL_WIDTH, SKULL_HEIGHT);
+		barBottom.setX(position.x);
+		barTop.setX(position.x);
+		skullBottom.setX(position.x - 1);
+		skullTop.setX(position.x - 1);
 	}
 
 	@Override
 	public void reset(float newX) {
 		super.reset(newX);
 		// Change the height to a random number
-		height = r.nextInt(90) + 15;
 		isScored = false;
+		setup();
+	}
+
+	@Override
+	public float getTailX() {
+		return super.getTailX() + Constants.Scrollables.PIPE_GAP;
+	}
+
+	public Rectangle getBarBottom() {
+		return barBottom;
+	}
+
+	public Rectangle getBarTop() {
+		return barTop;
+	}
+
+	public Rectangle getSkullBottom() {
+		return skullBottom;
+	}
+
+	public Rectangle getSkullTop() {
+		return skullTop;
 	}
 
 	public boolean collides(Bird bird) {
 		if (position.x < bird.getX() + bird.getWidth()) {
-			Circle c = bird.getBoundingCircle();
-			return (Intersector.overlaps(c, barUp) || Intersector.overlaps(c, barDown) || Intersector.overlaps(c, skullUp) || Intersector.overlaps(c, skullDown));
+			return (Intersector.overlaps(bird.getBoundingCircle(), barBottom) || Intersector.overlaps(bird.getBoundingCircle(), barTop) || Intersector.overlaps(bird.getBoundingCircle(), skullBottom) || Intersector.overlaps(bird.getBoundingCircle(), skullTop));
 		}
 		return false;
-	}
-
-	public Rectangle getSkullUp() {
-		return skullUp;
-	}
-
-	public Rectangle getSkullDown() {
-		return skullDown;
-	}
-
-	public Rectangle getBarUp() {
-		return barUp;
-	}
-
-	public Rectangle getBarDown() {
-		return barDown;
-	}
-
-	public void setScored(boolean t) {
-		isScored = true;
 	}
 
 	public boolean isScored() {
 		return isScored;
 	}
 
+	public void setScored(boolean b) {
+		isScored = b;
+	}
+
+	public int getHole() {
+		return holeY;
+	}
+
+	/*
+	 * Y coordinate of the pipe gap (from the top of the bottom pipe
+	 */
+
+	private static int genHole() {
+		if (r == null) {
+			r = new Random();
+		}
+		return Constants.Scrollables.GRASS_HEIGHT + Constants.Scrollables.PIPE_CLEARANCE + r.nextInt((int) Constants.GAME_HEIGHT - Constants.Scrollables.GRASS_HEIGHT - 2 * Constants.Scrollables.PIPE_CLEARANCE);
+	}
 }

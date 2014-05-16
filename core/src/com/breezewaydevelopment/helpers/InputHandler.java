@@ -1,45 +1,61 @@
 package com.breezewaydevelopment.helpers;
 
-import com.breezewaydevelopment.gameobjects.Bird;
-import com.breezewaydevelopment.gameworld.GameWorld;
-
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Input.Keys;
+import com.breezewaydevelopment.gameobjects.Bird;
+import com.breezewaydevelopment.gameworld.GameWorld;
+import com.breezewaydevelopment.gameworld.GameWorld.GameState;
 
 public class InputHandler implements InputProcessor {
-
+	private Bird myBird;
 	private GameWorld world;
-	private Bird bird;
+
+	// Don't forget inputhandler uses a y-down coord system for some reason ((0,0) is at the top left)
 
 	public InputHandler(GameWorld world) {
 		this.world = world;
-		this.bird = world.getBird();
+		myBird = world.getBird();
 	}
 
-	private void handleTouch() {
-		if (world.isReady()) {
-			world.start();
+	public boolean handleTap() {
+		switch (world.getState()) {
+			case READY:
+				world.setState(GameState.RUNNING);
+				myBird.onClick();
+				break;
+			case RUNNING:
+				myBird.onClick();
+				break;
+			case GAMEOVER:
+				world.restart();
+				break;
+			default:
+				return false;
 		}
-
-		bird.onClick();
-
-		if (world.isGameOver() || world.isHighScore()) {
-			world.restart();
-		}
+		return true;
 	}
 
 	@Override
-	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		handleTouch();
-		return true;
+	public boolean touchDown(int x, int y, int pointer, int button) {
+		return handleTap();
+	}
+
+	@Override
+	public boolean touchUp(int x, int y, int pointer, int button) {
+		return false;
 	}
 
 	@Override
 	public boolean keyDown(int keycode) {
-		if (keycode == Keys.DPAD_CENTER || keycode == Keys.SPACE) {
-			handleTouch();
+		switch (keycode) {
+			case Keys.DPAD_CENTER:
+			case Keys.SPACE:
+			case Keys.ENTER:
+			case Keys.UP:
+				return handleTap();
+			default:
+				return false;
 		}
-		return true;
 	}
 
 	@Override
@@ -49,11 +65,6 @@ public class InputHandler implements InputProcessor {
 
 	@Override
 	public boolean keyTyped(char character) {
-		return false;
-	}
-
-	@Override
-	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 		return false;
 	}
 
