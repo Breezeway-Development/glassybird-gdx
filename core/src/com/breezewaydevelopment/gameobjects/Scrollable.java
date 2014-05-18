@@ -28,8 +28,7 @@ public class Scrollable {
 			isScrolledLeft = true;
 		}
 	}
-
-	// Should Override in subclass for more specific behavior.
+	
 	public void reset(float newX) {
 		position.x = newX;
 		isScrolledLeft = false;

@@ -238,7 +238,7 @@ public class GameRenderer {
 			Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 			shapeRenderer.begin(ShapeType.Filled);
 			shapeRenderer.setColor(transitionColor.r, transitionColor.g, transitionColor.b, alpha.getValue());
-			shapeRenderer.rect(0, 0, 136, 300);
+			shapeRenderer.rect(0, 0, Constants.GAME_WIDTH, Constants.GAME_HEIGHT);
 			shapeRenderer.end();
 			Gdx.gl.glDisable(GL20.GL_BLEND);
 		}

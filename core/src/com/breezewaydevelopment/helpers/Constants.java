@@ -50,7 +50,7 @@ public final class Constants {
 		Scrollables.PIPE_GAP = 49;
 		Scrollables.PIPE_HOLE = 45;
 		Scrollables.PIPE_WIDTH = 22;
-		Scrollables.PIPE_CLEARANCE = 15; // TODO: Calculate this so you can play on a tall screen
+		Scrollables.PIPE_CLEARANCE = 15;
 		Scrollables.SKULL_WIDTH = 24;
 		Scrollables.SKULL_HEIGHT = 11;
 

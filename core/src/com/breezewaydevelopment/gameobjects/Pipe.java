@@ -12,7 +12,9 @@ public class Pipe extends Scrollable {
 
 	private boolean isScored = false;
 	private int holeY;
+
 	private static Random r;
+	private static int PREV_HOLE_Y;
 
 	public Pipe(float x) {
 		super(x, 0, Constants.Scrollables.PIPE_WIDTH, Constants.Scrollables.PIPE_HEIGHT);
@@ -26,18 +28,14 @@ public class Pipe extends Scrollable {
 	private void setup() {
 		int prevHoleY = holeY;
 		holeY = genHole();
-		while (holeY - prevHoleY > Constants.Scrollables.PIPE_MAX_HOLE_DELTA) {
-			holeY = genHole();
-			System.out.println("Trying new hole");
-		}
-		
+
 		barBottom.set(position.x, position.y, width, holeY);
 		skullBottom.set(position.x - 1, holeY - Constants.Scrollables.SKULL_HEIGHT, Constants.Scrollables.SKULL_WIDTH, Constants.Scrollables.SKULL_HEIGHT);
-		
+
 		barTop.set(position.x, holeY + Constants.Scrollables.PIPE_HOLE, width, Constants.GAME_HEIGHT - holeY - Constants.Scrollables.PIPE_HOLE);
 		skullTop.set(position.x - 1, barTop.getY(), Constants.Scrollables.SKULL_WIDTH, Constants.Scrollables.SKULL_HEIGHT);
 
-		System.out.println("Pipe " + hashCode() + "\tat " + (int) getX() + "," + (int) getY() + "  " + getWidth() + "x" + getHeight() + "\tgap " + holeY);
+		System.out.println("Pipe " + hashCode() + "\tat " + (int) getX() + "," + (int) getY() + " " + getWidth() + "x" + getHeight() + "\tgap " + holeY + "\tprev " + prevHoleY);
 	}
 
 	@Override
@@ -99,13 +97,36 @@ public class Pipe extends Scrollable {
 	}
 
 	/*
-	 * Y coordinate of the pipe gap (from the top of the bottom pipe
+	 * Y coordinate of the pipe hole (from the top of the bottom pipe section)
 	 */
 
 	private static int genHole() {
-		if (r == null) {
+		if (r == null || PREV_HOLE_Y == 0) {
 			r = new Random();
+			resetHole();
 		}
+
+		int testHole = randHole();
+		while (!canReach(testHole, PREV_HOLE_Y)) {
+			testHole = randHole();
+		}
+		PREV_HOLE_Y = testHole;
+
+		return testHole;
+	}
+
+	private static int randHole() {
 		return Constants.Scrollables.GRASS_HEIGHT + Constants.Scrollables.PIPE_CLEARANCE + r.nextInt((int) Constants.GAME_HEIGHT - Constants.Scrollables.GRASS_HEIGHT - 2 * Constants.Scrollables.PIPE_CLEARANCE);
 	}
+
+	//TODO: canReach check for above vs below
+	private static boolean canReach(int hole1, int hole2) {
+		return Math.abs(hole1 - hole2) < Constants.Scrollables.PIPE_MAX_HOLE_DELTA;
+	}
+
+	public static void resetHole() {
+		PREV_HOLE_Y = (int) Constants.Bird.START_Y;
+		System.out.println("Reset hole- " + PREV_HOLE_Y);
+	}
+
 }

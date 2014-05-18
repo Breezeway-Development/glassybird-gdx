@@ -21,17 +21,14 @@ public class ScrollHandler {
 	}
 
 	public void updateReady(float delta) {
-
 		frontGrass.update(delta);
 		backGrass.update(delta);
 
 		// Same with grass
 		if (frontGrass.isScrolledLeft()) {
 			frontGrass.reset(backGrass.getTailX());
-
 		} else if (backGrass.isScrolledLeft()) {
 			backGrass.reset(frontGrass.getTailX());
-
 		}
 
 	}
@@ -57,7 +54,6 @@ public class ScrollHandler {
 			frontGrass.reset(backGrass.getTailX());
 		} else if (backGrass.isScrolledLeft()) {
 			backGrass.reset(frontGrass.getTailX());
-
 		}
 	}
 
@@ -99,6 +95,7 @@ public class ScrollHandler {
 	public void onRestart() {
 		frontGrass.onRestart(0);
 		backGrass.onRestart(frontGrass.getTailX());
+		Pipe.resetHole();
 		for (int i = 0; i < pipes.length; i++) {
 			// Same thing as pipes setup in our constructor
 			pipes[i].onRestart((i == 0 ? 210 : pipes[i - 1].getTailX()));
