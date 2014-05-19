@@ -3,6 +3,7 @@ package com.breezewaydevelopment.gameworld;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenEquations;
 import aurelienribon.tweenengine.TweenManager;
+import aurelienribon.tweenengine.primitives.MutableFloat;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -17,8 +18,6 @@ import com.badlogic.gdx.math.Rectangle;
 import com.breezewaydevelopment.helpers.Assets;
 import com.breezewaydevelopment.helpers.Constants;
 import com.breezewaydevelopment.helpers.HighScoreHandler;
-import com.breezewaydevelopment.tweenaccessors.Value;
-import com.breezewaydevelopment.tweenaccessors.ValueAccessor;
 import com.breezewaydevelopment.gameobjects.Bird;
 import com.breezewaydevelopment.gameobjects.Grass;
 import com.breezewaydevelopment.gameobjects.Pipe;
@@ -47,7 +46,7 @@ public class GameRenderer {
 
 	// Tween stuff
 	private TweenManager manager;
-	private Value alpha = new Value();
+	private MutableFloat alpha;
 
 	// Buttons
 	private Color transitionColor;
@@ -69,6 +68,7 @@ public class GameRenderer {
 		initAssets();
 
 		transitionColor = new Color();
+		alpha = new MutableFloat(1);
 		initTransition(1, 1, 1, .5f);
 	}
 
@@ -226,18 +226,18 @@ public class GameRenderer {
 	public void initTransition(float r, float g, float b, float duration) {
 		transitionColor.set(r, g, b, 1);
 		alpha.setValue(1);
-		Tween.registerAccessor(Value.class, new ValueAccessor());
+		Tween.registerAccessor(MutableFloat.class, alpha);
 		manager = new TweenManager();
 		Tween.to(alpha, -1, duration).target(0).ease(TweenEquations.easeOutQuad).start(manager);
 	}
 
 	private void drawTransition(float delta) {
-		if (alpha.getValue() > 0) {
+		if (alpha.floatValue() > 0) {
 			manager.update(delta);
 			Gdx.gl.glEnable(GL20.GL_BLEND);
 			Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 			shapeRenderer.begin(ShapeType.Filled);
-			shapeRenderer.setColor(transitionColor.r, transitionColor.g, transitionColor.b, alpha.getValue());
+			shapeRenderer.setColor(transitionColor.r, transitionColor.g, transitionColor.b, alpha.floatValue());
 			shapeRenderer.rect(0, 0, Constants.GAME_WIDTH, Constants.GAME_HEIGHT);
 			shapeRenderer.end();
 			Gdx.gl.glDisable(GL20.GL_BLEND);
