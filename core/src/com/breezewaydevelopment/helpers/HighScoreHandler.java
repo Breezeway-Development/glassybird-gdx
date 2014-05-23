@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 
 public final class HighScoreHandler {
-	
+
 	private static Preferences prefs;
 
 	private HighScoreHandler() {
@@ -12,13 +12,13 @@ public final class HighScoreHandler {
 	}
 
 	public static void init() {
-		
+
 		prefs = Gdx.app.getPreferences("glassybird");
 		if (!prefs.contains("highscore")) {
 			setHighScore(0);
 		}
 	}
-	
+
 	public static void setHighScore(int score) {
 		prefs.putInteger("highscore", score);
 		prefs.flush();

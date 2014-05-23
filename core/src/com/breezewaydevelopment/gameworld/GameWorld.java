@@ -12,7 +12,7 @@ public class GameWorld {
 
 	private int score = 0;
 	private float runTime = 0;
-	
+
 	private Rectangle ground;
 
 	private Bird bird;

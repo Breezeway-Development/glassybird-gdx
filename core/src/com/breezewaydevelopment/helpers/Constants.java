@@ -1,7 +1,6 @@
 package com.breezewaydevelopment.helpers;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Vector2;
 
 public final class Constants {
 
@@ -29,7 +28,8 @@ public final class Constants {
 
 		public static int GRASS_WIDTH, GRASS_HEIGHT;
 
-		public static float PIPE_HOLE_DELTA_HIGHER, PIPE_HOLE_DELTA_LOWER, SCROLL_SPEED;
+		public static float PIPE_HOLE_DELTA_HIGHER, PIPE_HOLE_DELTA_LOWER,
+				SCROLL_SPEED;
 	}
 
 	public static void calc() {
@@ -52,7 +52,7 @@ public final class Constants {
 		Scrollables.PIPE_CLEARANCE = 15;
 		Scrollables.SKULL_WIDTH = 24;
 		Scrollables.SKULL_HEIGHT = 11;
-		
+
 		// TODO: Don't let pipes get too tall
 
 		Bird.START_X = GAME_WIDTH * (2 / 7f);
