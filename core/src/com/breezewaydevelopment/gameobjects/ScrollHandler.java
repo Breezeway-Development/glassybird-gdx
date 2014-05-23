@@ -8,6 +8,8 @@ public class ScrollHandler {
 	private GameWorld gameWorld;
 	private Grass frontGrass, backGrass;
 	private Pipe[] pipes = new Pipe[3];
+	
+	float runtime = 0;
 
 	public ScrollHandler(GameWorld gameWorld) {
 		this.gameWorld = gameWorld;
@@ -34,6 +36,7 @@ public class ScrollHandler {
 	}
 
 	public void update(float delta) {
+		runtime += delta;
 		// Update our objects
 		frontGrass.update(delta);
 		backGrass.update(delta);
@@ -72,6 +75,7 @@ public class ScrollHandler {
 				gameWorld.addScore();
 				p.setScored(true);
 				Assets.coin.play();
+//				System.out.println("Bird \t\tat " + bird.getY() + "\t" + runtime + "s");
 			}
 			if (p.collides(bird)) {
 				return true;

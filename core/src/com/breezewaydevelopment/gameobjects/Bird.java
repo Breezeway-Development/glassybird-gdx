@@ -9,7 +9,6 @@ public class Bird {
 
 	private int width;
 	private int height;
-	private float originalY;
 	private float rotation;
 	private boolean isAlive;
 
@@ -22,8 +21,7 @@ public class Bird {
 	public Bird() {
 		this.width = Constants.Bird.WIDTH;
 		this.height = Constants.Bird.HEIGHT;
-		originalY = Constants.Bird.START_Y;
-		position = new Vector2(Constants.Bird.START_X, originalY);
+		position = new Vector2(Constants.Bird.START_X, Constants.Bird.START_Y);
 		velocity = new Vector2(0, 0);
 		acceleration = new Vector2(0, -460);
 		boundingCircle = new Circle(position.x, position.y, 6.5f);
@@ -33,8 +31,8 @@ public class Bird {
 	public void update(float delta) {
 
 		velocity.add(acceleration.cpy().scl(delta));
-		if (velocity.y < Constants.Bird.DECEL) {
-			velocity.y = Constants.Bird.DECEL;
+		if (velocity.y < -1 * Constants.Bird.DECEL) {
+			velocity.y = -1 * Constants.Bird.DECEL;
 		}
 
 		if (position.y > Constants.GAME_HEIGHT) {
@@ -54,7 +52,7 @@ public class Bird {
 				rotation = 20;
 			}
 		} else if (!isAlive || velocity.y <= -110) { // Going down
-			// TODO: More responsive clockwise rotation
+			// TODO: More responsive rotation and constants
 			rotation -= 480 * delta;
 			if (rotation < -90) {
 				rotation = -90;
@@ -64,7 +62,7 @@ public class Bird {
 	}
 
 	public void updateReady(float runTime) {
-		position.y = 2 * (float) Math.sin(7 * runTime) + originalY;
+		position.y = 2 * (float) Math.sin(7 * runTime) + Constants.Bird.START_Y;
 		position.x = Constants.MIDPOINT_X - width;
 	}
 
