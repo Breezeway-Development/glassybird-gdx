@@ -1,6 +1,7 @@
 package com.breezewaydevelopment.gameobjects;
 
 import com.breezewaydevelopment.helpers.Assets;
+import com.breezewaydevelopment.helpers.Constants;
 import com.breezewaydevelopment.gameworld.GameWorld;
 
 public class ScrollHandler {
@@ -18,7 +19,8 @@ public class ScrollHandler {
 
 		for (int i = 0; i < pipes.length; i++) {
 			// Here we define each pipe. If i = 0 start at x=210, otherwise start behind the previous pipe
-			pipes[i] = new Pipe((i == 0 ? 210 : pipes[i - 1].getTailX()));
+			pipes[i] = new Pipe((i == 0 ? Constants.GAME_WIDTH + Constants.Scrollables.PIPE_GAP
+					: pipes[i - 1].getTailX()));
 		}
 	}
 
@@ -26,7 +28,6 @@ public class ScrollHandler {
 		frontGrass.update(delta);
 		backGrass.update(delta);
 
-		// Same with grass
 		if (frontGrass.isScrolledLeft()) {
 			frontGrass.reset(backGrass.getTailX());
 		} else if (backGrass.isScrolledLeft()) {
@@ -37,7 +38,6 @@ public class ScrollHandler {
 
 	public void update(float delta) {
 		runtime += delta;
-		// Update our objects
 		frontGrass.update(delta);
 		backGrass.update(delta);
 
@@ -102,7 +102,8 @@ public class ScrollHandler {
 		Pipe.resetHole();
 		for (int i = 0; i < pipes.length; i++) {
 			// Same thing as pipes setup in our constructor
-			pipes[i].onRestart((i == 0 ? 210 : pipes[i - 1].getTailX()));
+			pipes[i].onRestart((i == 0 ? Constants.GAME_WIDTH + Constants.Scrollables.PIPE_GAP
+					: pipes[i - 1].getTailX()));
 		}
 	}
 

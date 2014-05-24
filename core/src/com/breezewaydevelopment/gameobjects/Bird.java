@@ -21,7 +21,7 @@ public class Bird {
 	public Bird() {
 		this.width = Constants.Bird.WIDTH;
 		this.height = Constants.Bird.HEIGHT;
-		position = new Vector2(Constants.Bird.START_X, Constants.Bird.START_Y);
+		position = new Vector2(Constants.Bird.START_X, Constants.MIDPOINT_Y);
 		velocity = new Vector2(0, 0);
 		acceleration = new Vector2(0, -460);
 		boundingCircle = new Circle(position.x, position.y, 6.5f);
@@ -35,8 +35,7 @@ public class Bird {
 			velocity.y = -1 * Constants.Bird.DECEL;
 		}
 
-		if (position.y > Constants.GAME_HEIGHT) {
-			System.out.println("Ceiling");
+		if (position.y > Constants.GAME_HEIGHT) { // Ceiling
 			position.y = Constants.GAME_HEIGHT;
 			velocity.y = 0;
 		}
@@ -62,7 +61,7 @@ public class Bird {
 	}
 
 	public void updateReady(float runTime) {
-		position.y = 2 * (float) Math.sin(7 * runTime) + Constants.Bird.START_Y;
+		position.y = 2 * (float) Math.sin(7 * runTime) + Constants.MIDPOINT_Y;
 		position.x = Constants.MIDPOINT_X - width;
 	}
 
@@ -87,7 +86,7 @@ public class Bird {
 
 	public void onRestart() {
 		rotation = 0;
-		position.y = Constants.Bird.START_Y;
+		position.y = Constants.MIDPOINT_Y;
 		velocity.x = 0;
 		velocity.y = 0;
 		acceleration.x = 0;
