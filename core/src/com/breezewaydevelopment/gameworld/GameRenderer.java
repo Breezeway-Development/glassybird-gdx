@@ -18,15 +18,12 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.breezewaydevelopment.helpers.Assets;
 import com.breezewaydevelopment.helpers.Constants;
-import com.breezewaydevelopment.helpers.HighScoreHandler;
 import com.breezewaydevelopment.gameobjects.Bird;
 import com.breezewaydevelopment.gameobjects.Grass;
 import com.breezewaydevelopment.gameobjects.Pipe;
 import com.breezewaydevelopment.gameobjects.ScrollHandler;
 
 public class GameRenderer {
-
-	private float midpointY;
 
 	private GameWorld world;
 
@@ -52,8 +49,6 @@ public class GameRenderer {
 
 	public GameRenderer(GameWorld world) {
 		this.world = world;
-
-		midpointY = Constants.MIDPOINT_Y;
 
 		cam = new OrthographicCamera();
 		cam.setToOrtho(false, Constants.GAME_WIDTH, Constants.GAME_HEIGHT);
@@ -85,8 +80,9 @@ public class GameRenderer {
 		shadow = Assets.shadow;
 		grass = Assets.grass;
 		birdMid = Assets.bird;
-		skullBottom = Assets.skullBottom;
-		skullTop = Assets.skullTop;
+		skullBottom = Assets.ring;
+		skullTop = new TextureRegion(skullBottom);
+		skullTop.flip(false, true);
 		bar = Assets.bar;
 	}
 
