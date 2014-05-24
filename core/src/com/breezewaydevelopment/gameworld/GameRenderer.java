@@ -39,7 +39,7 @@ public class GameRenderer {
 
 	// Game Assets
 	private Animation birdAnimation;
-	public BitmapFont greenFont, shadow;
+	public BitmapFont font;
 	private TextureRegion grass, birdMid, skullBottom, skullTop, bar;
 
 	// Tween stuff
@@ -76,8 +76,7 @@ public class GameRenderer {
 
 	private void initAssets() {
 		birdAnimation = Assets.birdAnimation;
-		greenFont = Assets.greenFont;
-		shadow = Assets.shadow;
+		font = Assets.font;
 		grass = Assets.grass;
 		birdMid = Assets.bird;
 		skullBottom = Assets.ring;
@@ -119,15 +118,16 @@ public class GameRenderer {
 	}
 
 	private void drawReady() {
-		//		batcher.draw(ready, 36, midpointY + 50, 68, 14);
+		drawString("Tap to Flap");
 	}
 
-	// TODO: Look into cool bitmap fonts
 	// TODO: Constants for score rendering
 	private void drawScore() {
-		String score = Integer.toString(world.getScore());
-		shadow.draw(batcher, score, 15, Constants.GAME_HEIGHT - 10);
-		greenFont.draw(batcher, score, 15, Constants.GAME_HEIGHT - 10);
+		drawString(Integer.toString(world.getScore()));
+	}
+
+	private void drawString(String s) {
+		font.draw(batcher, s, font.getCapHeight(), Constants.GAME_HEIGHT - font.getCapHeight());
 	}
 
 	public void render(float delta, float runtime) {

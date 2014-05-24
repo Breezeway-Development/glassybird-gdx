@@ -62,7 +62,6 @@ public final class Constants {
 		float pipeTravelTime = Scrollables.PIPE_GAP / Scrollables.SCROLL_SPEED;
 		Scrollables.PIPE_HOLE_DELTA_HIGHER = (pipeTravelTime * Bird.ACCEL) - Scrollables.PIPE_HOLE;
 		Scrollables.PIPE_HOLE_DELTA_LOWER = (pipeTravelTime * Bird.DECEL * 0.8f) - Scrollables.PIPE_HOLE;
-		//		System.out.printf("Higher %f Lower %f\n", Scrollables.PIPE_HOLE_DELTA_HIGHER, Scrollables.PIPE_HOLE_DELTA_LOWER);
 	}
 
 	private Constants() {

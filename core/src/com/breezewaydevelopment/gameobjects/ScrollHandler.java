@@ -75,7 +75,6 @@ public class ScrollHandler {
 				gameWorld.addScore();
 				p.setScored(true);
 				Assets.coin.play();
-				//				System.out.println("Bird \t\tat " + bird.getY() + "\t" + runtime + "s");
 			}
 			if (p.collides(bird)) {
 				return true;
