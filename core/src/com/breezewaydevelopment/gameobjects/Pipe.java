@@ -104,13 +104,14 @@ public class Pipe extends Scrollable {
 		}
 
 		int testHole = randHole();
-		while (!canReach(testHole, PREV_HOLE_Y)) {
+		while (!canReach(PREV_HOLE_Y, testHole)) {
 			testHole = randHole();
 		}
-		System.out.printf("genHole()\tprev %d  \tnew %d\n", PREV_HOLE_Y, testHole);
+		//		System.out.printf("genHole()\tprev %d  \tnew %d\n", PREV_HOLE_Y, testHole);
 		return PREV_HOLE_Y = testHole;
 	}
 
+	// TODO: Don't let pipes get too tall
 	private static int randHole() {
 		return Constants.Scrollables.GRASS_HEIGHT + Constants.Scrollables.PIPE_CLEARANCE + r.nextInt((int) Constants.GAME_HEIGHT - Constants.Scrollables.GRASS_HEIGHT - 2 * Constants.Scrollables.PIPE_CLEARANCE);
 	}
@@ -122,9 +123,8 @@ public class Pipe extends Scrollable {
 		return hole2 - hole1 <= Constants.Scrollables.PIPE_HOLE_DELTA_HIGHER;
 	}
 
-	// TODO: Always reset first pipe 
 	public static void resetHole() {
-		PREV_HOLE_Y = (int) Constants.Bird.START_Y;
+		PREV_HOLE_Y = (int) Constants.MIDPOINT_Y;
 	}
 
 }

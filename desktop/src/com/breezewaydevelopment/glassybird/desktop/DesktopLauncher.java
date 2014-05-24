@@ -10,10 +10,10 @@ public class DesktopLauncher {
 		config.title = "Glassy Bird";
 		config.useGL30 = false;
 		// TODO: Glassify
-		config.width = 1088 / 4; // 272 (divisible by 136)
-		config.height = 1656 / 2; // 414 (480-66)
-		//		config.width = 1920 / 3; // 640
-		//		config.height = 1080 / 3; // 360
+//		config.width = 1088 / 4; // 272 (divisible by 136)
+//		config.height = 1656 / 2; // 414 (480-66)
+		config.width = 1920 / 3; // 640
+		config.height = 1080 / 3; // 360
 		new LwjglApplication(new GBGame(), config);
 	}
 }

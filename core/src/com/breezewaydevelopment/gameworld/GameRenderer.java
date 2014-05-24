@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -40,15 +41,13 @@ public class GameRenderer {
 	private Pipe[] pipes;
 
 	// Game Assets
-	private TextureRegion grass, birdMid, skullBottom, skullTop, bar, ready,
-			gameOver, scoreboard, star, noStar, retry;
 	private Animation birdAnimation;
+	public BitmapFont greenFont, shadow;
+	private TextureRegion grass, birdMid, skullBottom, skullTop, bar;
 
 	// Tween stuff
 	private TweenManager manager;
 	private MutableFloat alpha;
-
-	// Buttons
 	private Color transitionColor;
 
 	public GameRenderer(GameWorld world) {
@@ -81,18 +80,14 @@ public class GameRenderer {
 	}
 
 	private void initAssets() {
-		grass = Assets.grass;
 		birdAnimation = Assets.birdAnimation;
+		greenFont = Assets.greenFont;
+		shadow = Assets.shadow;
+		grass = Assets.grass;
 		birdMid = Assets.bird;
 		skullBottom = Assets.skullBottom;
 		skullTop = Assets.skullTop;
 		bar = Assets.bar;
-		ready = Assets.ready;
-		gameOver = Assets.gameOver;
-		scoreboard = Assets.scoreboard;
-		retry = Assets.retry;
-		star = Assets.star;
-		noStar = Assets.noStar;
 	}
 
 	private void drawGrass() {
@@ -127,73 +122,29 @@ public class GameRenderer {
 				: birdMid, bird.getX(), bird.getY(), birdW / 2.0f, birdH / 2.0f, birdW, birdH, 1, 1, bird.getRotation());
 	}
 
-	private void drawScoreboard() {
-		// TODO: Simple gameover
-		batcher.draw(scoreboard, 22, midpointY, 97, 37);
-
-		batcher.draw(noStar, 25, midpointY + 15, 10, 10);
-		batcher.draw(noStar, 37, midpointY + 15, 10, 10);
-		batcher.draw(noStar, 49, midpointY + 15, 10, 10);
-		batcher.draw(noStar, 61, midpointY + 15, 10, 10);
-		batcher.draw(noStar, 73, midpointY + 15, 10, 10);
-
-		if (world.getScore() > 2) {
-			batcher.draw(star, 73, midpointY + 15, 10, 10);
-		}
-
-		if (world.getScore() > 17) {
-			batcher.draw(star, 61, midpointY + 15, 10, 10);
-		}
-
-		if (world.getScore() > 50) {
-			batcher.draw(star, 49, midpointY + 15, 10, 10);
-		}
-
-		if (world.getScore() > 80) {
-			batcher.draw(star, 37, midpointY + 15, 10, 10);
-		}
-
-		if (world.getScore() > 120) {
-			batcher.draw(star, 25, midpointY + 15, 10, 10);
-		}
-
-		int length = ("" + world.getScore()).length();
-
-		Assets.whiteFont.draw(batcher, "" + world.getScore(), 104 - (2 * length), midpointY + 20);
-
-		int length2 = ("" + HighScoreHandler.getHighScore()).length();
-		Assets.whiteFont.draw(batcher, "" + HighScoreHandler.getHighScore(), 104 - (2.5f * length2), midpointY + 3);
-
-	}
-
-	private void drawRetry() {
-		batcher.draw(retry, 36, midpointY - 50, 66, 14);
-	}
-
 	private void drawReady() {
-		batcher.draw(ready, 36, midpointY + 50, 68, 14);
+		//		batcher.draw(ready, 36, midpointY + 50, 68, 14);
 	}
 
-	private void drawGameOver() {
-		batcher.draw(gameOver, 24, midpointY + 50, 92, 14);
-	}
-
+	// TODO: Look into cool bitmap fonts
+	// TODO: Constants for score rendering
 	private void drawScore() {
-		int length = ("" + world.getScore()).length();
-		Assets.shadow.draw(batcher, "" + world.getScore(), 68 - (3 * length), midpointY + 82);
-		Assets.greenFont.draw(batcher, "" + world.getScore(), 68 - (3 * length), midpointY + 83);
+		String score = Integer.toString(world.getScore());
+		shadow.draw(batcher, score, 15, Constants.GAME_HEIGHT - 10);
+		greenFont.draw(batcher, score, 15, Constants.GAME_HEIGHT - 10);
 	}
 
 	public void render(float delta, float runtime) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		shapeRenderer.begin(ShapeType.Filled);
-		shapeRenderer.setColor(55 / 255.0f, 80 / 255.0f, 100 / 255.0f, 1);
-		shapeRenderer.rect(0, 0, Constants.GAME_WIDTH, Constants.GAME_HEIGHT);
-		shapeRenderer.end();
+		//		shapeRenderer.begin(ShapeType.Filled);
+		//		shapeRenderer.setColor(55 / 255.0f, 80 / 255.0f, 100 / 255.0f, 1);
+		//		shapeRenderer.rect(0, 0, Constants.GAME_WIDTH, Constants.GAME_HEIGHT);
+		//		shapeRenderer.end();
 
 		batcher.begin();
+		batcher.enableBlending();
 		drawPipes();
 		batcher.disableBlending();
 		drawGrass();
@@ -210,9 +161,6 @@ public class GameRenderer {
 				break;
 			case GAMEOVER:
 				drawBird(runtime);
-				drawScoreboard();
-				drawGameOver();
-				drawRetry();
 				break;
 			default:
 				break;
