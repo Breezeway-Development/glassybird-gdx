@@ -3,6 +3,7 @@ package com.breezewaydevelopment.gameworld;
 import aurelienribon.tweenengine.Tween;
 import aurelienribon.tweenengine.TweenEquations;
 import aurelienribon.tweenengine.TweenManager;
+import aurelienribon.tweenengine.primitives.MutableFloat;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -17,8 +18,6 @@ import com.badlogic.gdx.math.Rectangle;
 import com.breezewaydevelopment.helpers.Assets;
 import com.breezewaydevelopment.helpers.Constants;
 import com.breezewaydevelopment.helpers.HighScoreHandler;
-import com.breezewaydevelopment.tweenaccessors.Value;
-import com.breezewaydevelopment.tweenaccessors.ValueAccessor;
 import com.breezewaydevelopment.gameobjects.Bird;
 import com.breezewaydevelopment.gameobjects.Grass;
 import com.breezewaydevelopment.gameobjects.Pipe;
@@ -37,7 +36,7 @@ public class GameRenderer {
 	// Game Objects
 	private Bird bird;
 	private ScrollHandler scroller;
-	private Grass firstGrass, secondGrass, thirdGrass, fourthGrass;
+	private Grass frontGrass, backGrass;
 	private Pipe[] pipes;
 
 	// Game Assets
@@ -47,7 +46,7 @@ public class GameRenderer {
 
 	// Tween stuff
 	private TweenManager manager;
-	private Value alpha = new Value();
+	private MutableFloat alpha;
 
 	// Buttons
 	private Color transitionColor;
@@ -58,7 +57,6 @@ public class GameRenderer {
 		midpointY = Constants.MIDPOINT_Y;
 
 		cam = new OrthographicCamera();
-
 		cam.setToOrtho(false, Constants.GAME_WIDTH, Constants.GAME_HEIGHT);
 
 		batcher = new SpriteBatch();
@@ -70,6 +68,7 @@ public class GameRenderer {
 		initAssets();
 
 		transitionColor = new Color();
+		alpha = new MutableFloat(1);
 		initTransition(1, 1, 1, .5f);
 	}
 
@@ -77,10 +76,8 @@ public class GameRenderer {
 		bird = world.getBird();
 		scroller = world.getScroller();
 		pipes = scroller.getPipes();
-		firstGrass = scroller.getFirstGrass();
-		secondGrass = scroller.getSecondGrass();
-		thirdGrass = scroller.getThirdGrass();
-		fourthGrass = scroller.getFourthGrass();
+		frontGrass = scroller.getFrontGrass();
+		backGrass = scroller.getBackGrass();
 	}
 
 	private void initAssets() {
@@ -99,11 +96,8 @@ public class GameRenderer {
 	}
 
 	private void drawGrass() {
-		batcher.draw(grass, firstGrass.getX(), firstGrass.getY(), firstGrass.getWidth(), firstGrass.getHeight());
-		batcher.draw(grass, secondGrass.getX(), secondGrass.getY(), secondGrass.getWidth(), secondGrass.getHeight());
-		batcher.draw(grass, thirdGrass.getX(), thirdGrass.getY(), thirdGrass.getWidth(), thirdGrass.getHeight());
-		batcher.draw(grass, fourthGrass.getX(), fourthGrass.getY(), fourthGrass.getWidth(), fourthGrass.getHeight());
-		
+		batcher.draw(grass, frontGrass.getX(), frontGrass.getY(), frontGrass.getWidth(), frontGrass.getHeight());
+		batcher.draw(grass, backGrass.getX(), backGrass.getY(), backGrass.getWidth(), backGrass.getHeight());
 	}
 
 	private void drawPipes() {
@@ -196,17 +190,14 @@ public class GameRenderer {
 
 		shapeRenderer.begin(ShapeType.Filled);
 		shapeRenderer.setColor(55 / 255.0f, 80 / 255.0f, 100 / 255.0f, 1);
-
 		shapeRenderer.rect(0, 0, Constants.GAME_WIDTH, Constants.GAME_HEIGHT);
 		shapeRenderer.end();
 
 		batcher.begin();
 		drawPipes();
 		batcher.disableBlending();
-
 		drawGrass();
 		batcher.enableBlending();
-
 
 		switch (world.getState()) {
 			case READY:
@@ -228,7 +219,6 @@ public class GameRenderer {
 		}
 		batcher.end();
 
-
 		drawTransition(delta);
 		//drawPipeRect();
 	}
@@ -236,19 +226,19 @@ public class GameRenderer {
 	public void initTransition(float r, float g, float b, float duration) {
 		transitionColor.set(r, g, b, 1);
 		alpha.setValue(1);
-		Tween.registerAccessor(Value.class, new ValueAccessor());
+		Tween.registerAccessor(MutableFloat.class, alpha);
 		manager = new TweenManager();
 		Tween.to(alpha, -1, duration).target(0).ease(TweenEquations.easeOutQuad).start(manager);
 	}
 
 	private void drawTransition(float delta) {
-		if (alpha.getValue() > 0) {
+		if (alpha.floatValue() > 0) {
 			manager.update(delta);
 			Gdx.gl.glEnable(GL20.GL_BLEND);
 			Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 			shapeRenderer.begin(ShapeType.Filled);
-			shapeRenderer.setColor(transitionColor.r, transitionColor.g, transitionColor.b, alpha.getValue());
-			shapeRenderer.rect(0, 0, 136, 300);
+			shapeRenderer.setColor(transitionColor.r, transitionColor.g, transitionColor.b, alpha.floatValue());
+			shapeRenderer.rect(0, 0, Constants.GAME_WIDTH, Constants.GAME_HEIGHT);
 			shapeRenderer.end();
 			Gdx.gl.glDisable(GL20.GL_BLEND);
 		}

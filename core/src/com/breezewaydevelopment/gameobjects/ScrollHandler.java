@@ -6,15 +6,15 @@ import com.breezewaydevelopment.gameworld.GameWorld;
 public class ScrollHandler {
 
 	private GameWorld gameWorld;
-	private Grass firstGrass, secondGrass, thirdGrass, fourthGrass;
-	private Pipe[] pipes = new Pipe[5];
+	private Grass frontGrass, backGrass;
+	private Pipe[] pipes = new Pipe[3];
+
+	float runtime = 0;
 
 	public ScrollHandler(GameWorld gameWorld) {
 		this.gameWorld = gameWorld;
-		firstGrass = new Grass(0);
-		secondGrass = new Grass(firstGrass.getTailX());
-		thirdGrass = new Grass(secondGrass.getTailX());
-		fourthGrass = new Grass(thirdGrass.getTailX());
+		frontGrass = new Grass(0);
+		backGrass = new Grass(frontGrass.getTailX());
 
 		for (int i = 0; i < pipes.length; i++) {
 			// Here we define each pipe. If i = 0 start at x=210, otherwise start behind the previous pipe
@@ -23,31 +23,23 @@ public class ScrollHandler {
 	}
 
 	public void updateReady(float delta) {
-
-		firstGrass.update(delta);
-		secondGrass.update(delta);
-		thirdGrass.update(delta);
-		fourthGrass.update(delta);
+		frontGrass.update(delta);
+		backGrass.update(delta);
 
 		// Same with grass
-		if (firstGrass.isScrolledLeft()) {
-			firstGrass.reset(fourthGrass.getTailX());
-		} else if (secondGrass.isScrolledLeft()) {
-			secondGrass.reset(firstGrass.getTailX());
-		} else if (thirdGrass.isScrolledLeft()) {
-			thirdGrass.reset(secondGrass.getTailX());
-		} else if (fourthGrass.isScrolledLeft()) {
-			fourthGrass.reset(thirdGrass.getTailX());
+		if (frontGrass.isScrolledLeft()) {
+			frontGrass.reset(backGrass.getTailX());
+		} else if (backGrass.isScrolledLeft()) {
+			backGrass.reset(frontGrass.getTailX());
 		}
 
 	}
 
 	public void update(float delta) {
+		runtime += delta;
 		// Update our objects
-		firstGrass.update(delta);
-		secondGrass.update(delta);
-		thirdGrass.update(delta);
-		fourthGrass.update(delta);
+		frontGrass.update(delta);
+		backGrass.update(delta);
 
 		// Update and reset pipes
 		int i = 0;
@@ -61,22 +53,16 @@ public class ScrollHandler {
 		}
 
 		// Same with grass
-		if (firstGrass.isScrolledLeft()) {
-			firstGrass.reset(fourthGrass.getTailX());
-		} else if (secondGrass.isScrolledLeft()) {
-			secondGrass.reset(firstGrass.getTailX());
-		} else if (thirdGrass.isScrolledLeft()) {
-			thirdGrass.reset(secondGrass.getTailX());
-		} else if (fourthGrass.isScrolledLeft()) {
-			fourthGrass.reset(thirdGrass.getTailX());
+		if (frontGrass.isScrolledLeft()) {
+			frontGrass.reset(backGrass.getTailX());
+		} else if (backGrass.isScrolledLeft()) {
+			backGrass.reset(frontGrass.getTailX());
 		}
 	}
 
 	public void stop() {
-		firstGrass.stop();
-		secondGrass.stop();
-		thirdGrass.stop();
-		fourthGrass.stop();
+		frontGrass.stop();
+		backGrass.stop();
 		for (Pipe p : pipes) {
 			p.stop();
 		}
@@ -89,6 +75,7 @@ public class ScrollHandler {
 				gameWorld.addScore();
 				p.setScored(true);
 				Assets.coin.play();
+				//				System.out.println("Bird \t\tat " + bird.getY() + "\t" + runtime + "s");
 			}
 			if (p.collides(bird)) {
 				return true;
@@ -97,32 +84,22 @@ public class ScrollHandler {
 		return false;
 	}
 
-	public Grass getFirstGrass() {
-		return firstGrass;
+	public Grass getFrontGrass() {
+		return frontGrass;
 	}
 
-	public Grass getSecondGrass() {
-		return secondGrass;
+	public Grass getBackGrass() {
+		return backGrass;
 	}
 
-	public Grass getThirdGrass() {
-		return thirdGrass;
-	}
-	
-	public Grass getFourthGrass() {
-		return fourthGrass;
-	}
-	
 	public Pipe[] getPipes() {
 		return pipes;
 	}
 
 	public void onRestart() {
-
-		firstGrass.onRestart(0);
-		secondGrass.onRestart(firstGrass.getTailX());
-		thirdGrass.onRestart(secondGrass.getTailX());
-		fourthGrass.onRestart(thirdGrass.getTailX());
+		frontGrass.onRestart(0);
+		backGrass.onRestart(frontGrass.getTailX());
+		Pipe.resetHole();
 		for (int i = 0; i < pipes.length; i++) {
 			// Same thing as pipes setup in our constructor
 			pipes[i].onRestart((i == 0 ? 210 : pipes[i - 1].getTailX()));

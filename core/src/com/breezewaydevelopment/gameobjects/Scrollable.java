@@ -16,7 +16,7 @@ public class Scrollable {
 
 	public Scrollable(float x, float y, int width, int height) {
 		position = new Vector2(x, y);
-		velocity = new Vector2(Constants.Scrollables.SCROLL_SPEED, 0);
+		velocity = new Vector2(-1 * Constants.Scrollables.SCROLL_SPEED, 0);
 		this.width = width;
 		this.height = height;
 		isScrolledLeft = false;
@@ -29,7 +29,6 @@ public class Scrollable {
 		}
 	}
 
-	// Should Override in subclass for more specific behavior.
 	public void reset(float newX) {
 		position.x = newX;
 		isScrolledLeft = false;
@@ -66,7 +65,7 @@ public class Scrollable {
 
 	public void onRestart(float x) {
 		reset(x);
-		velocity.x = Constants.Scrollables.SCROLL_SPEED;
+		velocity.x = -1 * Constants.Scrollables.SCROLL_SPEED;
 	}
 
 }

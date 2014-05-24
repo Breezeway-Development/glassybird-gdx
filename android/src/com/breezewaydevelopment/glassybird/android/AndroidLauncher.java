@@ -15,4 +15,4 @@ public class AndroidLauncher extends AndroidApplication {
 		getWindow().addFlags(WindowUtils.FLAG_DISABLE_HEAD_GESTURES);
 		initialize(new GBGame(), config);
 	}
-} 
+}

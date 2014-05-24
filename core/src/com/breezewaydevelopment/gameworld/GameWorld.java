@@ -45,7 +45,6 @@ public class GameWorld {
 			default:
 				break;
 		}
-
 	}
 
 	private void updateReady(float delta) {
@@ -66,7 +65,6 @@ public class GameWorld {
 			stop(false);
 		} else if (bird.getY() - bird.getWidth() < ground.getY() && Intersector.overlaps(bird.getBoundingCircle(), ground)) { // Bird hits ground
 			stop(true);
-
 		}
 	}
 
