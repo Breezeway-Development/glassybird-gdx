@@ -21,7 +21,8 @@ public final class Constants {
 
 		public static int PIPE_GAP;
 		public static int PIPE_HOLE;
-		public static int PIPE_CLEARANCE;
+		public static int PIPE_CLEARANCE_TOP;
+		public static int PIPE_CLEARANCE_BOTTOM;
 		public static int PIPE_WIDTH;
 		public static int SKULL_WIDTH;
 		public static int SKULL_HEIGHT;
@@ -46,7 +47,8 @@ public final class Constants {
 		Scrollables.PIPE_GAP = 55;
 		Scrollables.PIPE_HOLE = 45;
 		Scrollables.PIPE_WIDTH = 25;
-		Scrollables.PIPE_CLEARANCE = 15;
+		Scrollables.PIPE_CLEARANCE_TOP = Scrollables.PIPE_HOLE + 5;
+		Scrollables.PIPE_CLEARANCE_BOTTOM = 13;
 		Scrollables.SKULL_WIDTH = 27;
 		Scrollables.SKULL_HEIGHT = 20;
 		// TOOD: Resize pipe graphics

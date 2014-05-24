@@ -113,7 +113,7 @@ public class Pipe extends Scrollable {
 
 	// TODO: Don't let pipes get too tall
 	private static int randHole() {
-		return Constants.Scrollables.GRASS_HEIGHT + Constants.Scrollables.PIPE_CLEARANCE + r.nextInt((int) Constants.GAME_HEIGHT - Constants.Scrollables.GRASS_HEIGHT - 2 * Constants.Scrollables.PIPE_CLEARANCE);
+		return Constants.Scrollables.GRASS_HEIGHT + Constants.Scrollables.PIPE_CLEARANCE_BOTTOM + r.nextInt((int) Constants.GAME_HEIGHT - Constants.Scrollables.GRASS_HEIGHT - Constants.Scrollables.PIPE_CLEARANCE_TOP - Constants.Scrollables.PIPE_CLEARANCE_BOTTOM);
 	}
 
 	private static boolean canReach(int hole1, int hole2) {

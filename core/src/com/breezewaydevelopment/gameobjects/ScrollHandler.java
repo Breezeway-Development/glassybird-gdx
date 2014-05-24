@@ -8,7 +8,7 @@ public class ScrollHandler {
 
 	private GameWorld gameWorld;
 	private Grass frontGrass, backGrass;
-	private Pipe[] pipes = new Pipe[3];
+	private Pipe[] pipes = new Pipe[4];
 
 	float runtime = 0;
 
