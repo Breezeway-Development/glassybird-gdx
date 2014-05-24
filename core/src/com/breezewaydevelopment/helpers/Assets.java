@@ -1,7 +1,6 @@
 package com.breezewaydevelopment.helpers;
 
 import java.util.ArrayList;
-
 import java.util.List;
 
 import com.badlogic.gdx.Gdx;
@@ -11,6 +10,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.utils.Disposable;
 
 public final class Assets {
@@ -23,7 +24,7 @@ public final class Assets {
 	public static AtlasRegion bar, bird, birdDown, birdUp, grass, ring, splash;
 
 	public static Animation birdAnimation;
-	public static BitmapFont greenFont, shadow, whiteFont;
+	public static BitmapFont font;
 	public static Sound dead, flap, coin, fall;
 
 	private static List<Disposable> disposables;
@@ -48,7 +49,7 @@ public final class Assets {
 
 	private static void loadTextures() {
 		atlas = new TextureAtlas(Gdx.files.internal("data/textures.pack"));
-		
+
 		bar = atlas.findRegion("bar");
 		bird = atlas.findRegion("bird");
 		birdDown = atlas.findRegion("bird-down");
@@ -56,41 +57,9 @@ public final class Assets {
 		grass = atlas.findRegion("grass");
 		ring = atlas.findRegion("ring");
 		splash = atlas.findRegion("splash");
-		
-//		splashTexture = new Texture(Gdx.files.internal("data/logo.png"));
-//		splashTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-//		texture = new Texture(Gdx.files.internal("data/texture.png"));
-//		texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
-
+		// splashTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		disposables.add(atlas);
 	}
-
-	//	private static void loadTextureRegions() {
-	//		// TODO: Glassy Bird logo
-	//		logo = new TextureRegion(texture, 0, 55, 135, 24);
-	//		splash = new TextureRegion(splashTexture, 0, 0, 512, 114);
-	//
-	//		// UI
-	//		//		ready = new TextureRegion(texture, 59, 83, 34, 7);
-	//		//		retry = new TextureRegion(texture, 59, 110, 33, 7);
-	//		//		gameOver = new TextureRegion(texture, 59, 92, 46, 7);
-	//		//		scoreboard = new TextureRegion(texture, 111, 83, 97, 37);
-	//		//		star = new TextureRegion(texture, 152, 70, 10, 10);
-	//		//		noStar = new TextureRegion(texture, 165, 70, 10, 10);
-	//		//		highScore = new TextureRegion(texture, 59, 101, 48, 7);
-	//		//		playButtonUp = new TextureRegion(texture, 0, 83, 29, 16);
-	//		//		playButtonDown = new TextureRegion(texture, 29, 83, 29, 16);
-	//
-	//		// Game
-	//		grass = new TextureRegion(texture, 0, 43, 143, 11);
-	//		bird = new TextureRegion(texture, 153, 0, 17, 12);
-	//		birdUp = new TextureRegion(texture, 170, 0, 17, 12);
-	//		birdDown = new TextureRegion(texture, 136, 0, 17, 12);
-	//		bar = new TextureRegion(texture, 136, 16, 22, 3);
-	//		skullBottom = new TextureRegion(texture, 192, 0, 24, 14);
-	//		skullTop = new TextureRegion(skullBottom);
-	//		skullTop.flip(false, true); // Flip y from skullUp
-	//	}
 
 	private static void loadAnim() {
 		birdAnimation = new Animation(0.1f, new TextureRegion[] { birdDown, bird, birdUp });
@@ -110,16 +79,15 @@ public final class Assets {
 	}
 
 	private static void loadFonts() {
-		greenFont = new BitmapFont(Gdx.files.internal("data/greentext.fnt"));
-		greenFont.setScale(.25f, .25f);
-		whiteFont = new BitmapFont(Gdx.files.internal("data/whitetext.fnt"));
-		whiteFont.setScale(.1f, .1f);
-		shadow = new BitmapFont(Gdx.files.internal("data/shadow.fnt"));
-		shadow.setScale(.25f, .25f);
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("data/Roboto-Light.ttf"));
+		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+		parameter.size = 64;
+		parameter.characters = "aFlopTt1234567890";
 
-		disposables.add(greenFont);
-		disposables.add(whiteFont);
-		disposables.add(shadow);
+		font = generator.generateFont(parameter);
+		font.setScale(0.25f);
+		font.setColor(1, 1, 1, 1);
+		disposables.add(generator);
 	}
 
 }

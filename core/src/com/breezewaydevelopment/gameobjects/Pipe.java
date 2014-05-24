@@ -107,7 +107,6 @@ public class Pipe extends Scrollable {
 		while (!canReach(PREV_HOLE_Y, testHole)) {
 			testHole = randHole();
 		}
-		//		System.out.printf("genHole()\tprev %d  \tnew %d\n", PREV_HOLE_Y, testHole);
 		return PREV_HOLE_Y = testHole;
 	}
 
