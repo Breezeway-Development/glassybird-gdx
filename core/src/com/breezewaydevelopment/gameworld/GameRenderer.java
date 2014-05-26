@@ -40,7 +40,7 @@ public class GameRenderer {
 	// Game Assets
 	private Animation birdAnimation;
 	public BitmapFont font;
-	private TextureRegion grass, birdMid, skullBottom, skullTop, bar;
+	private TextureRegion grass, birdMid, ringBottom, ringTop, bar;
 
 	// Tween stuff
 	private TweenManager manager;
@@ -79,9 +79,9 @@ public class GameRenderer {
 		font = Assets.font;
 		grass = Assets.grass;
 		birdMid = Assets.bird;
-		skullBottom = Assets.ring;
-		skullTop = new TextureRegion(skullBottom);
-		skullTop.flip(false, true);
+		ringBottom = Assets.ring;
+		ringTop = new TextureRegion(ringBottom);
+		ringTop.flip(false, true);
 		bar = Assets.bar;
 	}
 
@@ -93,9 +93,9 @@ public class GameRenderer {
 	private void drawPipes() {
 		for (Pipe p : pipes) {
 			drawRect(p.getBarBottom(), bar);
-			drawRect(p.getSkullBottom(), skullBottom);
+			drawRect(p.getRingBottom(), ringBottom);
 			drawRect(p.getBarTop(), bar);
-			drawRect(p.getSkullTop(), skullTop);
+			drawRect(p.getRingTop(), ringTop);
 		}
 	}
 

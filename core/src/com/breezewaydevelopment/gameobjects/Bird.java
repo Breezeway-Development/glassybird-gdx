@@ -7,6 +7,12 @@ import com.breezewaydevelopment.helpers.Constants;
 
 public class Bird {
 
+	public static int WIDTH = 17;
+	public static int HEIGHT = 12;
+	public static float ACCEL = 145;
+	public static float DECEL = 205;
+	public static float START_X;
+
 	private int width;
 	private int height;
 	private float rotation;
@@ -19,9 +25,9 @@ public class Bird {
 	private Circle boundingCircle;
 
 	public Bird() {
-		this.width = Constants.Bird.WIDTH;
-		this.height = Constants.Bird.HEIGHT;
-		position = new Vector2(Constants.Bird.START_X, Constants.MIDPOINT_Y);
+		this.width = WIDTH;
+		this.height = HEIGHT;
+		position = new Vector2(START_X, Constants.MIDPOINT_Y);
 		velocity = new Vector2(0, 0);
 		acceleration = new Vector2(0, -460);
 		boundingCircle = new Circle(position.x, position.y, 6.5f);
@@ -29,10 +35,10 @@ public class Bird {
 	}
 
 	public void update(float delta) {
-
 		velocity.add(acceleration.cpy().scl(delta));
-		if (velocity.y < -1 * Constants.Bird.DECEL) {
-			velocity.y = -1 * Constants.Bird.DECEL;
+
+		if (velocity.y < -1 * DECEL) {
+			velocity.y = -1 * DECEL;
 		}
 
 		if (position.y > Constants.GAME_HEIGHT) { // Ceiling
@@ -62,7 +68,6 @@ public class Bird {
 
 	public void updateReady(float runTime) {
 		position.y = 2 * (float) Math.sin(7 * runTime) + Constants.MIDPOINT_Y;
-		position.x = Constants.MIDPOINT_X - width;
 	}
 
 	public boolean shouldFlap() {
@@ -72,7 +77,7 @@ public class Bird {
 	public void onClick() {
 		if (isAlive) {
 			Assets.flap.play();
-			velocity.y = Constants.Bird.ACCEL;
+			velocity.y = ACCEL;
 		}
 	}
 

@@ -19,7 +19,7 @@ public class ScrollHandler {
 
 		for (int i = 0; i < pipes.length; i++) {
 			// Here we define each pipe. If i = 0 start at x=210, otherwise start behind the previous pipe
-			pipes[i] = new Pipe((i == 0 ? Constants.GAME_WIDTH + Constants.Scrollables.PIPE_GAP
+			pipes[i] = new Pipe((i == 0 ? Constants.GAME_WIDTH + Pipe.GAP
 					: pipes[i - 1].getTailX()));
 		}
 	}
@@ -101,7 +101,7 @@ public class ScrollHandler {
 		Pipe.resetHole();
 		for (int i = 0; i < pipes.length; i++) {
 			// Same thing as pipes setup in our constructor
-			pipes[i].onRestart((i == 0 ? Constants.GAME_WIDTH + Constants.Scrollables.PIPE_GAP
+			pipes[i].onRestart((i == 0 ? Constants.GAME_WIDTH + Pipe.GAP
 					: pipes[i - 1].getTailX()));
 		}
 	}

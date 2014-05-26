@@ -6,6 +6,7 @@ import com.breezewaydevelopment.helpers.Assets;
 import com.breezewaydevelopment.helpers.Constants;
 import com.breezewaydevelopment.helpers.HighScoreHandler;
 import com.breezewaydevelopment.gameobjects.Bird;
+import com.breezewaydevelopment.gameobjects.Grass;
 import com.breezewaydevelopment.gameobjects.ScrollHandler;
 
 public class GameWorld {
@@ -28,7 +29,7 @@ public class GameWorld {
 		HighScoreHandler.init();
 		bird = new Bird();
 		scroller = new ScrollHandler(this);
-		ground = new Rectangle(0, 0, Constants.GAME_WIDTH, Constants.Scrollables.GRASS_HEIGHT);
+		ground = new Rectangle(0, 0, Constants.GAME_WIDTH, Grass.GRASS_HEIGHT);
 
 		setState(GameState.READY);
 	}
@@ -114,7 +115,7 @@ public class GameWorld {
 
 	public void setState(GameState state) {
 		if (renderer != null && state == GameState.READY) {
-			renderer.initTransition(1, 1, 1, 1f);
+			renderer.initTransition(0, 0, 0, 0.5f);
 		}
 		currentState = state;
 	}
