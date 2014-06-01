@@ -21,10 +21,10 @@ public class InputHandler implements InputProcessor {
 		switch (world.getState()) {
 			case READY:
 				world.setState(GameState.RUNNING);
-				myBird.onClick();
+				myBird.onTap();
 				break;
 			case RUNNING:
-				myBird.onClick();
+				myBird.onTap();
 				break;
 			case GAMEOVER:
 				world.restart();

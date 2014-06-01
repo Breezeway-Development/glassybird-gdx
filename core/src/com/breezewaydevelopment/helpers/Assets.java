@@ -12,11 +12,12 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
 public final class Assets {
 
-	public static Animation birdAnimation;
+	public static Animation birdReady, birdRunning;
 	public static AtlasRegion bar, bird, birdDown, birdUp, grass, ring, splash;
 	public static BitmapFont font;
 	public static Sound dead, flap, coin, fall;
@@ -41,8 +42,9 @@ public final class Assets {
 		splash = atlas.findRegion("splash");
 		disposables.add(atlas);
 
-		birdAnimation = new Animation(0.1f, new TextureRegion[] { birdDown, bird, birdUp });
-		birdAnimation.setPlayMode(Animation.PlayMode.LOOP_PINGPONG); // Back and forth
+		Array<TextureRegion> birds = new Array<TextureRegion>(new TextureRegion[] { birdDown, bird, birdUp });
+		birdReady = new Animation(0.1f, birds, Animation.PlayMode.LOOP_PINGPONG);
+		birdRunning = new Animation(0.07f, birds, Animation.PlayMode.LOOP_PINGPONG);
 
 		dead = Gdx.audio.newSound(Gdx.files.internal("data/dead.wav"));
 		flap = Gdx.audio.newSound(Gdx.files.internal("data/flap.wav"));
@@ -58,7 +60,7 @@ public final class Assets {
 		parameter.size = 96;
 		//		parameter.characters = "aFlopTt1234567890";
 		font = generator.generateFont(parameter);
-		font.setScale(0.16f);
+		font.setScale(0.15f);
 		font.setColor(1, 1, 1, 1);
 		disposables.add(generator);
 	}

@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Scrollable {
 
-	public static float SCROLL_SPEED = 54;
+	public static float SCROLL_SPEED = 50;
 
 	// Protected is similar to private, but allows inheritance by subclasses
 	protected Vector2 position;

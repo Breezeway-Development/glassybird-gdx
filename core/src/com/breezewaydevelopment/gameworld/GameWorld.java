@@ -12,7 +12,6 @@ import com.breezewaydevelopment.gameobjects.ScrollHandler;
 public class GameWorld {
 
 	private int score = 0;
-	private float runTime = 0;
 
 	private Rectangle ground;
 
@@ -35,7 +34,6 @@ public class GameWorld {
 	}
 
 	public void update(float delta) {
-		runTime += delta;
 		switch (currentState) {
 			case READY:
 				updateReady(delta);
@@ -43,13 +41,15 @@ public class GameWorld {
 			case RUNNING:
 				updateRunning(delta);
 				break;
+			case GAMEOVER:
+				updateGameover(delta);
 			default:
 				break;
 		}
 	}
 
 	private void updateReady(float delta) {
-		bird.updateReady(runTime);
+		bird.updateReady(delta);
 		scroller.updateReady(delta);
 	}
 
@@ -67,6 +67,10 @@ public class GameWorld {
 		} else if (bird.getY() - bird.getWidth() < ground.getY() && Intersector.overlaps(bird.getBoundingCircle(), ground)) { // Bird hits ground
 			stop(true);
 		}
+	}
+
+	private void updateGameover(float delta) {
+		bird.updateGameover(delta);
 	}
 
 	private void stop(boolean ground) {

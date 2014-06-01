@@ -8,16 +8,16 @@ import com.breezewaydevelopment.helpers.Constants;
 
 public class Pipe extends Scrollable {
 
-	public static int GAP = 54;
+	public static int GAP = 60;
 	public static int HOLE = 45;
-	public static int CLEARANCE_BOTTOM = 13;
-	public static int CLEARANCE_TOP = HOLE + 5;
+	public static int CLEARANCE_BOTTOM = 10;
+	public static int CLEARANCE_TOP = HOLE + 10;
 	public static int WIDTH = 23;
 	public static float HOLE_DELTA_LOWER;
 	public static float HOLE_DELTA_HIGHER;
 
 	public static int RING_WIDTH = WIDTH + 2;
-	public static int RING_HEIGHT = 20;
+	public static int RING_HEIGHT = 16;
 
 	private static int PREV_HOLE_Y;
 	private static SecureRandom r;
@@ -36,6 +36,15 @@ public class Pipe extends Scrollable {
 		setup();
 	}
 
+	@Override
+	public void update(float delta) {
+		super.update(delta);
+		barBottom.setX(position.x);
+		barTop.setX(position.x);
+		ringBottom.setX(position.x - 1);
+		ringTop.setX(position.x - 1);
+	}
+
 	private void setup() {
 		holeY = genHole();
 
@@ -47,18 +56,8 @@ public class Pipe extends Scrollable {
 	}
 
 	@Override
-	public void update(float delta) {
-		super.update(delta);
-		barBottom.setX(position.x);
-		barTop.setX(position.x);
-		ringBottom.setX(position.x - 1);
-		ringTop.setX(position.x - 1);
-	}
-
-	@Override
 	public void reset(float newX) {
 		super.reset(newX);
-		// Change the height to a random number
 		isScored = false;
 		setup();
 	}
@@ -103,9 +102,13 @@ public class Pipe extends Scrollable {
 		return holeY;
 	}
 
+	public static void resetHole() {
+		PREV_HOLE_Y = (int) Constants.MIDPOINT_Y;
+	}
+
 	/*
-	 * Returns the y coordinate of the pipe hole (from the top of the bottom pipe
-	 * section)
+	 * Returns the y coordinate of the pipe hole from the top of the bottom pipe
+	 * section
 	 */
 
 	private static int genHole() {
@@ -130,10 +133,6 @@ public class Pipe extends Scrollable {
 			return hole1 - hole2 <= Pipe.HOLE_DELTA_LOWER;
 		}
 		return hole2 - hole1 <= Pipe.HOLE_DELTA_HIGHER;
-	}
-
-	public static void resetHole() {
-		PREV_HOLE_Y = (int) Constants.MIDPOINT_Y;
 	}
 
 }
