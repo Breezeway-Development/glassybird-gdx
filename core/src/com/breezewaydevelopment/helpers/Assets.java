@@ -43,7 +43,7 @@ public final class Assets {
 		disposables.add(atlas);
 
 		Array<TextureRegion> birds = new Array<TextureRegion>(new TextureRegion[] { birdDown, bird, birdUp });
-		birdReady = new Animation(0.1f, birds, Animation.PlayMode.LOOP_PINGPONG);
+		birdReady = new Animation(0.15f, birds, Animation.PlayMode.LOOP_PINGPONG);
 		birdRunning = new Animation(0.07f, birds, Animation.PlayMode.LOOP_PINGPONG);
 
 		dead = Gdx.audio.newSound(Gdx.files.internal("data/dead.wav"));

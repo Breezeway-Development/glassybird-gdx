@@ -57,14 +57,13 @@ public class GameWorld {
 		if (delta > .15f) {
 			delta = .15f;
 		}
-
 		bird.update(delta);
 		scroller.update(delta);
 
-		if (bird.isAlive() && scroller.collides(bird)) { // Bird hits pipe
+		if (bird.isAlive() && scroller.handlePipes(bird)) { // Bird hits pipe
 			Assets.fall.play();
 			stop(false);
-		} else if (bird.getY() - bird.getWidth() < ground.getY() && Intersector.overlaps(bird.getBoundingCircle(), ground)) { // Bird hits ground
+		} else if (bird.getY() - bird.getWidth() <= ground.getY() && Intersector.overlaps(bird.getBoundingCircle(), ground)) { // Bird hits ground
 			stop(true);
 		}
 	}

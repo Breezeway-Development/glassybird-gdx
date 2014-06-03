@@ -19,6 +19,7 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.breezewaydevelopment.helpers.Assets;
 import com.breezewaydevelopment.helpers.Constants;
+import com.breezewaydevelopment.helpers.HighScoreHandler;
 import com.breezewaydevelopment.gameobjects.Bird;
 import com.breezewaydevelopment.gameobjects.Grass;
 import com.breezewaydevelopment.gameobjects.Pipe;
@@ -113,7 +114,6 @@ public class GameRenderer {
 	 */
 
 	private void drawBird(boolean running) {
-
 		if (bird.shouldFlap()) {
 			if (running) {
 				drawBird(birdRunning.getKeyFrame(bird.getRuntime()));
@@ -132,15 +132,23 @@ public class GameRenderer {
 
 	private void drawReady() {
 		drawString("Tap to Flap");
+		drawString("Highscore: " + HighScoreHandler.getHighScore(), Grass.GRASS_HEIGHT + font.getCapHeight() * 2);
+	}
+	
+	private void drawRetry() {
+		drawString("Retry?", Grass.GRASS_HEIGHT + font.getCapHeight() * 2);
 	}
 
-	// TODO: Constants for score rendering
 	private void drawScore() {
 		drawString(Integer.toString(world.getScore()));
 	}
 
-	private void drawString(String s) {
-		font.draw(batcher, s, font.getCapHeight(), Constants.GAME_HEIGHT - font.getCapHeight());
+	private void drawString(String str) {
+		drawString(str, Constants.GAME_HEIGHT - font.getCapHeight());
+	}
+	
+	private void drawString(String str, float y) {
+		font.draw(batcher, str, Constants.MIDPOINT_X - (font.getBounds(str).width / 2), y);
 	}
 
 	public void render(float delta) {
@@ -166,6 +174,8 @@ public class GameRenderer {
 				break;
 			case GAMEOVER:
 				drawBird(false);
+				drawScore();
+				drawRetry();
 				break;
 			default:
 				break;

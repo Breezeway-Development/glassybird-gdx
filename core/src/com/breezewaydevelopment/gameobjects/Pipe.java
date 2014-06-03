@@ -84,7 +84,7 @@ public class Pipe extends Scrollable {
 	}
 
 	public boolean collides(Bird bird) {
-		if (position.x < bird.getX() + bird.getWidth()) {
+		if (position.x <= bird.getX() + bird.getWidth()) {
 			return (Intersector.overlaps(bird.getBoundingCircle(), barBottom) || Intersector.overlaps(bird.getBoundingCircle(), barTop) || Intersector.overlaps(bird.getBoundingCircle(), ringBottom) || Intersector.overlaps(bird.getBoundingCircle(), ringTop));
 		}
 		return false;

@@ -68,7 +68,7 @@ public class ScrollHandler {
 		}
 	}
 
-	public boolean collides(Bird bird) {
+	public boolean handlePipes(Bird bird) {
 		float birdTip = bird.getX() + bird.getWidth();
 		for (Pipe p : pipes) {
 			if (!p.isScored() && p.getX() + (p.getWidth() / 2) < birdTip) { // If the tip of the bird crosses the middle of the pipe
