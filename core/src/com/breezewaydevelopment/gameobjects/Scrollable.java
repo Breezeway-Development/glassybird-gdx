@@ -1,9 +1,10 @@
 package com.breezewaydevelopment.gameobjects;
 
 import com.badlogic.gdx.math.Vector2;
-import com.breezewaydevelopment.helpers.Constants;
 
 public class Scrollable {
+
+	public static float SCROLL_SPEED = 50;
 
 	// Protected is similar to private, but allows inheritance by subclasses
 	protected Vector2 position;
@@ -16,7 +17,7 @@ public class Scrollable {
 
 	public Scrollable(float x, float y, int width, int height) {
 		position = new Vector2(x, y);
-		velocity = new Vector2(-1 * Constants.Scrollables.SCROLL_SPEED, 0);
+		velocity = new Vector2(-1 * SCROLL_SPEED, 0);
 		this.width = width;
 		this.height = height;
 		isScrolledLeft = false;
@@ -65,7 +66,7 @@ public class Scrollable {
 
 	public void onRestart(float x) {
 		reset(x);
-		velocity.x = -1 * Constants.Scrollables.SCROLL_SPEED;
+		velocity.x = -1 * SCROLL_SPEED;
 	}
 
 }

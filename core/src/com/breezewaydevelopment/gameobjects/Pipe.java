@@ -8,54 +8,63 @@ import com.breezewaydevelopment.helpers.Constants;
 
 public class Pipe extends Scrollable {
 
-	private Rectangle skullBottom, skullTop, barBottom, barTop;
+	public static int GAP = 60;
+	public static int HOLE = 45;
+	public static int CLEARANCE_BOTTOM = 10;
+	public static int CLEARANCE_TOP = HOLE + 10;
+	public static int WIDTH = 23;
+	public static float HOLE_DELTA_LOWER;
+	public static float HOLE_DELTA_HIGHER;
+
+	public static int RING_WIDTH = WIDTH + 2;
+	public static int RING_HEIGHT = 16;
+
+	private static int PREV_HOLE_Y;
+	private static SecureRandom r;
+
+	private Rectangle ringBottom, ringTop, barBottom, barTop;
 
 	private boolean isScored = false;
 	private int holeY;
 
-	private static SecureRandom r;
-	private static int PREV_HOLE_Y;
-
 	public Pipe(float x) {
-		super(x, 0, Constants.Scrollables.PIPE_WIDTH, 0);
+		super(x, 0, WIDTH, 0);
 		barBottom = new Rectangle(0, 0, width, height);
 		barTop = new Rectangle(0, 0, width, height);
-		skullBottom = new Rectangle(0, 0, Constants.Scrollables.SKULL_WIDTH, Constants.Scrollables.SKULL_HEIGHT);
-		skullTop = new Rectangle(0, 0, Constants.Scrollables.SKULL_WIDTH, Constants.Scrollables.SKULL_HEIGHT);
+		ringBottom = new Rectangle(0, 0, RING_WIDTH, RING_HEIGHT);
+		ringTop = new Rectangle(0, 0, RING_WIDTH, RING_HEIGHT);
 		setup();
+	}
+
+	@Override
+	public void update(float delta) {
+		super.update(delta);
+		barBottom.setX(position.x);
+		barTop.setX(position.x);
+		ringBottom.setX(position.x - 1);
+		ringTop.setX(position.x - 1);
 	}
 
 	private void setup() {
 		holeY = genHole();
 
 		barBottom.set(position.x, position.y, width, holeY);
-		skullBottom.set(position.x - 1, holeY - Constants.Scrollables.SKULL_HEIGHT, Constants.Scrollables.SKULL_WIDTH, Constants.Scrollables.SKULL_HEIGHT);
+		ringBottom.set(position.x - 1, holeY - RING_HEIGHT, RING_WIDTH, RING_HEIGHT);
 
-		barTop.set(position.x, holeY + Constants.Scrollables.PIPE_HOLE, width, Constants.GAME_HEIGHT - holeY - Constants.Scrollables.PIPE_HOLE);
-		skullTop.set(position.x - 1, barTop.getY(), Constants.Scrollables.SKULL_WIDTH, Constants.Scrollables.SKULL_HEIGHT);
-	}
-
-	@Override
-	public void update(float delta) {
-		super.update(delta);
-
-		barBottom.setX(position.x);
-		barTop.setX(position.x);
-		skullBottom.setX(position.x - 1);
-		skullTop.setX(position.x - 1);
+		barTop.set(position.x, holeY + HOLE, width, Constants.GAME_HEIGHT - holeY - HOLE);
+		ringTop.set(position.x - 1, barTop.getY(), RING_WIDTH, RING_HEIGHT);
 	}
 
 	@Override
 	public void reset(float newX) {
 		super.reset(newX);
-		// Change the height to a random number
 		isScored = false;
 		setup();
 	}
 
 	@Override
 	public float getTailX() {
-		return super.getTailX() + Constants.Scrollables.PIPE_GAP;
+		return super.getTailX() + GAP;
 	}
 
 	public Rectangle getBarBottom() {
@@ -66,17 +75,17 @@ public class Pipe extends Scrollable {
 		return barTop;
 	}
 
-	public Rectangle getSkullBottom() {
-		return skullBottom;
+	public Rectangle getRingBottom() {
+		return ringBottom;
 	}
 
-	public Rectangle getSkullTop() {
-		return skullTop;
+	public Rectangle getRingTop() {
+		return ringTop;
 	}
 
 	public boolean collides(Bird bird) {
-		if (position.x < bird.getX() + bird.getWidth()) {
-			return (Intersector.overlaps(bird.getBoundingCircle(), barBottom) || Intersector.overlaps(bird.getBoundingCircle(), barTop) || Intersector.overlaps(bird.getBoundingCircle(), skullBottom) || Intersector.overlaps(bird.getBoundingCircle(), skullTop));
+		if (position.x <= bird.getX() + bird.getWidth()) {
+			return (Intersector.overlaps(bird.getBoundingCircle(), barBottom) || Intersector.overlaps(bird.getBoundingCircle(), barTop) || Intersector.overlaps(bird.getBoundingCircle(), ringBottom) || Intersector.overlaps(bird.getBoundingCircle(), ringTop));
 		}
 		return false;
 	}
@@ -93,8 +102,13 @@ public class Pipe extends Scrollable {
 		return holeY;
 	}
 
+	public static void resetHole() {
+		PREV_HOLE_Y = (int) Constants.MIDPOINT_Y;
+	}
+
 	/*
-	 * Y coordinate of the pipe hole (from the top of the bottom pipe section)
+	 * Returns the y coordinate of the pipe hole from the top of the bottom pipe
+	 * section
 	 */
 
 	private static int genHole() {
@@ -110,20 +124,15 @@ public class Pipe extends Scrollable {
 		return PREV_HOLE_Y = testHole;
 	}
 
-	// TODO: Don't let pipes get too tall
 	private static int randHole() {
-		return Constants.Scrollables.GRASS_HEIGHT + Constants.Scrollables.PIPE_CLEARANCE_BOTTOM + r.nextInt((int) Constants.GAME_HEIGHT - Constants.Scrollables.GRASS_HEIGHT - Constants.Scrollables.PIPE_CLEARANCE_TOP - Constants.Scrollables.PIPE_CLEARANCE_BOTTOM);
+		return Grass.GRASS_HEIGHT + CLEARANCE_BOTTOM + r.nextInt((int) Constants.GAME_HEIGHT - Grass.GRASS_HEIGHT - CLEARANCE_TOP - CLEARANCE_BOTTOM);
 	}
 
 	private static boolean canReach(int hole1, int hole2) {
 		if (hole1 > hole2) {
-			return hole1 - hole2 <= Constants.Scrollables.PIPE_HOLE_DELTA_LOWER;
+			return hole1 - hole2 <= Pipe.HOLE_DELTA_LOWER;
 		}
-		return hole2 - hole1 <= Constants.Scrollables.PIPE_HOLE_DELTA_HIGHER;
-	}
-
-	public static void resetHole() {
-		PREV_HOLE_Y = (int) Constants.MIDPOINT_Y;
+		return hole2 - hole1 <= Pipe.HOLE_DELTA_HIGHER;
 	}
 
 }

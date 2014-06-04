@@ -17,6 +17,8 @@ import com.breezewaydevelopment.helpers.Constants;
 import com.breezewaydevelopment.tweenaccessors.SpriteAccessor;
 
 public class SplashScreen implements Screen {
+	
+	// TODO: Get an actual splash screen
 
 	private TweenManager manager;
 	private SpriteBatch batcher;

@@ -15,9 +15,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.breezewaydevelopment.helpers.Assets;
 import com.breezewaydevelopment.helpers.Constants;
+import com.breezewaydevelopment.helpers.HighScoreHandler;
 import com.breezewaydevelopment.gameobjects.Bird;
 import com.breezewaydevelopment.gameobjects.Grass;
 import com.breezewaydevelopment.gameobjects.Pipe;
@@ -26,7 +28,6 @@ import com.breezewaydevelopment.gameobjects.ScrollHandler;
 public class GameRenderer {
 
 	private GameWorld world;
-
 	private OrthographicCamera cam;
 	private ShapeRenderer shapeRenderer;
 	private SpriteBatch batcher;
@@ -38,9 +39,9 @@ public class GameRenderer {
 	private Pipe[] pipes;
 
 	// Game Assets
-	private Animation birdAnimation;
-	public BitmapFont font;
-	private TextureRegion grass, birdMid, skullBottom, skullTop, bar;
+	private Animation birdReady, birdRunning;
+	private BitmapFont font;
+	private TextureRegion grass, birdMid, ringBottom, ringTop, bar;
 
 	// Tween stuff
 	private TweenManager manager;
@@ -75,13 +76,14 @@ public class GameRenderer {
 	}
 
 	private void initAssets() {
-		birdAnimation = Assets.birdAnimation;
+		birdReady = Assets.birdReady;
+		birdRunning = Assets.birdRunning;
 		font = Assets.font;
 		grass = Assets.grass;
 		birdMid = Assets.bird;
-		skullBottom = Assets.ring;
-		skullTop = new TextureRegion(skullBottom);
-		skullTop.flip(false, true);
+		ringBottom = Assets.ring;
+		ringTop = new TextureRegion(ringBottom);
+		ringTop.flip(false, true);
 		bar = Assets.bar;
 	}
 
@@ -93,9 +95,9 @@ public class GameRenderer {
 	private void drawPipes() {
 		for (Pipe p : pipes) {
 			drawRect(p.getBarBottom(), bar);
-			drawRect(p.getSkullBottom(), skullBottom);
+			drawRect(p.getRingBottom(), ringBottom);
 			drawRect(p.getBarTop(), bar);
-			drawRect(p.getSkullTop(), skullTop);
+			drawRect(p.getRingTop(), ringTop);
 		}
 	}
 
@@ -111,26 +113,45 @@ public class GameRenderer {
 	 * rotation of the rectangle around originX, originY.
 	 */
 
-	private void drawBird(float runtime) {
+	private void drawBird(boolean running) {
+		if (bird.shouldFlap()) {
+			if (running) {
+				drawBird(birdRunning.getKeyFrame(bird.getRuntime()));
+			} else {
+				drawBird(birdReady.getKeyFrame(bird.getRuntime()));
+			}
+		} else {
+			drawBird(birdMid);
+		}
+	}
+
+	private void drawBird(TextureRegion birdTexture) {
 		float birdW = bird.getWidth(), birdH = bird.getHeight();
-		batcher.draw(bird.shouldFlap() ? birdAnimation.getKeyFrame(runtime)
-				: birdMid, bird.getX(), bird.getY(), birdW / 2.0f, birdH / 2.0f, birdW, birdH, 1, 1, bird.getRotation());
+		batcher.draw(birdTexture, bird.getX(), bird.getY(), birdW / 2.0f, birdH / 2.0f, birdW, birdH, 1, 1, bird.getRotation());
 	}
 
 	private void drawReady() {
 		drawString("Tap to Flap");
+		drawString("Highscore: " + HighScoreHandler.getHighScore(), Grass.GRASS_HEIGHT + font.getCapHeight() * 2);
+	}
+	
+	private void drawRetry() {
+		drawString("Retry?", Grass.GRASS_HEIGHT + font.getCapHeight() * 2);
 	}
 
-	// TODO: Constants for score rendering
 	private void drawScore() {
 		drawString(Integer.toString(world.getScore()));
 	}
 
-	private void drawString(String s) {
-		font.draw(batcher, s, font.getCapHeight(), Constants.GAME_HEIGHT - font.getCapHeight());
+	private void drawString(String str) {
+		drawString(str, Constants.GAME_HEIGHT - font.getCapHeight());
+	}
+	
+	private void drawString(String str, float y) {
+		font.draw(batcher, str, Constants.MIDPOINT_X - (font.getBounds(str).width / 2), y);
 	}
 
-	public void render(float delta, float runtime) {
+	public void render(float delta) {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -142,29 +163,31 @@ public class GameRenderer {
 		batcher.begin();
 		batcher.enableBlending();
 		drawPipes();
-		batcher.disableBlending();
-		drawGrass();
-		batcher.enableBlending();
-
 		switch (world.getState()) {
 			case READY:
-				drawBird(runtime);
+				drawBird(false);
 				drawReady();
 				break;
 			case RUNNING:
-				drawBird(runtime);
+				drawBird(true);
 				drawScore();
 				break;
 			case GAMEOVER:
-				drawBird(runtime);
+				drawBird(false);
+				drawScore();
+				drawRetry();
 				break;
 			default:
 				break;
 		}
+		batcher.disableBlending();
+		drawGrass();
 		batcher.end();
 
+//		drawBirdCirc();
+//		drawPipeRect();
+
 		drawTransition(delta);
-		//drawPipeRect();
 	}
 
 	public void initTransition(float r, float g, float b, float duration) {
@@ -188,17 +211,25 @@ public class GameRenderer {
 		}
 	}
 
-	//	private void drawPipeRect() {
-	//		shapeRenderer.begin(ShapeType.Filled);
-	//		for (Pipe p : pipes) {
-	//			shapeRenderer.setColor(Color.BLACK);
-	//			shapeRenderer.rect(p.getSkullBottom().getX(), p.getSkullBottom().getY(), p.getSkullBottom().getWidth(), p.getSkullBottom().getHeight());
-	//			shapeRenderer.rect(p.getBarBottom().getX(), p.getBarBottom().getY(), p.getBarBottom().getWidth(), p.getBarBottom().getHeight());
-	//			shapeRenderer.setColor(Color.WHITE);
-	//			shapeRenderer.rect(p.getBarTop().getX(), p.getBarTop().getY(), p.getBarTop().getWidth(), p.getBarTop().getHeight());
-	//			shapeRenderer.rect(p.getSkullTop().getX(), p.getSkullTop().getY(), p.getSkullTop().getWidth(), p.getSkullTop().getHeight());
-	//		}
-	//		shapeRenderer.end();
-	//	}
+	private void drawPipeRect() {
+		shapeRenderer.begin(ShapeType.Filled);
+		for (Pipe p : pipes) {
+			shapeRenderer.setColor(Color.CYAN);
+			shapeRenderer.rect(p.getRingBottom().getX(), p.getRingBottom().getY(), p.getRingBottom().getWidth(), p.getRingBottom().getHeight());
+			shapeRenderer.rect(p.getBarBottom().getX(), p.getBarBottom().getY(), p.getBarBottom().getWidth(), p.getBarBottom().getHeight());
+			shapeRenderer.setColor(Color.BLUE);
+			shapeRenderer.rect(p.getBarTop().getX(), p.getBarTop().getY(), p.getBarTop().getWidth(), p.getBarTop().getHeight());
+			shapeRenderer.rect(p.getRingTop().getX(), p.getRingTop().getY(), p.getRingTop().getWidth(), p.getRingTop().getHeight());
+		}
+		shapeRenderer.end();
+	}
+
+	private void drawBirdCirc() {
+		shapeRenderer.begin(ShapeType.Filled);
+		shapeRenderer.setColor(Color.RED);
+		Circle circ = bird.getBoundingCircle();
+		shapeRenderer.circle(circ.x, circ.y, circ.radius);
+		shapeRenderer.end();
+	}
 
 }

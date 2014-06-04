@@ -6,12 +6,12 @@ import com.breezewaydevelopment.helpers.Assets;
 import com.breezewaydevelopment.helpers.Constants;
 import com.breezewaydevelopment.helpers.HighScoreHandler;
 import com.breezewaydevelopment.gameobjects.Bird;
+import com.breezewaydevelopment.gameobjects.Grass;
 import com.breezewaydevelopment.gameobjects.ScrollHandler;
 
 public class GameWorld {
 
 	private int score = 0;
-	private float runTime = 0;
 
 	private Rectangle ground;
 
@@ -28,13 +28,12 @@ public class GameWorld {
 		HighScoreHandler.init();
 		bird = new Bird();
 		scroller = new ScrollHandler(this);
-		ground = new Rectangle(0, 0, Constants.GAME_WIDTH, Constants.Scrollables.GRASS_HEIGHT);
+		ground = new Rectangle(0, 0, Constants.GAME_WIDTH, Grass.GRASS_HEIGHT);
 
 		setState(GameState.READY);
 	}
 
 	public void update(float delta) {
-		runTime += delta;
 		switch (currentState) {
 			case READY:
 				updateReady(delta);
@@ -42,13 +41,15 @@ public class GameWorld {
 			case RUNNING:
 				updateRunning(delta);
 				break;
+			case GAMEOVER:
+				updateGameover(delta);
 			default:
 				break;
 		}
 	}
 
 	private void updateReady(float delta) {
-		bird.updateReady(runTime);
+		bird.updateReady(delta);
 		scroller.updateReady(delta);
 	}
 
@@ -56,16 +57,19 @@ public class GameWorld {
 		if (delta > .15f) {
 			delta = .15f;
 		}
-
 		bird.update(delta);
 		scroller.update(delta);
 
-		if (bird.isAlive() && scroller.collides(bird)) { // Bird hits pipe
+		if (bird.isAlive() && scroller.handlePipes(bird)) { // Bird hits pipe
 			Assets.fall.play();
 			stop(false);
-		} else if (bird.getY() - bird.getWidth() < ground.getY() && Intersector.overlaps(bird.getBoundingCircle(), ground)) { // Bird hits ground
+		} else if (bird.getY() - bird.getWidth() <= ground.getY() && Intersector.overlaps(bird.getBoundingCircle(), ground)) { // Bird hits ground
 			stop(true);
 		}
+	}
+
+	private void updateGameover(float delta) {
+		bird.updateGameover(delta);
 	}
 
 	private void stop(boolean ground) {
@@ -114,7 +118,7 @@ public class GameWorld {
 
 	public void setState(GameState state) {
 		if (renderer != null && state == GameState.READY) {
-			renderer.initTransition(1, 1, 1, 1f);
+			renderer.initTransition(0, 0, 0, 0.5f);
 		}
 		currentState = state;
 	}

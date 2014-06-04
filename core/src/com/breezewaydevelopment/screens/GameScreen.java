@@ -8,8 +8,6 @@ import com.breezewaydevelopment.gameworld.GameWorld;
 
 public class GameScreen implements Screen {
 
-	private float runTime = 0;
-
 	private GameWorld world;
 	private GameRenderer renderer;
 
@@ -23,9 +21,8 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
-		runTime += delta;
 		world.update(delta);
-		renderer.render(delta, runTime);
+		renderer.render(delta);
 	}
 
 	@Override
