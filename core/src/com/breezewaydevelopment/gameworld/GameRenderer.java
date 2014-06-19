@@ -136,7 +136,8 @@ public class GameRenderer {
 	}
 	
 	private void drawRetry() {
-		drawString("Retry?", Grass.GRASS_HEIGHT + font.getCapHeight() * 2);
+		drawString("Tap to Retry", Grass.GRASS_HEIGHT + font.getCapHeight() * 5);
+		drawString("Highscore: " + HighScoreHandler.getHighScore(), Grass.GRASS_HEIGHT + font.getCapHeight() * 2);
 	}
 
 	private void drawScore() {
