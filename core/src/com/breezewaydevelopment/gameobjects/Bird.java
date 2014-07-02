@@ -47,7 +47,7 @@ public class Bird {
 
 	public void updateReady(float delta) {
 		runtime += delta;
-		position.y = Constants.MIDPOINT_Y + (float) (1.5d * Math.sin(7 * runtime));
+		position.y = Constants.MIDPOINT_Y + (float) (1.5f * Math.sin(7 * runtime));
 		updateCircle();
 	}
 

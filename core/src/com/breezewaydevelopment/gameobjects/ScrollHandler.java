@@ -18,7 +18,6 @@ public class ScrollHandler {
 		backGrass = new Grass(frontGrass.getTailX());
 
 		for (int i = 0; i < pipes.length; i++) {
-			// Here we define each pipe. If i = 0 start at x=210, otherwise start behind the previous pipe
 			pipes[i] = new Pipe((i == 0 ? Constants.GAME_WIDTH + Pipe.GAP
 					: pipes[i - 1].getTailX()));
 		}
