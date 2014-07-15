@@ -12,12 +12,10 @@ public final class HighScoreHandler {
 	}
 
 	public static void init() {
-
 		prefs = Gdx.app.getPreferences("glassybird");
-		// TODO: Don't reset highscore in production
-		//		if (!prefs.contains("highscore")) {
-		setHighScore(0);
-		//		}
+		if (!prefs.contains("highscore")) {
+			setHighScore(0);
+		}
 	}
 
 	public static void setHighScore(int score) {

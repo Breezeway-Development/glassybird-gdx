@@ -6,8 +6,8 @@ repeat: none
 splash
   rotate: false
   xy: 0, 61
-  size: 512, 128
-  orig: 512, 128
+  size: 640, 360
+  orig: 640, 360
   offset: 0, 0
   index: -1
 grass
@@ -19,7 +19,7 @@ grass
   index: -1
 bird-down
   rotate: false
-  xy: 514, 141
+  xy: 642, 373
   size: 68, 48
   orig: 68, 48
   offset: 0, 0
@@ -33,14 +33,14 @@ bird-up
   index: -1
 bird
   rotate: false
-  xy: 514, 91
+  xy: 642, 323
   size: 68, 48
   orig: 68, 48
   offset: 0, 0
   index: -1
 ring
   rotate: false
-  xy: 584, 173
+  xy: 712, 405
   size: 25, 16
   orig: 25, 16
   offset: 0, 0

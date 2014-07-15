@@ -64,7 +64,7 @@ public class GameRenderer {
 
 		transitionColor = new Color();
 		alpha = new MutableFloat(1);
-		initTransition(1, 1, 1, .5f);
+		initTransition(0, 0, 0, .5f);
 	}
 
 	private void initGameObjects() {

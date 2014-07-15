@@ -18,7 +18,7 @@ import com.breezewaydevelopment.tweenaccessors.SpriteAccessor;
 
 public class SplashScreen implements Screen {
 
-	// TODO: Get an actual splash screen
+	// TODO: Improve the splash image
 
 	private TweenManager manager;
 	private SpriteBatch batcher;
@@ -35,7 +35,7 @@ public class SplashScreen implements Screen {
 		Constants.calc();
 
 		sprite = new Sprite(Assets.splash);
-		sprite.setColor(1, 1, 1, 0);
+		sprite.setColor(0, 0, 0, 0);
 
 		float scale = Constants.SCREEN_WIDTH / sprite.getWidth();
 		sprite.setSize(sprite.getWidth() * scale, sprite.getHeight() * scale);
@@ -54,14 +54,14 @@ public class SplashScreen implements Screen {
 				game.setScreen(new GameScreen());
 			}
 		};
-
-		Tween.to(sprite, SpriteAccessor.ALPHA, 1.4f).target(1).ease(TweenEquations.easeInOutQuad).repeatYoyo(1, .2f).setCallback(cb).setCallbackTriggers(TweenCallback.COMPLETE).start(manager);
+		//1.3 sec transition with .3 sec pause in the middle from alpha 0 -> 1 -> 0
+		Tween.to(sprite, SpriteAccessor.ALPHA, 1.5f).target(1).ease(TweenEquations.easeInOutQuad).repeatYoyo(1, 0.35f).setCallback(cb).setCallbackTriggers(TweenCallback.COMPLETE).start(manager);
 	}
 
 	@Override
 	public void render(float delta) {
 		manager.update(delta);
-		Gdx.gl.glClearColor(1, 1, 1, 1);
+		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batcher.begin();
 		sprite.draw(batcher);
