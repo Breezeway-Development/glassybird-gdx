@@ -16,7 +16,6 @@ public class AndroidLauncher extends AndroidApplication {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-
 		getWindow().addFlags(WindowUtils.FLAG_DISABLE_HEAD_GESTURES);
 		initialize(new GBGame(), config);
 	}

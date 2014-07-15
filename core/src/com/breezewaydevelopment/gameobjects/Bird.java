@@ -18,9 +18,9 @@ public class Bird {
 	public static float DECEL_MAX = 205;
 	public static float START_X;
 
-	public static float CIRC_OFFSET_X;
-	public static float CIRC_OFFSET_Y;
-	public static float CIRC_RADIUS = 6.5f;
+	public static float CIRC_OFFSET_X = (float) WIDTH / 2;
+	public static float CIRC_OFFSET_Y = (float) HEIGHT / 2;
+	public static float CIRC_RADIUS = 6.2f;
 
 	private int width;
 	private int height;

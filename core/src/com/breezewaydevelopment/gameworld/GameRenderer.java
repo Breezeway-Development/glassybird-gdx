@@ -134,7 +134,7 @@ public class GameRenderer {
 		drawString("Tap to Flap");
 		drawString("Highscore: " + HighScoreHandler.getHighScore(), Grass.GRASS_HEIGHT + font.getCapHeight() * 2);
 	}
-	
+
 	private void drawRetry() {
 		drawString("Tap to Retry", Grass.GRASS_HEIGHT + font.getCapHeight() * 5);
 		drawString("Highscore: " + HighScoreHandler.getHighScore(), Grass.GRASS_HEIGHT + font.getCapHeight() * 2);
@@ -147,7 +147,7 @@ public class GameRenderer {
 	private void drawString(String str) {
 		drawString(str, Constants.GAME_HEIGHT - font.getCapHeight());
 	}
-	
+
 	private void drawString(String str, float y) {
 		font.draw(batcher, str, Constants.MIDPOINT_X - (font.getBounds(str).width / 2), y);
 	}
@@ -160,6 +160,9 @@ public class GameRenderer {
 		//		shapeRenderer.setColor(55 / 255.0f, 80 / 255.0f, 100 / 255.0f, 1);
 		//		shapeRenderer.rect(0, 0, Constants.GAME_WIDTH, Constants.GAME_HEIGHT);
 		//		shapeRenderer.end();
+
+		//		drawBirdCirc();
+		//		drawPipeRect();
 
 		batcher.begin();
 		batcher.enableBlending();
@@ -184,9 +187,6 @@ public class GameRenderer {
 		batcher.disableBlending();
 		drawGrass();
 		batcher.end();
-
-//		drawBirdCirc();
-//		drawPipeRect();
 
 		drawTransition(delta);
 	}
