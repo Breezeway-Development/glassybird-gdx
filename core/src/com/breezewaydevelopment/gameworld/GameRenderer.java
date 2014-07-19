@@ -19,7 +19,7 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.breezewaydevelopment.helpers.Assets;
 import com.breezewaydevelopment.helpers.Constants;
-import com.breezewaydevelopment.helpers.HighScoreHandler;
+import com.breezewaydevelopment.helpers.PreferencesHandler;
 import com.breezewaydevelopment.gameobjects.Bird;
 import com.breezewaydevelopment.gameobjects.Grass;
 import com.breezewaydevelopment.gameobjects.Pipe;
@@ -48,6 +48,11 @@ public class GameRenderer {
 	private MutableFloat alpha;
 	private Color transitionColor;
 
+	// All of this just for volume adjustment
+	private MutableFloat volumeAlpha;
+	private TweenManager volumeManager;
+	private BitmapFont volumeFont;
+
 	public GameRenderer(GameWorld world) {
 		this.world = world;
 
@@ -64,7 +69,8 @@ public class GameRenderer {
 
 		transitionColor = new Color();
 		alpha = new MutableFloat(1);
-		initTransition(1, 1, 1, .5f);
+		volumeAlpha = new MutableFloat(0);
+		initTransition(0, 0, 0, .5f);
 	}
 
 	private void initGameObjects() {
@@ -79,6 +85,7 @@ public class GameRenderer {
 		birdReady = Assets.birdReady;
 		birdRunning = Assets.birdRunning;
 		font = Assets.font;
+		volumeFont = Assets.volumeFont;
 		grass = Assets.grass;
 		birdMid = Assets.bird;
 		ringBottom = Assets.ring;
@@ -132,23 +139,32 @@ public class GameRenderer {
 
 	private void drawReady() {
 		drawString("Tap to Flap");
-		drawString("Highscore: " + HighScoreHandler.getHighScore(), Grass.GRASS_HEIGHT + font.getCapHeight() * 2);
+		drawString("Highscore: " + PreferencesHandler.getHighScore(), Grass.GRASS_HEIGHT + font.getCapHeight() * 2);
 	}
-	
+
 	private void drawRetry() {
-		drawString("Tap to Retry", Grass.GRASS_HEIGHT + font.getCapHeight() * 5);
-		drawString("Highscore: " + HighScoreHandler.getHighScore(), Grass.GRASS_HEIGHT + font.getCapHeight() * 2);
+		drawString("Tap to Retry", Constants.MIDPOINT_Y + font.getCapHeight());
+		drawString("Highscore: " + PreferencesHandler.getHighScore(), Grass.GRASS_HEIGHT + font.getCapHeight() * 2);
 	}
 
 	private void drawScore() {
 		drawString(Integer.toString(world.getScore()));
 	}
 
+	private void drawVolume() {
+		volumeFont.setColor(1, 1, 1, volumeAlpha.floatValue());
+		drawString("Volume " + (PreferencesHandler.getVolume() ? "On" : "Off"), Constants.MIDPOINT_Y + volumeFont.getCapHeight(), volumeFont);
+	}
+
 	private void drawString(String str) {
 		drawString(str, Constants.GAME_HEIGHT - font.getCapHeight());
 	}
-	
+
 	private void drawString(String str, float y) {
+		drawString(str, y, font);
+	}
+
+	private void drawString(String str, float y, BitmapFont font) {
 		font.draw(batcher, str, Constants.MIDPOINT_X - (font.getBounds(str).width / 2), y);
 	}
 
@@ -160,6 +176,9 @@ public class GameRenderer {
 		//		shapeRenderer.setColor(55 / 255.0f, 80 / 255.0f, 100 / 255.0f, 1);
 		//		shapeRenderer.rect(0, 0, Constants.GAME_WIDTH, Constants.GAME_HEIGHT);
 		//		shapeRenderer.end();
+
+		//		drawBirdCirc();
+		//		drawPipeRect();
 
 		batcher.begin();
 		batcher.enableBlending();
@@ -181,19 +200,32 @@ public class GameRenderer {
 			default:
 				break;
 		}
+		drawVolume();
 		batcher.disableBlending();
 		drawGrass();
 		batcher.end();
 
-//		drawBirdCirc();
-//		drawPipeRect();
-
+		if (volumeAlpha.floatValue() != 0) {
+			updateVolumeAlpha(delta);
+		}
 		drawTransition(delta);
+	}
+
+	public void volumeToggle() {
+		volumeAlpha.setValue(1);
+		Tween.registerAccessor(MutableFloat.class, volumeAlpha);
+		volumeManager = new TweenManager();
+		Tween.to(volumeAlpha, -1, 0.75f).target(0).ease(TweenEquations.easeInQuad).start(volumeManager);
+	}
+
+	public void updateVolumeAlpha(float delta) {
+		volumeManager.update(delta);
 	}
 
 	public void initTransition(float r, float g, float b, float duration) {
 		transitionColor.set(r, g, b, 1);
 		alpha.setValue(1);
+		volumeAlpha.setValue(0);
 		Tween.registerAccessor(MutableFloat.class, alpha);
 		manager = new TweenManager();
 		Tween.to(alpha, -1, duration).target(0).ease(TweenEquations.easeOutQuad).start(manager);
@@ -232,5 +264,4 @@ public class GameRenderer {
 		shapeRenderer.circle(circ.x, circ.y, circ.radius);
 		shapeRenderer.end();
 	}
-
 }

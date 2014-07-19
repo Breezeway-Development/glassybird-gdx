@@ -1,7 +1,7 @@
 package com.breezewaydevelopment.gameobjects;
 
-import com.breezewaydevelopment.helpers.Assets;
 import com.breezewaydevelopment.helpers.Constants;
+import com.breezewaydevelopment.helpers.SoundHandler;
 import com.breezewaydevelopment.gameworld.GameWorld;
 
 public class ScrollHandler {
@@ -18,7 +18,6 @@ public class ScrollHandler {
 		backGrass = new Grass(frontGrass.getTailX());
 
 		for (int i = 0; i < pipes.length; i++) {
-			// Here we define each pipe. If i = 0 start at x=210, otherwise start behind the previous pipe
 			pipes[i] = new Pipe((i == 0 ? Constants.GAME_WIDTH + Pipe.GAP
 					: pipes[i - 1].getTailX()));
 		}
@@ -74,7 +73,7 @@ public class ScrollHandler {
 			if (!p.isScored() && p.getX() + (p.getWidth() / 2) < birdTip) { // If the tip of the bird crosses the middle of the pipe
 				gameWorld.addScore();
 				p.setScored(true);
-				Assets.coin.play();
+				SoundHandler.playCoin();
 			}
 			if (p.collides(bird)) {
 				return true;

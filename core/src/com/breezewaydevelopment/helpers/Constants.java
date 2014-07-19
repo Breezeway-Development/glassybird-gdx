@@ -20,8 +20,6 @@ public final class Constants {
 		MIDPOINT_X = GAME_WIDTH / 2;
 
 		Bird.START_X = GAME_WIDTH * 0.33f;
-		Bird.CIRC_OFFSET_X = (float) Bird.WIDTH / 2;
-		Bird.CIRC_OFFSET_Y = (float) Bird.HEIGHT / 2;
 
 		float pipeTravelTime = Pipe.GAP / Scrollable.SCROLL_SPEED;
 		Pipe.HOLE_DELTA_HIGHER = (pipeTravelTime * Bird.ACCEL) - Pipe.HOLE;

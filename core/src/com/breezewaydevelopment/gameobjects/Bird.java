@@ -2,8 +2,8 @@ package com.breezewaydevelopment.gameobjects;
 
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
-import com.breezewaydevelopment.helpers.Assets;
 import com.breezewaydevelopment.helpers.Constants;
+import com.breezewaydevelopment.helpers.SoundHandler;
 
 public class Bird {
 
@@ -18,9 +18,9 @@ public class Bird {
 	public static float DECEL_MAX = 205;
 	public static float START_X;
 
-	public static float CIRC_OFFSET_X;
-	public static float CIRC_OFFSET_Y;
-	public static float CIRC_RADIUS = 6.5f;
+	public static float CIRC_OFFSET_X = (float) WIDTH / 2;
+	public static float CIRC_OFFSET_Y = (float) HEIGHT / 2;
+	public static float CIRC_RADIUS = 6.2f;
 
 	private int width;
 	private int height;
@@ -47,7 +47,7 @@ public class Bird {
 
 	public void updateReady(float delta) {
 		runtime += delta;
-		position.y = Constants.MIDPOINT_Y + (float) (1.5d * Math.sin(7 * runtime));
+		position.y = Constants.MIDPOINT_Y + (float) (1.5f * Math.sin(7 * runtime));
 		updateCircle();
 	}
 
@@ -95,7 +95,7 @@ public class Bird {
 
 	public void onTap() {
 		if (isAlive) {
-			Assets.flap.play();
+			SoundHandler.playFlap();
 			velocity.y = ACCEL;
 			runtime = 0; // Always flap wings down on tap
 		}
