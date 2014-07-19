@@ -1,7 +1,7 @@
 package com.breezewaydevelopment.gameobjects;
 
-import com.breezewaydevelopment.helpers.Assets;
 import com.breezewaydevelopment.helpers.Constants;
+import com.breezewaydevelopment.helpers.SoundHandler;
 import com.breezewaydevelopment.gameworld.GameWorld;
 
 public class ScrollHandler {
@@ -73,7 +73,7 @@ public class ScrollHandler {
 			if (!p.isScored() && p.getX() + (p.getWidth() / 2) < birdTip) { // If the tip of the bird crosses the middle of the pipe
 				gameWorld.addScore();
 				p.setScored(true);
-				Assets.coin.play();
+				SoundHandler.playCoin();
 			}
 			if (p.collides(bird)) {
 				return true;

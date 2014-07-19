@@ -19,7 +19,7 @@ public final class Assets {
 
 	public static Animation birdReady, birdRunning;
 	public static AtlasRegion bar, bird, birdDown, birdUp, grass, ring, splash;
-	public static BitmapFont font;
+	public static BitmapFont font, volumeFont;
 	public static Sound dead, flap, coin, fall;
 
 	private static List<Disposable> disposables;
@@ -62,7 +62,13 @@ public final class Assets {
 		font = generator.generateFont(parameter);
 		font.setScale(0.15f);
 		font.setColor(1, 1, 1, 1);
+		volumeFont = generator.generateFont(parameter);
+		volumeFont.setScale(0.15f);
+		volumeFont.setColor(1, 1, 1, 0);
+
 		disposables.add(generator);
+
+		PreferencesHandler.init();
 	}
 
 	public static void dispose() {

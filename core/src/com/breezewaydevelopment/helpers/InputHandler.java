@@ -7,24 +7,26 @@ import com.breezewaydevelopment.gameworld.GameWorld;
 import com.breezewaydevelopment.gameworld.GameWorld.GameState;
 
 public class InputHandler implements InputProcessor {
-	private Bird myBird;
+
+	private Bird bird;
 	private GameWorld world;
 
 	// Don't forget inputhandler uses a y-down coord system for some reason ((0,0) is at the top left)
 
 	public InputHandler(GameWorld world) {
 		this.world = world;
-		myBird = world.getBird();
+		bird = world.getBird();
 	}
 
-	public boolean handleTap() {
+	private boolean handleTap() {
+		world.onTap();
 		switch (world.getState()) {
 			case READY:
 				world.setState(GameState.RUNNING);
-				myBird.onTap();
+				bird.onTap();
 				break;
 			case RUNNING:
-				myBird.onTap();
+				bird.onTap();
 				break;
 			case GAMEOVER:
 				world.restart();
@@ -35,6 +37,15 @@ public class InputHandler implements InputProcessor {
 		return true;
 	}
 
+	private boolean handleRelease() {
+		world.onRelease();
+		return true;
+	}
+
+	private boolean isKey(int kc) {
+		return kc == Keys.DPAD_CENTER || kc == Keys.ENTER || kc == Keys.SHIFT_LEFT || kc == Keys.SHIFT_RIGHT || kc == Keys.SPACE || kc == Keys.UP;
+	}
+
 	@Override
 	public boolean touchDown(int x, int y, int pointer, int button) {
 		return handleTap();
@@ -42,25 +53,17 @@ public class InputHandler implements InputProcessor {
 
 	@Override
 	public boolean touchUp(int x, int y, int pointer, int button) {
-		return false;
+		return handleRelease();
 	}
 
 	@Override
 	public boolean keyDown(int keycode) {
-		switch (keycode) {
-			case Keys.DPAD_CENTER:
-			case Keys.SPACE:
-			case Keys.ENTER:
-			case Keys.UP:
-				return handleTap();
-			default:
-				return false;
-		}
+		return isKey(keycode) ? handleTap() : false;
 	}
 
 	@Override
 	public boolean keyUp(int keycode) {
-		return false;
+		return isKey(keycode) ? handleRelease() : false;
 	}
 
 	@Override
